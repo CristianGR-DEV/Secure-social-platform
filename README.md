@@ -225,23 +225,23 @@ Estas respuestas reemplazan cualquier supuesto inicial que no coincida.
 
 - **Usuarios y propósito:** comunidad cerrada; el uso principal es hablar en privado con amistades y controlar los propios datos/servidor.
 - **UX y estilo:** en la primera etapa, acercarse lo máximo posible a los flujos y estética de Discord, manteniendo marca Corebite. Más adelante se desarrollará un estilo propio. Interfaz minimalista, oscura por defecto, con modo claro y temas personalizables. Se busca la ligereza y fiabilidad de TeamSpeak clásico.
-- **Cuentas y contactos:** usuario y contraseña con verificación por correo; búsqueda por nombre de usuario y, en comunidades futuras, búsqueda de miembros. Aceptar/rechazar solicitudes, bloquear, eliminar amistades, ocultar perfil de búsquedas y reportar cuentas.
+- **Cuentas y contactos:** usuario y contraseña; en beta comprobar que nombre de usuario y correo no estén ya registrados, sin verificar ni enviar correos. La verificación por correo se evaluará después de la beta. Búsqueda por nombre de usuario y, en comunidades futuras, búsqueda de miembros. Aceptar/rechazar solicitudes, bloquear, eliminar amistades, ocultar perfil de búsquedas y reportar cuentas.
 - **Solicitudes de amistad:** cualquier cuenta puede enviar solicitudes. No caducan y quien las envía no puede cancelarlas; quedan pendientes hasta que la persona destinataria acepte o rechace. Límite inicial: 5 nuevas solicitudes al día y 7 días antes de volver a solicitar a la misma persona.
 - **Mensajes e historial:** mensajería en tiempo real, historial y sincronización. Se permite editar/borrar para todas las personas durante los primeros 5 minutos; después el mensaje permanece visible para ambas y no se puede ocultar solo para una persona. No hay caducidad automática.
 - **Borrado de conversación:** quitarla de la bandeja la oculta para esa persona. El servidor elimina el historial cuando ambas personas la hayan quitado de sus propias bandejas.
-- **Sesiones y seguridad:** varios dispositivos con la misma cuenta/sesión, sesiones revocables y aviso de nuevo dispositivo por correo verificado. Sin E2EE en beta. Se guardará solo lo necesario; el historial se protegerá en almacenamiento y habrá registros técnicos limitados. Esto no equivale a E2EE.
+- **Sesiones y seguridad:** varios dispositivos con la misma cuenta/sesión y sesiones revocables. No se envían correos de verificación, recuperación ni aviso de dispositivo nuevo en la beta; se evaluarán tras implementar la verificación por correo. Sin E2EE en beta. Se guardará solo lo necesario; el historial se protegerá en almacenamiento y habrá registros técnicos limitados. Esto no equivale a E2EE.
 - **E2EE posterior:** explorar E2EE para mensajes privados después de la beta, con recuperación de historial mediante clave o copia protegida. Los archivos quedan fuera de esa decisión por ahora.
 - **Archivos:** imágenes, vídeo, audio y documentos comunes hasta 50 MB por archivo. ZIP se pospone en beta. Bloquear ejecutables/scripts y validar tipo real y permisos.
 - **Llamadas:** voz 1:1 en beta; vídeo 1:1 después.
 - **Interfaz y accesibilidad:** ordenador, tablet y móvil mediante navegador. Navegación por teclado, compatibilidad con lectores de pantalla y texto ampliable.
 - **Personalización:** tema claro/oscuro, paletas, distribución de paneles, tamaño de texto e importar/exportar ajustes.
-- **Infraestructura:** servidor Ubuntu e IP pública disponibles. Comparar costes y opciones de alojamiento antes de decidir el despliegue. Dominio, SMTP y acceso externo se deben comprobar.
+- **Infraestructura:** servidor Ubuntu e IP pública dinámica disponibles; el usuario puede configurar router y firewall. No hay dominio registrado. Comparar coste total y opciones de alojamiento; SMTP queda fuera de beta.
 - **Tecnología de mensajería:** servicio propio Corebite para beta, sin Matrix/Synapse; se quiere una explicación comparativa de ventajas y límites de Matrix.
 - **Comunidades futuras:** servidores privados, canales, roles y permisos posteriores, con un modelo inspirado en Discord. Falta concretar jerarquía y permisos.
 - **Linux:** integración nativa como objetivo; cliente de escritorio Linux posterior a la beta.
 - **Código y repositorio:** Corebite no se publicará como producto de código abierto. El repositorio se mantiene público por la decisión previa.
 - **Fecha y éxito de beta:** mantener 2027-05-01. Beta terminada significa funciones principales, criterios verificados, despliegue externo, backups/restauración probados, documentación y presentación. Si hay que recortar, priorizar UX.
-- **Plan estimado:** 270 h provisionales. Comparar alojamiento y confirmar dominio, correo SMTP y acceso externo antes del despliegue.
+- **Plan estimado:** 270 h provisionales. Comparar alojamiento y confirmar dominio, DNS dinámico y acceso externo antes del despliegue. SMTP se decidirá después de la beta.
 
 ### Comparativa inicial de alojamiento (referencia: 2026-11-03)
 
@@ -254,11 +254,11 @@ Estas respuestas reemplazan cualquier supuesto inicial que no coincida.
 
 **Propuesta provisional:** desarrollar y medir primero en Ubuntu propio. Para una beta accesible externamente, comparar su coste total y fiabilidad con un VPS europeo o una plataforma gestionada. No elegir proveedor hasta medir estabilidad de la conexión, consumo eléctrico y necesidades reales de CPU/RAM/almacenamiento. Los precios son referencias publicadas y pueden cambiar; confirmar en el checkout.
 
-**Dominio, correo y acceso externo pendientes:**
-- No hay dominio ni proveedor SMTP confirmado. El dominio es una compra aparte; Cloudflare puede gestionar sus DNS, pero no registra el dominio.
-- Cuando se elija dominio: crear A/AAAA hacia la IP pública; comprobar si la IP es fija y usar actualización DNS si cambia.
-- Confirmar que el router/ISP permite conexiones entrantes y configurar firewall/port forwarding de 80/443 al proxy HTTPS; probar desde una red externa.
-- El correo de verificación, recuperación y alertas necesita dominio/remitente autenticado y registros SPF, DKIM y DMARC. Brevo declara correo transaccional y 300 envíos al día en el plan gratuito; verificar dominio y condiciones antes de integrarlo.
+**Dominio, IP y acceso externo pendientes:**
+- No hay dominio registrado. El usuario confirma que su IP pública cambia y que puede configurar el router/firewall. Un dominio se compra aparte; Cloudflare puede gestionar DNS, pero no registra dominios.
+- Para probar desde Internet en el Ubuntu propio, configurar DNS dinámico para que el registro apunte a la IP cambiante; abrir solo los puertos necesarios y probar desde una red externa.
+- Revisar con el ISP si existe CGNAT aunque la configuración local del router sea posible. Configurar port forwarding de 80/443 al proxy HTTPS; la voz WebRTC puede requerir TURN/UDP.
+- En la beta no se enviarán correos ni se verificará el correo. Solo se comprueba que nombre de usuario y correo sean únicos. Tras la beta se decidirán proveedor SMTP, verificación, recuperación y alertas; entonces configurar SPF, DKIM y DMARC.
 - La voz WebRTC puede requerir un relay TURN; validarlo con el Issue CORE-18 y medir tráfico/costes.
 - Fórmula para estimar electricidad del servidor: vatios medios medidos × horas de uso × tarifa eléctrica; no usar el consumo máximo de la fuente como gasto medio.
 
