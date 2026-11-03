@@ -221,25 +221,34 @@ Este archivo es la referencia resumida y viva del proyecto. Al avanzar, actualiz
 
 ## Preferencias confirmadas por el propietario (2026-11-03)
 
-Estas respuestas son las decisiones vigentes y reemplazan supuestos anteriores:
+Estas respuestas reemplazan cualquier supuesto inicial que no coincida.
 
-- **Producto:** comunidad cerrada para amistades; inspiración visual Discord, meta de ligereza y fiabilidad tipo TeamSpeak clásico, con marca Corebite propia.
-- **Beta:** web adaptable/PWA, chats privados, historial, contactos, archivos de hasta 50 MB y voz 1:1. Sin E2EE, servidores/comunidades privadas, canales, vídeo ni cliente de escritorio Linux.
-- **Después de beta:** servidores privados con roles/permisos, vídeo 1:1 y cliente Linux de escritorio; priorizar estas funciones después de medir capacidad y validar la beta.
-- **Arquitectura:** solución propia ligera; no integrar Matrix/Synapse en la beta. Mantener la integración Linux de escritorio para una fase posterior.
-- **Seguridad beta:** contraseñas con Argon2id, confirmación de correo, HTTPS, autorización estricta por conversación, límites de intentos/abuso, protección de datos almacenados, copias seguras y logs mínimos. Sin E2EE, una persona que administre el servidor puede leer el contenido; informar claramente a usuarios. No llamar a estas medidas E2EE.
-- **Cifrado:** E2EE queda para evaluar después de la beta. CORE-13 se mantiene abierto en Ideas, sin Sprint, fechas ni estimación.
-- **Llamadas:** voz 1:1 en beta; vídeo después.
-- **Alojamiento y rendimiento:** probar primero en el servidor Ubuntu disponible y medir CPU, RAM, almacenamiento, latencia y estabilidad. Los valores reales deben guiar los límites, sin asumir que el hardware por sí solo garantiza rendimiento.
-- **Interfaz:** primero reorganizar/rediseñar el prototipo local para acercar sus flujos a Discord manteniendo identidad propia. Subirlo al repositorio después de limpiarlo y revisarlo.
-- **Repositorio:** el código no se plantea como código abierto, pero el usuario quiere mantener el repositorio público por ahora.
-- **Objetivo de beta:** fecha objetivo 2027-05-01. Funciones principales operativas, criterios de aceptación verificados, despliegue externo, backups/restauración probados, documentación y presentación.
-- **Estimación:** 270 h iniciales al quitar CORE-13 de la beta, pero CORE-03/11/12 y PWA requieren reestimación. Sprint 3 queda en 35 h provisionales.
+- **Público y alcance:** comunidad cerrada para amistades; servidores privados, canales, roles y permisos van después de la beta.
+- **Interfaz inicial:** bandeja de conversaciones tras iniciar sesión. Si está vacía, invitar a buscar amistades.
+- **Primer contacto:** buscar por nombre de usuario, enviar una solicitud y esperar aceptación; solo amistades aceptadas pueden escribir mensajes privados.
+- **Mensajes:** edición/borrado para todos durante 5 minutos; después quedan bloqueados para edición/borrado global. Los mensajes no caducan automáticamente y permanecen hasta que alguien los borra.
+- **Perfiles:** nombre de usuario, avatar y presencia; presencia visible a todas las cuentas con perfil. Correo no público.
+- **Cuentas:** usuario/contraseña, verificación y recuperación por correo, aviso de nuevo dispositivo y revocación de sesiones. Contraseñas con Argon2id.
+- **Seguridad beta:** sin E2EE. HTTPS, autorización por conversación, control de acceso, límites contra intentos/abuso, protección del almacenamiento y copias seguras. La administración del servidor puede leer chats y esto debe explicarse claramente.
+- **Archivos:** imágenes, vídeo, audio, documentos comunes y ZIP hasta 50 MB; bloquear programas y scripts, validar el tipo real y restringir descargas a participantes autorizados.
+- **Llamadas y plataforma:** voz 1:1 en beta; vídeo y cliente de escritorio Linux después. Beta en web/PWA adaptable, con objetivo de bajo consumo.
+- **Arquitectura:** servicio propio Corebite y medición de CPU, RAM, almacenamiento, latencia y estabilidad en el Ubuntu disponible; Matrix no se usa en beta.
+- **Alojamiento:** probar primero en Ubuntu; comparar servicios gestionados más adelante.
+- **Diseño:** inspiración funcional y visual de Discord, marca propia, estilo ligero y sencillo. Rediseñar los flujos del prototipo local antes de incorporarlo al repositorio.
+- **Repositorio:** producto cerrado; mantener el repositorio público por ahora.
+- **Beta:** objetivo 2027-05-01; funciones principales, criterios verificados, acceso externo, copias/restauración probadas, documentación y presentación.
+- **Plan estimado:** 270 h provisionales tras mover CORE-13 fuera de beta. Revisar esfuerzo de CORE-03, CORE-11, CORE-12 y CORE-16 tras los prototipos/controles de archivos.
 
 ### Seguridad sin E2EE
 
-HTTPS protege el transporte y el cifrado de disco/copias reduce el riesgo si se exponen esos soportes; Argon2id, autorización, rate limiting y mínimo registro protegen cuentas y operación. Sin E2EE, estas medidas no impiden que una persona con control suficiente del servidor lea mensajes. Este límite debe mostrarse antes de que los usuarios usen Corebite.
+HTTPS protege la conexión; Argon2id, autorización por conversación, rate limiting, protección del almacenamiento y copias seguras reducen riesgos. No impiden que quien administra el servidor lea mensajes sin E2EE. Mostrar este límite a los usuarios.
+
+### Ideas posteriores a la beta
+
+- [CORE-13 · Evaluar E2EE para una versión posterior](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — estado Ideas, sin Sprint, fechas ni estimación.
+- Servidores privados, roles, permisos y canales.
+- Vídeo 1:1 y aplicación de escritorio Linux.
 
 ### Material local
 
-La carpeta de trabajo contiene páginas HTML para inicio, sesión, cuenta y términos, hojas CSS e imágenes. No encontré JavaScript, backend ni manifiesto de dependencias. El prototipo se rediseñará y limpiará antes de incorporarlo al repositorio; la página inicial todavía tiene texto de ejemplo y algunas rutas incompletas.
+La carpeta de trabajo contiene páginas HTML para inicio, sesión, cuenta y términos, hojas CSS e imágenes. No encontré JavaScript, backend ni manifiesto de dependencias. Rediseñar y limpiar antes de subirlo al repositorio; la página inicial tiene textos de ejemplo y algunas rutas incompletas.
