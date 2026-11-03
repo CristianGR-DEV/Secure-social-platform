@@ -1,6 +1,6 @@
 # Corebite
 
-Corebite es una plataforma web de comunicación cuyo objetivo es ofrecer cuentas, relaciones entre usuarios y mensajería privada con seguridad desde el diseño. La beta prioriza conversaciones privadas, cifrado de extremo a extremo, archivos, llamadas de voz individuales y una interfaz personalizable.
+Corebite es una plataforma web de comunicación para comunidades cerradas. La beta prioriza chats privados, voz individual y una experiencia sencilla, ligera y protegida mediante seguridad de cuentas, conexiones y datos almacenados. E2EE no forma parte de la beta inicial.
 
 Este README reúne el alcance y la planificación del proyecto. Describe lo que se quiere construir; no afirma que una función esté terminada. El avance real se registra en los Issues y en GitHub Projects.
 
@@ -25,7 +25,7 @@ Objetivos de la beta:
 2. Permitir registro, inicio y cierre de sesión, administración de sesiones y perfiles.
 3. Permitir buscar usuarios, gestionar amistades y bloquear contactos.
 4. Ofrecer conversaciones privadas en tiempo real, historial y sincronización.
-5. Decidir en CORE-03 si E2EE cabe en el objetivo de ligereza y en la capacidad del servidor; implementarlo para mensajes privados solo si el prototipo confirma que es viable y su complejidad queda aceptada.
+5. Proteger cuentas, conexiones y datos almacenados. E2EE queda fuera de la beta y podrá reconsiderarse después.
 6. Permitir compartir archivos con validación de tipo y tamaño y autorización de descarga.
 7. Entregar llamadas de voz individuales mediante WebRTC en la beta; dejar el vídeo individual para una versión posterior y probar relay TURN si la conectividad lo requiere.
 8. Ofrecer interfaz adaptable, accesible, en español e inglés, con temas y distribución personalizable.
@@ -36,15 +36,15 @@ Objetivos de la beta:
 - Registro y sesiones seguras.
 - Perfiles, avatares, estados de presencia, búsqueda, amistades y bloqueo.
 - Interfaz principal y componentes reutilizables.
-- Mensajería privada, historial y sincronización. E2EE para mensajes queda condicionada al resultado de CORE-03 y a una medición en el servidor.
-- Archivos y llamadas de voz individuales.
+- Mensajería privada, historial y sincronización sin E2EE en la beta. La persona que administre el servidor podría leer el contenido.
+- Archivos y llamadas de voz individuales; sin vídeo en la beta.
 - Temas, paletas, ajustes exportables/importables, navegación personalizable y una PWA/aplicación de escritorio Linux prevista; su tecnología queda pendiente.
 - Pruebas funcionales y de seguridad, compatibilidad de navegadores, diseño responsive y accesibilidad.
 - Staging, despliegue en Ubuntu Server, copias de seguridad, restauración, monitorización, optimización y documentación.
 
 ### Funciones posteriores
 
-La creación de servidores privados/comunidades, grupos, canales, roles y permisos queda fuera de la primera beta. También quedan para después las llamadas de vídeo, llamadas grupales, compartir pantalla, plugins y procesamiento de audio/vídeo. Primero se validarán los chats privados y la voz 1:1.
+La creación de servidores privados/comunidades, grupos, canales, roles y permisos queda fuera de la primera beta. También quedan para después el cliente de escritorio Linux, las llamadas de vídeo/grupales, compartir pantalla, plugins y procesamiento de audio/vídeo. La beta prioriza web/PWA, chats privados y voz 1:1.
 
 ## Cómo se quiere trabajar
 
@@ -88,16 +88,16 @@ La selección final de frameworks y algunos detalles de implementación queda su
 | Estructura | Monorepo con apps/web, apps/api y packages/shared |
 | Lenguaje | TypeScript para la base de frontend y backend |
 | Base de datos | PostgreSQL y migraciones iniciales |
-| Mensajería | Comparar Matrix/Synapse con un servicio propio y medir memoria, CPU y complejidad en Ubuntu antes de decidir |
-| Cifrado | E2EE no es requisito cerrado: decidir tras el prototipo; si se adopta, usar una implementación estable y no crear criptografía propia |
+| Mensajería | Servicio propio Corebite, priorizando simplicidad y bajo consumo; medir entrega, historial, sincronización y recursos en Ubuntu |
+| Cifrado | Sin E2EE en la beta. Aplicar HTTPS, autorización, protección de datos almacenados y registros mínimos; reconsiderar E2EE tras la beta |
 | Voz/vídeo | WebRTC para voz 1:1 en beta; vídeo después; coturn si las pruebas de red lo requieren |
-| Interfaz | Referencia visual Discord; diseño ligero y adaptable; web/PWA y aplicación de escritorio Linux objetivo; tecnología de escritorio pendiente |
+| Interfaz | Diseño propio inspirado en Discord; web/PWA adaptable en beta; escritorio Linux después; ligereza como objetivo de rendimiento |
 | Autenticación | Argon2id para contraseñas, sesiones revocables y cookies HttpOnly, Secure y SameSite en producción |
 | Archivos | Almacenamiento fuera del directorio público, validación de contenido/tamaño y descargas autorizadas |
 | Infraestructura | Probar primero en el Ubuntu disponible y medir recursos; Docker Compose previsto; comparar alojamiento gestionado después |
 | Integración continua | GitHub Actions para instalación y comprobaciones de lint/build |
 
-El framework web, el runtime/API, el ORM y el empaquetado Linux deben elegirse y documentarse antes de depender de ellos. CORE-03 debe comparar Matrix con mensajería propia, medir recursos en Ubuntu, definir el modelo de amenazas y decidir si la beta necesita E2EE. Si se omite E2EE, debe quedar claro que quien administre el servidor podría leer los mensajes.
+El framework web, el runtime/API, el ORM y la solución PWA deben elegirse y documentarse antes de depender de ellos. CORE-03 define una arquitectura propia ligera y mide recursos en Ubuntu. La administración del servidor puede leer los mensajes porque la beta no tendrá E2EE; documentar ese límite claramente.
 
 ## Principios de seguridad y calidad
 
@@ -106,7 +106,7 @@ El framework web, el runtime/API, el ORM y el empaquetado Linux deben elegirse y
 - Proteger endpoints y sesiones; revocar sesiones cuando corresponda.
 - Validar archivos por tamaño, extensión y tipo real. No confiar solo en el MIME declarado por el cliente.
 - Guardar archivos fuera de rutas públicas predecibles y comprobar permisos antes de servirlos.
-- No afirmar que el servidor no puede leer contenido hasta validar E2EE de extremo a extremo. Si se aplaza E2EE, aplicar HTTPS, control de acceso, protección de datos almacenados y registros mínimos; estas medidas no sustituyen E2EE.
+- La beta no tendrá E2EE: explicar a usuarios que quien administre el servidor puede leer los mensajes. Aplicar HTTPS, hash Argon2id para contraseñas, autorización por conversación, limitación de intentos, cifrado/protección de datos almacenados y copias seguras. Estas medidas no equivalen a E2EE.
 - No afirmar E2EE para llamadas de voz o vídeo sin comprobarlo por separado.
 - Probar pérdida de sesión, cambio de dispositivo y recuperación de claves; documentar límites.
 - Probar restauraciones de backups y proteger las copias y claves.
@@ -120,14 +120,14 @@ La duración prevista es de cuatro semanas por Sprint. El cierre tiene dos seman
 |---|---|---|---|---:|
 | Sprint 1 | 2026-11-01 a 2026-11-28 | Análisis, arquitectura y preparación | CORE-01 a CORE-05 | 40 h |
 | Sprint 2 | 2026-11-29 a 2026-12-26 | Interfaz, autenticación y usuarios | CORE-06 a CORE-10 | 50 h |
-| Sprint 3 | 2026-12-27 a 2027-01-23 | Mensajería privada y cifrado | CORE-11 a CORE-15 | 57 h |
+| Sprint 3 | 2026-12-27 a 2027-01-23 | Mensajería privada y sincronización | CORE-11, CORE-12, CORE-14 y CORE-15 | 35 h provisionales |
 | Sprint 4 | 2027-01-24 a 2027-02-20 | Archivos, llamadas y personalización | CORE-16 a CORE-20 | 51 h |
 | Sprint 5 | 2027-02-21 a 2027-03-20 | Personalización avanzada, seguridad y pruebas | CORE-21 a CORE-25 | 48 h |
 | Sprint 6 | 2027-03-21 a 2027-04-17 | Despliegue, rendimiento y documentación | CORE-26 a CORE-29 | 34 h |
 | Cierre | 2027-04-18 a 2027-05-01 | Validación, release y exposición | CORE-30 | 12 h |
-| **Total** |  |  | **30 Issues** | **292 h** |
+| **Total beta** |  |  | **29 Issues planificados + 1 idea posterior** | **270 h provisionales** |
 
-Las 292 horas son una estimación inicial de trabajo; voz está prevista y vídeo se traslada a después de la beta, por lo que habrá que revisar el total antes de cerrar el plan. Las 22 horas de CORE-13 son provisionales y dependen de CORE-03; si se aplaza E2EE, se replanificará el Sprint 3. Se recomienda reservar un 15–20% adicional para imprevistos. La beta tiene como fecha objetivo el 1 de mayo de 2027; no es una fecha garantizada.
+Las 270 horas son una suma provisional tras sacar CORE-13 de la beta. Las estimaciones de CORE-03, CORE-11 y CORE-12 deben revisarse para la solución propia; también hay que confirmar que la PWA queda cubierta. Voz está prevista y vídeo/cliente escritorio Linux se posponen. Se recomienda reservar un 15–20% para imprevistos. La fecha objetivo de beta es el 1 de mayo de 2027, no una garantía.
 
 ## Tareas planificadas
 
@@ -137,7 +137,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 
 - [CORE-01 · Definir visión, objetivos, alcance y criterios de éxito](https://github.com/CristianGR-DEV/Secure-social-platform/issues/2) — 2026-11-03 a 2026-11-05 · 6 h · Urgente · Análisis.
 - [CORE-02 · Definir UX, flujos de usuario y wireframes](https://github.com/CristianGR-DEV/Secure-social-platform/issues/1) — 2026-11-03 a 2026-11-12 · 8 h · Alta · Análisis.
-- [CORE-03 · Definir arquitectura, modelo de seguridad y prueba técnica de Matrix](https://github.com/CristianGR-DEV/Secure-social-platform/issues/3) — 2026-11-05 a 2026-11-15 · 10 h · Urgente · Arquitectura.
+- [CORE-03 · Diseñar y probar arquitectura ligera de mensajería propia](https://github.com/CristianGR-DEV/Secure-social-platform/issues/3) — 2026-11-05 a 2026-11-15 · 10 h provisionales · Urgente · Arquitectura.
 - [CORE-04 · Preparar repositorio, estructura de trabajo, TypeScript y CI inicial](https://github.com/CristianGR-DEV/Secure-social-platform/issues/4) — 2026-11-09 a 2026-11-18 · 8 h · Urgente · DevOps.
 - [CORE-05 · Diseñar modelo de datos PostgreSQL y migraciones iniciales](https://github.com/CristianGR-DEV/Secure-social-platform/issues/5) — 2026-11-16 a 2026-11-28 · 8 h · Alta · Database.
 
@@ -149,11 +149,11 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 - [CORE-09 · Configurar internacionalización inicial en español e inglés](https://github.com/CristianGR-DEV/Secure-social-platform/issues/9) — 2026-12-10 a 2026-12-19 · 7 h · Media · Frontend.
 - [CORE-10 · Implementar búsqueda de usuarios, amistades y bloqueo](https://github.com/CristianGR-DEV/Secure-social-platform/issues/10) — 2026-12-16 a 2026-12-26 · 8 h · Alta · Backend.
 
-### Sprint 3 — Mensajería privada y cifrado · 57 h
+### Sprint 3 — Mensajería privada y sincronización · 35 h provisionales
 
-- [CORE-11 · Desplegar Synapse de desarrollo y vincular identidades Corebite](https://github.com/CristianGR-DEV/Secure-social-platform/issues/11) — 2026-12-27 a 2027-01-05 · 10 h · Urgente · Backend.
-- [CORE-12 · Integrar Matrix JS SDK y mensajería privada en tiempo real](https://github.com/CristianGR-DEV/Secure-social-platform/issues/12) — 2027-01-02 a 2027-01-11 · 12 h · Urgente · Frontend.
-- [CORE-13 · Evaluar e implementar, si procede, E2EE en conversaciones privadas](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — 2027-01-08 a 2027-01-20 · 22 h provisionales · Urgente para resolver la decisión · Security.
+- [CORE-11 · Preparar el servicio propio de mensajería Corebite](https://github.com/CristianGR-DEV/Secure-social-platform/issues/11) — 2026-12-27 a 2027-01-05 · 10 h provisionales · Urgente · Backend.
+- [CORE-12 · Implementar mensajería privada Corebite en tiempo real](https://github.com/CristianGR-DEV/Secure-social-platform/issues/12) — 2027-01-02 a 2027-01-11 · 12 h provisionales · Urgente · Frontend.
+
 - [CORE-14 · Implementar historial, sincronización y estados de conversación](https://github.com/CristianGR-DEV/Secure-social-platform/issues/14) — 2027-01-11 a 2027-01-18 · 7 h · Alta · Frontend.
 - [CORE-15 · Implementar protección adicional de acceso a conversaciones](https://github.com/CristianGR-DEV/Secure-social-platform/issues/15) — 2027-01-17 a 2027-01-23 · 6 h · Alta · Security.
 
@@ -190,7 +190,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 |---|---|---|
 | H1 · Análisis y arquitectura | 2026-11-28 | Requisitos, wireframes, ADR y base técnica |
 | H2 · Usuarios operativos | 2026-12-26 | Registro, perfiles, presencia y amistades |
-| H3 · Mensajería privada | 2027-01-23 | Mensajería privada operativa y decisión de E2EE documentada |
+| H3 · Mensajería privada | 2027-01-23 | Mensajería privada operativa y sincronización fiable |
 | H4 · Multimedia | 2027-02-20 | Archivos y llamadas de voz 1:1 |
 | H5 · Experiencia y pruebas | 2027-03-20 | Personalización, seguridad y pruebas |
 | H6 · Beta desplegada | 2027-04-17 | Despliegue, copias de seguridad y documentación |
@@ -198,13 +198,13 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 
 ## Dependencias y riesgos principales
 
-- CORE-03 debe validar la arquitectura Matrix, el modelo de amenazas y el prototipo antes de cerrar decisiones técnicas.
+- CORE-03 debe validar la arquitectura propia, el modelo de amenazas y el prototipo antes de cerrar decisiones técnicas.
 - CORE-11 depende del diseño de arquitectura, la base de datos y la autenticación.
-- CORE-12 depende de la búsqueda/contactos y de Synapse.
+- CORE-12 depende de la búsqueda/contactos y del servicio propio preparado en CORE-11.
 - CORE-13 depende de CORE-03: E2EE solo se implementa si el prototipo y la decisión de arquitectura lo aprueban.
 - CORE-16 depende de la mensajería y del modelo de seguridad.
 - CORE-17 depende de la señalización/mensajería; CORE-18 depende de las pruebas de WebRTC.
-- CORE-26 depende de Synapse, coturn y staging.
+- CORE-26 depende del servicio propio, coturn y staging.
 - CORE-27 depende del despliegue.
 - CORE-30 depende de las pruebas, seguridad, despliegue y documentación.
 - Las fechas pueden cambiar por capacidad del servidor, DNS/dominio, disponibilidad de SMTP, limitaciones de navegadores y recuperación de claves.
@@ -215,29 +215,25 @@ Este archivo es la referencia resumida y viva del proyecto. Al avanzar, actualiz
 
 ## Preferencias confirmadas por el propietario (2026-11-03)
 
-Esta sección prevalece sobre decisiones iniciales que no coincidan.
+Estas respuestas son las decisiones vigentes y reemplazan supuestos anteriores:
 
-- **Público:** comunidad cerrada, como una clase o asociación; el propósito inicial son chats privados con amistades.
-- **Visión:** interfaz inspirada en Discord y objetivo de ligereza/fiabilidad similar a TeamSpeak clásico, con identidad propia.
-- **Beta:** primero cuentas, perfiles, contactos, chat privado, archivos y voz 1:1. Los servidores/comunidades privadas, roles, permisos, canales y vídeo se posponen; no entran en la primera beta.
-- **Cuentas:** nombre de usuario y contraseña, correo verificado. Perfil público limitado a nombre de usuario, avatar y presencia; búsqueda por usuario o dentro de una comunidad cuando esa función se incorpore.
-- **Mensajes:** historial, sincronización, edición, respuestas/citas, búsqueda y borrado con plazo limitado.
-- **Cifrado:** mantener E2EE como opción a evaluar, no como requisito incondicional. Primero medir complejidad y recursos; si se descarta, proteger cuentas y chats con HTTPS, autorización, protección de datos almacenados y registros mínimos, indicando que el servidor podría leer el contenido.
-- **Recuperación y dispositivos:** se prefiere una copia protegida de claves y varias sesiones de dispositivo; si E2EE no se adopta, la recuperación no necesita resolver claves de chat.
-- **Archivos:** varios tipos, límite objetivo inicial de 50 MB. Definir tipos peligrosos y validación antes de permitir cualquier tipo.
-- **Llamadas:** voz 1:1 en la beta; vídeo después.
-- **Avisos y apariencia:** avisos dentro de la app y del navegador, configurables; diseño minimalista, oscuro por defecto, tema claro, paletas, paneles y tamaño de texto.
-- **Accesibilidad:** teclado, lectores de pantalla y texto ampliable.
-- **Linux:** objetivo de ofrecer web/PWA y escritorio Linux, con notificaciones e integración de audio. Falta decidir empaquetado y tecnología de escritorio.
-- **Alojamiento:** probar primero en el Ubuntu disponible y medir memoria, CPU, red y fiabilidad; más adelante comparar con alojamiento gestionado.
-- **Visibilidad:** el producto no será de código abierto; el propietario prefiere mantener el repositorio público por ahora.
-- **Objetivo de beta:** mantener el 1 de mayo de 2027; aceptación requiere funciones principales, criterios verificados, despliegue externo, restauración probada, documentación y presentación.
-- **Recorte de alcance:** priorizar interfaz y experiencia, manteniendo un nivel mínimo de seguridad.
+- **Producto:** comunidad cerrada para amistades; inspiración visual Discord, meta de ligereza y fiabilidad tipo TeamSpeak clásico, con marca Corebite propia.
+- **Beta:** web adaptable/PWA, chats privados, historial, contactos, archivos de hasta 50 MB y voz 1:1. Sin E2EE, servidores/comunidades privadas, canales, vídeo ni cliente de escritorio Linux.
+- **Después de beta:** servidores privados con roles/permisos, vídeo 1:1 y cliente Linux de escritorio; priorizar estas funciones después de medir capacidad y validar la beta.
+- **Arquitectura:** solución propia ligera; no integrar Matrix/Synapse en la beta. Mantener la integración Linux de escritorio para una fase posterior.
+- **Seguridad beta:** contraseñas con Argon2id, confirmación de correo, HTTPS, autorización estricta por conversación, límites de intentos/abuso, protección de datos almacenados, copias seguras y logs mínimos. Sin E2EE, una persona que administre el servidor puede leer el contenido; informar claramente a usuarios. No llamar a estas medidas E2EE.
+- **Cifrado:** E2EE queda para evaluar después de la beta. CORE-13 se mantiene abierto en Ideas, sin Sprint, fechas ni estimación.
+- **Llamadas:** voz 1:1 en beta; vídeo después.
+- **Alojamiento y rendimiento:** probar primero en el servidor Ubuntu disponible y medir CPU, RAM, almacenamiento, latencia y estabilidad. Los valores reales deben guiar los límites, sin asumir que el hardware por sí solo garantiza rendimiento.
+- **Interfaz:** primero reorganizar/rediseñar el prototipo local para acercar sus flujos a Discord manteniendo identidad propia. Subirlo al repositorio después de limpiarlo y revisarlo.
+- **Repositorio:** el código no se plantea como código abierto, pero el usuario quiere mantener el repositorio público por ahora.
+- **Objetivo de beta:** fecha objetivo 2027-05-01. Funciones principales operativas, criterios de aceptación verificados, despliegue externo, backups/restauración probados, documentación y presentación.
+- **Estimación:** 270 h iniciales al quitar CORE-13 de la beta, pero CORE-03/11/12 y PWA requieren reestimación. Sprint 3 queda en 35 h provisionales.
 
-### Decisión de arquitectura: Matrix o mensajería propia
+### Seguridad sin E2EE
 
-Matrix reutiliza un protocolo abierto, sincronización en tiempo real, salas y bibliotecas existentes; permite alojar el servidor y evita diseñar desde cero todo el sistema de transporte de mensajes. A cambio, hay que integrar identidades Corebite/Matrix y manejar dispositivos, claves, verificación y recuperación. Synapse también puede requerir bastante memoria, por lo que se medirá en el servidor disponible. Una solución propia podría ajustarse mejor a las necesidades mínimas y reducir servicios, pero obliga a construir y mantener entrega, sincronización, historial y seguridad. Sin E2EE, el servidor puede leer el texto de los mensajes. La tarea CORE-03 comparará ambas opciones con un prototipo y datos del Ubuntu antes de decidir.
+HTTPS protege el transporte y el cifrado de disco/copias reduce el riesgo si se exponen esos soportes; Argon2id, autorización, rate limiting y mínimo registro protegen cuentas y operación. Sin E2EE, estas medidas no impiden que una persona con control suficiente del servidor lea mensajes. Este límite debe mostrarse antes de que los usuarios usen Corebite.
 
-### Estado del prototipo local
+### Material local
 
-La carpeta de trabajo contiene páginas HTML para inicio, sesión, cuenta y términos, hojas CSS e imágenes. No encontré JavaScript, backend ni manifiesto de dependencias. El propietario quiere ordenar y corregir este prototipo antes de subirlo al repositorio. La página inicial todavía contiene texto de ejemplo; no se considera una función terminada.
+La carpeta de trabajo contiene páginas HTML para inicio, sesión, cuenta y términos, hojas CSS e imágenes. No encontré JavaScript, backend ni manifiesto de dependencias. El prototipo se rediseñará y limpiará antes de incorporarlo al repositorio; la página inicial todavía tiene texto de ejemplo y algunas rutas incompletas.
