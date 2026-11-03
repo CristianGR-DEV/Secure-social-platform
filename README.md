@@ -90,7 +90,7 @@ La selección final de frameworks y algunos detalles de implementación queda su
 | Base de datos | PostgreSQL y migraciones iniciales |
 | Mensajería | Comparar Matrix/Synapse con un servicio propio y medir memoria, CPU y complejidad en Ubuntu antes de decidir |
 | Cifrado | E2EE no es requisito cerrado: decidir tras el prototipo; si se adopta, usar una implementación estable y no crear criptografía propia |
-| Voz | WebRTC para llamadas individuales; coturn como relay si las pruebas de red lo requieren |
+| Voz/vídeo | WebRTC para voz 1:1 en beta; vídeo después; coturn si las pruebas de red lo requieren |
 | Interfaz | Referencia visual Discord; diseño ligero y adaptable; web/PWA y aplicación de escritorio Linux objetivo; tecnología de escritorio pendiente |
 | Autenticación | Argon2id para contraseñas, sesiones revocables y cookies HttpOnly, Secure y SameSite en producción |
 | Archivos | Almacenamiento fuera del directorio público, validación de contenido/tamaño y descargas autorizadas |
@@ -127,7 +127,7 @@ La duración prevista es de cuatro semanas por Sprint. El cierre tiene dos seman
 | Cierre | 2027-04-18 a 2027-05-01 | Validación, release y exposición | CORE-30 | 12 h |
 | **Total** |  |  | **30 Issues** | **292 h** |
 
-Las 292 horas son una estimación inicial de trabajo; voz está prevista y vídeo se traslada a después de la beta, por lo que habrá que revisar el total antes de cerrar el plan. Se recomienda reservar un 15–20% adicional para imprevistos. La beta tiene como fecha objetivo el 1 de mayo de 2027; no es una fecha garantizada.
+Las 292 horas son una estimación inicial de trabajo; voz está prevista y vídeo se traslada a después de la beta, por lo que habrá que revisar el total antes de cerrar el plan. Las 22 horas de CORE-13 son provisionales y dependen de CORE-03; si se aplaza E2EE, se replanificará el Sprint 3. Se recomienda reservar un 15–20% adicional para imprevistos. La beta tiene como fecha objetivo el 1 de mayo de 2027; no es una fecha garantizada.
 
 ## Tareas planificadas
 
@@ -153,7 +153,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 
 - [CORE-11 · Desplegar Synapse de desarrollo y vincular identidades Corebite](https://github.com/CristianGR-DEV/Secure-social-platform/issues/11) — 2026-12-27 a 2027-01-05 · 10 h · Urgente · Backend.
 - [CORE-12 · Integrar Matrix JS SDK y mensajería privada en tiempo real](https://github.com/CristianGR-DEV/Secure-social-platform/issues/12) — 2027-01-02 a 2027-01-11 · 12 h · Urgente · Frontend.
-- [CORE-13 · Implementar y validar E2EE en conversaciones privadas](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — 2027-01-08 a 2027-01-20 · 22 h · Urgente · Security.
+- [CORE-13 · Evaluar e implementar, si procede, E2EE en conversaciones privadas](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — 2027-01-08 a 2027-01-20 · 22 h provisionales · Urgente para resolver la decisión · Security.
 - [CORE-14 · Implementar historial, sincronización y estados de conversación](https://github.com/CristianGR-DEV/Secure-social-platform/issues/14) — 2027-01-11 a 2027-01-18 · 7 h · Alta · Frontend.
 - [CORE-15 · Implementar protección adicional de acceso a conversaciones](https://github.com/CristianGR-DEV/Secure-social-platform/issues/15) — 2027-01-17 a 2027-01-23 · 6 h · Alta · Security.
 
@@ -201,7 +201,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 - CORE-03 debe validar la arquitectura Matrix, el modelo de amenazas y el prototipo antes de cerrar decisiones técnicas.
 - CORE-11 depende del diseño de arquitectura, la base de datos y la autenticación.
 - CORE-12 depende de la búsqueda/contactos y de Synapse.
-- CORE-13 depende de Synapse y la integración del SDK.
+- CORE-13 depende de CORE-03: E2EE solo se implementa si el prototipo y la decisión de arquitectura lo aprueban.
 - CORE-16 depende de la mensajería y del modelo de seguridad.
 - CORE-17 depende de la señalización/mensajería; CORE-18 depende de las pruebas de WebRTC.
 - CORE-26 depende de Synapse, coturn y staging.
