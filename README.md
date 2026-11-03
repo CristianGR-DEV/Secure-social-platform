@@ -243,6 +243,27 @@ Estas respuestas reemplazan cualquier supuesto inicial que no coincida.
 - **Fecha y éxito de beta:** mantener 2027-05-01. Beta terminada significa funciones principales, criterios verificados, despliegue externo, backups/restauración probados, documentación y presentación. Si hay que recortar, priorizar UX.
 - **Plan estimado:** 270 h provisionales. Comparar alojamiento y confirmar dominio, correo SMTP y acceso externo antes del despliegue.
 
+### Comparativa inicial de alojamiento (referencia: 2026-11-03)
+
+| Opción | Coste/servicio de referencia | Ventajas | Límites a comprobar |
+|---|---|---|---|
+| Ubuntu propio disponible | Sin alquiler adicional de servidor; calcular electricidad, conexión, mantenimiento y backup | Reutiliza hardware, control completo y útil para medir rendimiento real | Cortes eléctricos o de red, acceso entrante, IP fija/dinámica, router/ISP, seguridad y restauración |
+| VPS europeo Hetzner CPX22 | 2 vCPU, 4 GB RAM, 80 GB NVMe; 19,49 €/mes antes de IVA y coste adicional de IPv4 | Servidor público estable y escalable; menos dependencia de la red doméstica | Es un VPS que seguimos administrando; añadir copias, IPv4, IVA y almacenamiento si se requiere |
+| VPS DigitalOcean Basic | 2 vCPU, 4 GB RAM, 80 GB SSD; 24 USD/mes, con 4.000 GiB de transferencia | Configuración sencilla, precio mensual claro y región elegible | También es autogestionado; revisar impuestos, región, backups y cargos adicionales |
+| Plataforma gestionada Render | Precio por servicio, base de datos, almacenamiento y transferencia; web services con TLS/dominio/WebSockets | Reduce tareas del sistema operativo y ofrece servicios gestionados | Sumar aplicación + PostgreSQL + disco/tráfico; probar WebRTC/TURN y límites antes de adoptarla |
+
+**Propuesta provisional:** desarrollar y medir primero en Ubuntu propio. Para una beta accesible externamente, comparar su coste total y fiabilidad con un VPS europeo o una plataforma gestionada. No elegir proveedor hasta medir estabilidad de la conexión, consumo eléctrico y necesidades reales de CPU/RAM/almacenamiento. Los precios son referencias publicadas y pueden cambiar; confirmar en el checkout.
+
+**Dominio, correo y acceso externo pendientes:**
+- No hay dominio ni proveedor SMTP confirmado. El dominio es una compra aparte; Cloudflare puede gestionar sus DNS, pero no registra el dominio.
+- Cuando se elija dominio: crear A/AAAA hacia la IP pública; comprobar si la IP es fija y usar actualización DNS si cambia.
+- Confirmar que el router/ISP permite conexiones entrantes y configurar firewall/port forwarding de 80/443 al proxy HTTPS; probar desde una red externa.
+- El correo de verificación, recuperación y alertas necesita dominio/remitente autenticado y registros SPF, DKIM y DMARC. Brevo declara correo transaccional y 300 envíos al día en el plan gratuito; verificar dominio y condiciones antes de integrarlo.
+- La voz WebRTC puede requerir un relay TURN; validarlo con el Issue CORE-18 y medir tráfico/costes.
+- Fórmula para estimar electricidad del servidor: vatios medios medidos × horas de uso × tarifa eléctrica; no usar el consumo máximo de la fuente como gasto medio.
+
+Fuentes oficiales de la referencia: [Hetzner Cloud y tarifas](https://docs.hetzner.com/general/infrastructure-and-availability/price-adjustment/), [DigitalOcean Droplets](https://www.digitalocean.com/pricing/droplets), [Render Pricing](https://render.com/pricing), [Brevo](https://help.brevo.com/hc/en-us/articles/208589409-About-Brevo-s-pricing-plans) y [gestión DNS de Cloudflare](https://developers.cloudflare.com/dns/manage-dns-records/).
+
 ### Seguridad sin E2EE
 
 HTTPS protege la conexión; Argon2id, autorización por conversación, límites de uso, protección del almacenamiento y copias seguras reducen riesgos. No impiden que quien administre el servidor lea mensajes sin E2EE. Mostrar este límite. La protección criptográfica del historial almacenado se describe por separado de E2EE.
