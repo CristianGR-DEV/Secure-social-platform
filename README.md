@@ -38,7 +38,7 @@ Objetivos de la beta:
 - Interfaz principal y componentes reutilizables.
 - Mensajería privada, historial y sincronización sin E2EE en la beta. La persona que administre el servidor podría leer el contenido.
 - Archivos y llamadas de voz individuales; sin vídeo en la beta.
-- Temas, paletas, ajustes exportables/importables, navegación personalizable y una PWA/aplicación de escritorio Linux prevista; su tecnología queda pendiente.
+- Temas, paletas, ajustes exportables/importables y navegación personalizable; web/PWA en beta y escritorio Linux posterior.
 - Pruebas funcionales y de seguridad, compatibilidad de navegadores, diseño responsive y accesibilidad.
 - Staging, despliegue en Ubuntu Server, copias de seguridad, restauración, monitorización, optimización y documentación.
 
@@ -184,6 +184,12 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 
 - [CORE-30 · Validar beta, corregir errores y preparar entrega y exposición](https://github.com/CristianGR-DEV/Secure-social-platform/issues/30) — 2027-04-18 a 2027-05-01 · 12 h · Urgente · Release.
 
+## Ideas posteriores a la beta
+
+- [CORE-13 · Evaluar E2EE para una versión posterior](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — estado Ideas; no tiene Sprint, fechas ni estimación.
+- Servidores privados, roles, permisos y canales.
+- Vídeo 1:1 y cliente de escritorio Linux.
+
 ## Hitos
 
 | Hito | Fecha objetivo | Resultado |
@@ -201,7 +207,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 - CORE-03 debe validar la arquitectura propia, el modelo de amenazas y el prototipo antes de cerrar decisiones técnicas.
 - CORE-11 depende del diseño de arquitectura, la base de datos y la autenticación.
 - CORE-12 depende de la búsqueda/contactos y del servicio propio preparado en CORE-11.
-- CORE-13 depende de CORE-03: E2EE solo se implementa si el prototipo y la decisión de arquitectura lo aprueban.
+- CORE-13 queda fuera de la beta en Ideas, sin Sprint, fechas ni estimación; reconsiderar después de la beta.
 - CORE-16 depende de la mensajería y del modelo de seguridad.
 - CORE-17 depende de la señalización/mensajería; CORE-18 depende de las pruebas de WebRTC.
 - CORE-26 depende del servicio propio, coturn y staging.
