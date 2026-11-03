@@ -37,14 +37,14 @@ Objetivos de la beta:
 - Perfiles, avatares, estados de presencia, búsqueda, amistades y bloqueo.
 - Interfaz principal y componentes reutilizables.
 - Mensajería privada, historial y sincronización sin E2EE en la beta. La persona que administre el servidor podría leer el contenido.
-- Archivos y llamadas 1:1; voz está aprobada en beta y el alcance de vídeo queda pendiente de aclaración.
+- Archivos y llamadas 1:1; voz está aprobada en beta y el vídeo 1:1 queda fuera de la beta.
 - Temas, paletas, ajustes exportables/importables y navegación personalizable; web/PWA en beta y escritorio Linux posterior.
 - Pruebas funcionales y de seguridad, compatibilidad de navegadores, diseño responsive y accesibilidad.
 - Staging, despliegue en Ubuntu Server, copias de seguridad, restauración, monitorización, optimización y documentación.
 
 ### Funciones posteriores
 
-La creación de servidores privados/comunidades, grupos, canales, roles y permisos queda fuera de la primera beta. También quedan para después el cliente de escritorio Linux, las llamadas grupales, compartir pantalla, plugins y procesamiento avanzado de audio/vídeo. La beta prioriza web/PWA, chats privados y voz 1:1; falta aclarar si el vídeo 1:1 entra en esta beta.
+La creación de servidores privados/comunidades, grupos, canales, roles y permisos queda fuera de la primera beta. También quedan para después el cliente de escritorio Linux, las llamadas grupales, compartir pantalla, plugins y procesamiento avanzado de audio/vídeo. La beta prioriza web/PWA, chats privados y voz 1:1; el vídeo 1:1 queda para después de la beta.
 
 ## Cómo se quiere trabajar
 
@@ -90,7 +90,7 @@ La selección final de frameworks y algunos detalles de implementación queda su
 | Base de datos | PostgreSQL y migraciones iniciales |
 | Mensajería | Servicio propio Corebite, priorizando simplicidad y bajo consumo; medir entrega, historial, sincronización y recursos en Ubuntu |
 | Cifrado | Sin E2EE en la beta. Aplicar HTTPS, autorización, protección de datos almacenados y registros mínimos; reconsiderar E2EE tras la beta |
-| Voz/vídeo | WebRTC para voz 1:1 en beta; vídeo 1:1 por aclarar; coturn si las pruebas de red lo requieren |
+| Voz/vídeo | WebRTC para voz 1:1 en beta; vídeo 1:1 posterior a la beta; coturn si las pruebas de red lo requieren |
 | Interfaz | Diseño propio inspirado en Discord; web/PWA adaptable en beta; escritorio Linux después; ligereza como objetivo de rendimiento |
 | Autenticación | Argon2id para contraseñas, sesiones revocables y cookies HttpOnly, Secure y SameSite en producción |
 | Archivos | Almacenamiento fuera del directorio público, validación de contenido/tamaño y descargas autorizadas |
@@ -127,7 +127,7 @@ La duración prevista es de cuatro semanas por Sprint. El cierre tiene dos seman
 | Cierre | 2027-04-18 a 2027-05-01 | Validación, release y exposición | CORE-30 | 12 h |
 | **Total beta** |  |  | **29 Issues planificados + 1 idea posterior** | **270 h provisionales** |
 
-Las 270 horas son una suma provisional tras sacar CORE-13 de la beta. Las estimaciones de CORE-03, CORE-11 y CORE-12 deben revisarse para la solución propia; también hay que confirmar que la PWA queda cubierta. Voz está prevista; el vídeo 1:1 está pendiente de aclaración y el cliente de escritorio Linux se pospone. Se recomienda reservar un 15–20% para imprevistos. La fecha objetivo de beta es el 1 de mayo de 2027, no una garantía.
+Las 270 horas son una suma provisional tras sacar CORE-13 de la beta. Las estimaciones de CORE-03, CORE-11 y CORE-12 deben revisarse para la solución propia; también hay que confirmar que la PWA queda cubierta. Voz está prevista; el vídeo 1:1 queda para después de la beta y el cliente de escritorio Linux se pospone. Se recomienda reservar un 15–20% para imprevistos. La fecha objetivo de beta es el 1 de mayo de 2027, no una garantía.
 
 ## Tareas planificadas
 
@@ -221,37 +221,37 @@ Este archivo es la referencia resumida y viva del proyecto. Al avanzar, actualiz
 
 ## Preferencias confirmadas por el propietario (2026-11-03)
 
-Estas respuestas reemplazan cualquier supuesto inicial que no coincida. Si dos respuestas se contradicen, el punto aparece como pendiente y no se cambia el alcance hasta aclararlo.
+Estas respuestas reemplazan cualquier supuesto inicial que no coincida.
 
 - **Usuarios y propósito:** comunidad cerrada; el uso principal es hablar en privado con amistades y controlar los propios datos/servidor.
-- **UX y estilo:** en la primera etapa, acercarse lo máximo posible a los flujos y estética de Discord; más adelante incorporar estilo propio. Prioridad visual minimalista, oscura por defecto, con modo claro y temas personalizables. Se busca la ligereza y fiabilidad de TeamSpeak clásico.
-- **Cuentas y contactos:** usuario y contraseña con verificación por correo; búsqueda por nombre de usuario y también dentro de comunidades cuando existan. Aceptar/rechazar solicitudes, bloquear, eliminar amistades, ocultar perfil de búsquedas y reportar cuentas.
-- **Solicitudes de amistad:** cualquier cuenta puede enviar solicitudes. No caducan; permanecen pendientes hasta que la persona destinataria acepte o rechace. Límite inicial elegido: 5 nuevas solicitudes al día y 7 días antes de volver a solicitar a la misma persona.
-- **Mensajes e historial:** mensajería en tiempo real, historial y sincronización, edición/borrado para todos solo durante los primeros 5 minutos. Después el mensaje queda visible para ambas personas y no se permite ocultarlo solo para uno. No hay caducidad automática.
-- **Borrado de conversación:** quitarla de la bandeja la oculta para esa persona. El servidor elimina la conversación cuando ambas personas la hayan quitado de sus bandejas; hasta entonces, la conserva para la otra persona.
-- **Sesiones y seguridad:** varios dispositivos con la misma cuenta/sesión, sesiones revocables y aviso de dispositivo nuevo por correo verificado. Sin E2EE en beta. Se pide guardar lo mínimo necesario, historial protegido/cifrado en almacenamiento y registros técnicos limitados; esto no equivale a E2EE. La preferencia de E2EE para mensajes y recuperación de historial se evaluará para después de la beta.
-- **Archivos:** imágenes, vídeo, audio y documentos comunes hasta 50 MB por archivo. ZIP se pospone en beta. Se bloquean ejecutables/scripts y se valida el tipo real y permisos.
-- **Llamadas:** la respuesta sobre el alcance no es consistente: se eligió vídeo 1:1 en la pregunta de tipos de llamada, pero también se seleccionaron las videollamadas como función posterior. Hasta confirmar, solo voz 1:1 queda en el alcance aprobado y CORE-17 mantiene su estimación original.
-- **Interfaz y accesibilidad:** beta en ordenador, tablet y móvil mediante navegador. Incluir navegación por teclado, compatibilidad con lectores de pantalla y texto ampliable; mantener buen contraste como requisito general.
-- **Personalización:** tema claro/oscuro, colores/paletas, distribución de paneles, tamaño de texto y exportar/importar ajustes.
-- **Infraestructura:** servidor Ubuntu e IP pública disponibles. Aún se deben comparar costes/opciones de alojamiento antes de decidir el despliegue final; disponibilidad de dominio y SMTP queda por confirmar.
-- **Tecnología de mensajería:** el servicio propio Corebite sigue siendo la opción aprobada para la beta, sin Matrix/Synapse. El usuario quiere una comparación clara de ventajas y límites de Matrix antes de cerrar decisiones futuras.
-- **Comunidades posteriores:** servidores privados, canales, roles y permisos quedan para después. La administración de comunidades debería seguir un modelo parecido al de Discord; los niveles y permisos exactos faltan por concretar.
-- **Linux:** la integración nativa con Linux es un objetivo; el cliente de escritorio Linux queda posterior a la beta salvo que se decida cambiar el alcance.
-- **Código y repositorio:** Corebite no se publicará como producto de código abierto. El repositorio GitHub se mantiene público por la decisión previa, separada de la licencia/producto.
-- **Fecha y éxito de beta:** mantener objetivo 2027-05-01. Beta terminada significa funciones principales, criterios verificados, despliegue externo, backup/restauración probados, documentación y presentación. Si hay que recortar, priorizar la experiencia de usuario.
-- **Plan estimado:** 270 h provisionales. La estimación de llamadas y el alojamiento deberán revisarse cuando se resuelvan las decisiones pendientes.
+- **UX y estilo:** en la primera etapa, acercarse lo máximo posible a los flujos y estética de Discord, manteniendo marca Corebite. Más adelante se desarrollará un estilo propio. Interfaz minimalista, oscura por defecto, con modo claro y temas personalizables. Se busca la ligereza y fiabilidad de TeamSpeak clásico.
+- **Cuentas y contactos:** usuario y contraseña con verificación por correo; búsqueda por nombre de usuario y, en comunidades futuras, búsqueda de miembros. Aceptar/rechazar solicitudes, bloquear, eliminar amistades, ocultar perfil de búsquedas y reportar cuentas.
+- **Solicitudes de amistad:** cualquier cuenta puede enviar solicitudes. No caducan y quien las envía no puede cancelarlas; quedan pendientes hasta que la persona destinataria acepte o rechace. Límite inicial: 5 nuevas solicitudes al día y 7 días antes de volver a solicitar a la misma persona.
+- **Mensajes e historial:** mensajería en tiempo real, historial y sincronización. Se permite editar/borrar para todas las personas durante los primeros 5 minutos; después el mensaje permanece visible para ambas y no se puede ocultar solo para una persona. No hay caducidad automática.
+- **Borrado de conversación:** quitarla de la bandeja la oculta para esa persona. El servidor elimina el historial cuando ambas personas la hayan quitado de sus propias bandejas.
+- **Sesiones y seguridad:** varios dispositivos con la misma cuenta/sesión, sesiones revocables y aviso de nuevo dispositivo por correo verificado. Sin E2EE en beta. Se guardará solo lo necesario; el historial se protegerá en almacenamiento y habrá registros técnicos limitados. Esto no equivale a E2EE.
+- **E2EE posterior:** explorar E2EE para mensajes privados después de la beta, con recuperación de historial mediante clave o copia protegida. Los archivos quedan fuera de esa decisión por ahora.
+- **Archivos:** imágenes, vídeo, audio y documentos comunes hasta 50 MB por archivo. ZIP se pospone en beta. Bloquear ejecutables/scripts y validar tipo real y permisos.
+- **Llamadas:** voz 1:1 en beta; vídeo 1:1 después.
+- **Interfaz y accesibilidad:** ordenador, tablet y móvil mediante navegador. Navegación por teclado, compatibilidad con lectores de pantalla y texto ampliable.
+- **Personalización:** tema claro/oscuro, paletas, distribución de paneles, tamaño de texto e importar/exportar ajustes.
+- **Infraestructura:** servidor Ubuntu e IP pública disponibles. Comparar costes y opciones de alojamiento antes de decidir el despliegue. Dominio, SMTP y acceso externo se deben comprobar.
+- **Tecnología de mensajería:** servicio propio Corebite para beta, sin Matrix/Synapse; se quiere una explicación comparativa de ventajas y límites de Matrix.
+- **Comunidades futuras:** servidores privados, canales, roles y permisos posteriores, con un modelo inspirado en Discord. Falta concretar jerarquía y permisos.
+- **Linux:** integración nativa como objetivo; cliente de escritorio Linux posterior a la beta.
+- **Código y repositorio:** Corebite no se publicará como producto de código abierto. El repositorio se mantiene público por la decisión previa.
+- **Fecha y éxito de beta:** mantener 2027-05-01. Beta terminada significa funciones principales, criterios verificados, despliegue externo, backups/restauración probados, documentación y presentación. Si hay que recortar, priorizar UX.
+- **Plan estimado:** 270 h provisionales. Comparar alojamiento y confirmar dominio, correo SMTP y acceso externo antes del despliegue.
 
 ### Seguridad sin E2EE
 
-HTTPS protege la conexión; Argon2id, autorización por conversación, límites de uso, protección del almacenamiento y copias seguras reducen riesgos. No impiden que quien administre el servidor lea los mensajes sin E2EE. Mostrar este límite a los usuarios. La eventual protección criptográfica del historial almacenado debe describirse por separado de E2EE.
+HTTPS protege la conexión; Argon2id, autorización por conversación, límites de uso, protección del almacenamiento y copias seguras reducen riesgos. No impiden que quien administre el servidor lea mensajes sin E2EE. Mostrar este límite. La protección criptográfica del historial almacenado se describe por separado de E2EE.
 
 ### Ideas posteriores a la beta
 
-- [CORE-13 · Evaluar E2EE para una versión posterior](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — centrado inicialmente en mensajes; falta decidir recuperación/dispositivos y el cifrado de archivos.
+- [CORE-13 · Evaluar E2EE para mensajes privados](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — estudiar recuperación/dispositivos; E2EE de archivos queda fuera de la decisión actual.
 - Servidores privados, roles, permisos y canales.
-- Cliente de escritorio Linux.
-- Vídeo 1:1, pendiente de aclaración sobre si se incluye en beta.
+- Vídeo 1:1 y cliente de escritorio Linux.
 
 ### Material local
 
