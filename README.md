@@ -27,7 +27,7 @@ Objetivos de la beta:
 4. Ofrecer conversaciones privadas en tiempo real, historial y sincronización.
 5. Proteger cuentas, conexiones y datos almacenados. E2EE queda fuera de la beta y podrá reconsiderarse después.
 6. Permitir compartir archivos con validación de tipo y tamaño y autorización de descarga.
-7. Entregar llamadas 1:1 mediante WebRTC. Voz en beta; el alcance de vídeo está pendiente de aclaración por respuestas contradictorias. Probar relay TURN si la conectividad lo requiere.
+7. Entregar llamadas 1:1 mediante WebRTC. Voz en beta; vídeo 1:1 posterior a la beta. Probar relay TURN si la conectividad lo requiere.
 8. Ofrecer interfaz adaptable, accesible, en español e inglés, con temas y distribución personalizable.
 9. Entregar una beta desplegable, con copias de seguridad, monitorización, documentación y una presentación demostrable.
 
@@ -197,7 +197,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 | H1 · Análisis y arquitectura | 2026-11-28 | Requisitos, wireframes, ADR y base técnica |
 | H2 · Usuarios operativos | 2026-12-26 | Registro, perfiles, presencia y amistades |
 | H3 · Mensajería privada | 2027-01-23 | Mensajería privada operativa y sincronización fiable |
-| H4 · Multimedia | 2027-02-20 | Archivos y llamadas 1:1 (voz; vídeo pendiente de decisión) |
+| H4 · Multimedia | 2027-02-20 | Archivos, voz 1:1 en beta y vídeo 1:1 posterior |
 | H5 · Experiencia y pruebas | 2027-03-20 | Personalización, seguridad y pruebas |
 | H6 · Beta desplegada | 2027-04-17 | Despliegue, copias de seguridad y documentación |
 | H7 · Entrega | 2027-05-01 | Beta validada y presentación |
