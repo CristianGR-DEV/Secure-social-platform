@@ -233,6 +233,7 @@ Estas respuestas reemplazan cualquier supuesto inicial que no coincida.
 - **E2EE posterior:** explorar E2EE para mensajes privados después de la beta, con recuperación de historial mediante clave o copia protegida. Los archivos quedan fuera de esa decisión por ahora.
 - **Archivos:** imágenes, vídeo, audio y documentos comunes hasta 50 MB por archivo. ZIP se pospone en beta. Bloquear ejecutables/scripts y validar tipo real y permisos.
 - **Llamadas:** voz 1:1 en beta; vídeo 1:1 después.
+- **Notificaciones:** nuevas conversaciones/mensajes, solicitudes de amistad y llamadas entrantes; usar avisos dentro de Corebite y del navegador según preferencias de cada persona. Las vistas previas del navegador muestran solo el nombre y que llegó un mensaje, nunca su contenido. Sonido activable y silenciable.
 - **Interfaz y accesibilidad:** ordenador, tablet y móvil mediante navegador. Navegación por teclado, compatibilidad con lectores de pantalla y texto ampliable.
 - **Personalización:** tema claro/oscuro, paletas, distribución de paneles, tamaño de texto e importar/exportar ajustes.
 - **Infraestructura:** servidor Ubuntu e IP pública dinámica disponibles; el usuario puede configurar router y firewall. No hay dominio registrado. Comparar coste total y opciones de alojamiento; SMTP queda fuera de beta.
