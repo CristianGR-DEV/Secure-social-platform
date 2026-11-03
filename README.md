@@ -225,12 +225,13 @@ Estas respuestas reemplazan cualquier supuesto inicial que no coincida.
 
 - **Público y alcance:** comunidad cerrada para amistades; servidores privados, canales, roles y permisos van después de la beta.
 - **Interfaz inicial:** bandeja de conversaciones tras iniciar sesión. Si está vacía, invitar a buscar amistades.
-- **Primer contacto:** buscar por nombre de usuario, enviar una solicitud y esperar aceptación; solo amistades aceptadas pueden escribir mensajes privados.
-- **Mensajes:** edición/borrado para todos durante 5 minutos; después quedan bloqueados para edición/borrado global. Los mensajes no caducan automáticamente y permanecen hasta que alguien los borra.
-- **Perfiles:** nombre de usuario, avatar y presencia; presencia visible a todas las cuentas con perfil. Correo no público.
-- **Cuentas:** usuario/contraseña, verificación y recuperación por correo, aviso de nuevo dispositivo y revocación de sesiones. Contraseñas con Argon2id.
+- **Primer contacto:** buscar por nombre de usuario, enviar una solicitud y esperar aceptación; solo amistades aceptadas pueden escribir mensajes privados. Cualquier cuenta puede enviar solicitudes, con límites contra spam.
+- **Mensajes:** se pueden editar o borrar para todas las personas durante los primeros 5 minutos. Pasado ese plazo, permanecen visibles para ambas personas y ya no se pueden editar ni borrar para todos. No caducan automáticamente.
+- **Borrar conversación:** la acción la quita únicamente de la bandeja de quien la ejecuta; no borra los mensajes para la otra persona. La eliminación del historial del servidor queda pendiente de concretar.
+- **Perfiles y presencia:** nombre de usuario, avatar y presencia son campos públicos; correo no. La presencia se muestra por defecto a todas las cuentas con perfil, pero cada persona puede ocultarla.
+- **Cuentas:** usuario/contraseña, verificación y recuperación por correo, aviso de nuevo dispositivo enviado al correo verificado y revocación de sesiones. Contraseñas con Argon2id.
 - **Seguridad beta:** sin E2EE. HTTPS, autorización por conversación, control de acceso, límites contra intentos/abuso, protección del almacenamiento y copias seguras. La administración del servidor puede leer chats y esto debe explicarse claramente.
-- **Archivos:** imágenes, vídeo, audio, documentos comunes y ZIP hasta 50 MB; bloquear programas y scripts, validar el tipo real y restringir descargas a participantes autorizados.
+- **Archivos:** imágenes, vídeo, audio, documentos comunes y ZIP hasta 50 MB; bloquear ejecutables y scripts. ZIP queda sujeto a controles estrictos: aceptar solo si puede inspeccionarse sin ejecutar, limitar tamaño expandido y cantidad de archivos, y rechazar ZIP cifrados, corruptos o anidados. Si el servidor no puede aplicar esos controles de forma fiable, posponer ZIP.
 - **Llamadas y plataforma:** voz 1:1 en beta; vídeo y cliente de escritorio Linux después. Beta en web/PWA adaptable, con objetivo de bajo consumo.
 - **Arquitectura:** servicio propio Corebite y medición de CPU, RAM, almacenamiento, latencia y estabilidad en el Ubuntu disponible; Matrix no se usa en beta.
 - **Alojamiento:** probar primero en Ubuntu; comparar servicios gestionados más adelante.
