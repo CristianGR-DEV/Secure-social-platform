@@ -37,14 +37,14 @@ Objetivos de la beta:
 - Perfiles, avatares, estados de presencia, búsqueda, amistades y bloqueo.
 - Interfaz principal y componentes reutilizables.
 - Mensajería privada, historial y sincronización sin E2EE en la beta. La persona que administre el servidor podría leer el contenido.
-- Archivos y llamadas de voz individuales; sin vídeo en la beta.
+- Archivos y llamadas 1:1; voz está aprobada en beta y el alcance de vídeo queda pendiente de aclaración.
 - Temas, paletas, ajustes exportables/importables y navegación personalizable; web/PWA en beta y escritorio Linux posterior.
 - Pruebas funcionales y de seguridad, compatibilidad de navegadores, diseño responsive y accesibilidad.
 - Staging, despliegue en Ubuntu Server, copias de seguridad, restauración, monitorización, optimización y documentación.
 
 ### Funciones posteriores
 
-La creación de servidores privados/comunidades, grupos, canales, roles y permisos queda fuera de la primera beta. También quedan para después el cliente de escritorio Linux, las llamadas de vídeo/grupales, compartir pantalla, plugins y procesamiento de audio/vídeo. La beta prioriza web/PWA, chats privados y voz 1:1.
+La creación de servidores privados/comunidades, grupos, canales, roles y permisos queda fuera de la primera beta. También quedan para después el cliente de escritorio Linux, las llamadas de vídeo/grupales, compartir pantalla, plugins y procesamiento de audio/vídeo. La beta prioriza web/PWA, chats privados y voz 1:1; vídeo 1:1 queda pendiente de aclarar.
 
 ## Cómo se quiere trabajar
 
@@ -221,34 +221,37 @@ Este archivo es la referencia resumida y viva del proyecto. Al avanzar, actualiz
 
 ## Preferencias confirmadas por el propietario (2026-11-03)
 
-Estas respuestas reemplazan cualquier supuesto inicial que no coincida.
+Estas respuestas reemplazan cualquier supuesto inicial que no coincida. Si dos respuestas se contradicen, el punto aparece como pendiente y no se cambia el alcance hasta aclararlo.
 
-- **Público y alcance:** comunidad cerrada para amistades; servidores privados, canales, roles y permisos van después de la beta.
-- **Interfaz inicial:** bandeja de conversaciones tras iniciar sesión. Si está vacía, invitar a buscar amistades.
-- **Primer contacto:** buscar por nombre de usuario, enviar una solicitud y esperar aceptación; solo amistades aceptadas pueden escribir mensajes privados. Cualquier cuenta puede enviar solicitudes, con límites contra spam.
-- **Mensajes:** se pueden editar o borrar para todas las personas durante los primeros 5 minutos. Pasado ese plazo, permanecen visibles para ambas personas y ya no se pueden editar ni borrar para todos. No caducan automáticamente.
-- **Borrar conversación:** la acción la quita únicamente de la bandeja de quien la ejecuta; no borra los mensajes para la otra persona. La eliminación del historial del servidor queda pendiente de concretar.
-- **Perfiles y presencia:** nombre de usuario, avatar y presencia son campos públicos; correo no. La presencia se muestra por defecto a todas las cuentas con perfil, pero cada persona puede ocultarla.
-- **Cuentas:** usuario/contraseña, verificación y recuperación por correo, aviso de nuevo dispositivo enviado al correo verificado y revocación de sesiones. Contraseñas con Argon2id.
-- **Seguridad beta:** sin E2EE. HTTPS, autorización por conversación, control de acceso, límites contra intentos/abuso, protección del almacenamiento y copias seguras. La administración del servidor puede leer chats y esto debe explicarse claramente.
-- **Archivos:** imágenes, vídeo, audio, documentos comunes y ZIP hasta 50 MB; bloquear ejecutables y scripts. ZIP queda sujeto a controles estrictos: aceptar solo si puede inspeccionarse sin ejecutar, limitar tamaño expandido y cantidad de archivos, y rechazar ZIP cifrados, corruptos o anidados. Si el servidor no puede aplicar esos controles de forma fiable, posponer ZIP.
-- **Llamadas y plataforma:** voz 1:1 en beta; vídeo y cliente de escritorio Linux después. Beta en web/PWA adaptable, con objetivo de bajo consumo.
-- **Arquitectura:** servicio propio Corebite y medición de CPU, RAM, almacenamiento, latencia y estabilidad en el Ubuntu disponible; Matrix no se usa en beta.
-- **Alojamiento:** probar primero en Ubuntu; comparar servicios gestionados más adelante.
-- **Diseño:** inspiración funcional y visual de Discord, marca propia, estilo ligero y sencillo. Rediseñar los flujos del prototipo local antes de incorporarlo al repositorio.
-- **Repositorio:** producto cerrado; mantener el repositorio público por ahora.
-- **Beta:** objetivo 2027-05-01; funciones principales, criterios verificados, acceso externo, copias/restauración probadas, documentación y presentación.
-- **Plan estimado:** 270 h provisionales tras mover CORE-13 fuera de beta. Revisar esfuerzo de CORE-03, CORE-11, CORE-12 y CORE-16 tras los prototipos/controles de archivos.
+- **Usuarios y propósito:** comunidad cerrada; el uso principal es hablar en privado con amistades y controlar los propios datos/servidor.
+- **UX y estilo:** en la primera etapa, acercarse lo máximo posible a los flujos y estética de Discord; más adelante incorporar estilo propio. Prioridad visual minimalista, oscura por defecto, con modo claro y temas personalizables. Se busca la ligereza y fiabilidad de TeamSpeak clásico.
+- **Cuentas y contactos:** usuario y contraseña con verificación por correo; búsqueda por nombre de usuario y también dentro de comunidades cuando existan. Aceptar/rechazar solicitudes, bloquear, eliminar amistades, ocultar perfil de búsquedas y reportar cuentas.
+- **Solicitudes de amistad:** cualquier cuenta puede enviar solicitudes. No caducan; permanecen pendientes hasta que la persona destinataria acepte o rechace. Límite inicial elegido: 5 nuevas solicitudes al día y 7 días antes de volver a solicitar a la misma persona.
+- **Mensajes e historial:** mensajería en tiempo real, historial y sincronización, edición/borrado para todos solo durante los primeros 5 minutos. Después el mensaje queda visible para ambas personas y no se permite ocultarlo solo para uno. No hay caducidad automática.
+- **Borrado de conversación:** quitarla de la bandeja la oculta para esa persona. El servidor elimina la conversación cuando ambas personas la hayan quitado de sus bandejas; hasta entonces, la conserva para la otra persona.
+- **Sesiones y seguridad:** varios dispositivos con la misma cuenta/sesión, sesiones revocables y aviso de dispositivo nuevo por correo verificado. Sin E2EE en beta. Se pide guardar lo mínimo necesario, historial protegido/cifrado en almacenamiento y registros técnicos limitados; esto no equivale a E2EE. La preferencia de E2EE para mensajes y recuperación de historial se evaluará para después de la beta.
+- **Archivos:** imágenes, vídeo, audio y documentos comunes hasta 50 MB por archivo. ZIP se pospone en beta. Se bloquean ejecutables/scripts y se valida el tipo real y permisos.
+- **Llamadas:** la respuesta sobre el alcance no es consistente: se eligió vídeo 1:1 en la pregunta de tipos de llamada, pero también se seleccionaron las videollamadas como función posterior. Hasta confirmar, solo voz 1:1 queda en el alcance aprobado y CORE-17 mantiene su estimación original.
+- **Interfaz y accesibilidad:** beta en ordenador, tablet y móvil mediante navegador. Incluir navegación por teclado, compatibilidad con lectores de pantalla y texto ampliable; mantener buen contraste como requisito general.
+- **Personalización:** tema claro/oscuro, colores/paletas, distribución de paneles, tamaño de texto y exportar/importar ajustes.
+- **Infraestructura:** servidor Ubuntu e IP pública disponibles. Aún se deben comparar costes/opciones de alojamiento antes de decidir el despliegue final; disponibilidad de dominio y SMTP queda por confirmar.
+- **Tecnología de mensajería:** el servicio propio Corebite sigue siendo la opción aprobada para la beta, sin Matrix/Synapse. El usuario quiere una comparación clara de ventajas y límites de Matrix antes de cerrar decisiones futuras.
+- **Comunidades posteriores:** servidores privados, canales, roles y permisos quedan para después. La administración de comunidades debería seguir un modelo parecido al de Discord; los niveles y permisos exactos faltan por concretar.
+- **Linux:** la integración nativa con Linux es un objetivo; el cliente de escritorio Linux queda posterior a la beta salvo que se decida cambiar el alcance.
+- **Código y repositorio:** Corebite no se publicará como producto de código abierto. El repositorio GitHub se mantiene público por la decisión previa, separada de la licencia/producto.
+- **Fecha y éxito de beta:** mantener objetivo 2027-05-01. Beta terminada significa funciones principales, criterios verificados, despliegue externo, backup/restauración probados, documentación y presentación. Si hay que recortar, priorizar la experiencia de usuario.
+- **Plan estimado:** 270 h provisionales. La estimación de llamadas y el alojamiento deberán revisarse cuando se resuelvan las decisiones pendientes.
 
 ### Seguridad sin E2EE
 
-HTTPS protege la conexión; Argon2id, autorización por conversación, rate limiting, protección del almacenamiento y copias seguras reducen riesgos. No impiden que quien administra el servidor lea mensajes sin E2EE. Mostrar este límite a los usuarios.
+HTTPS protege la conexión; Argon2id, autorización por conversación, límites de uso, protección del almacenamiento y copias seguras reducen riesgos. No impiden que quien administre el servidor lea los mensajes sin E2EE. Mostrar este límite a los usuarios. La eventual protección criptográfica del historial almacenado debe describirse por separado de E2EE.
 
 ### Ideas posteriores a la beta
 
-- [CORE-13 · Evaluar E2EE para una versión posterior](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — estado Ideas, sin Sprint, fechas ni estimación.
+- [CORE-13 · Evaluar E2EE para una versión posterior](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — centrado inicialmente en mensajes; falta decidir recuperación/dispositivos y el cifrado de archivos.
 - Servidores privados, roles, permisos y canales.
-- Vídeo 1:1 y aplicación de escritorio Linux.
+- Cliente de escritorio Linux.
+- Vídeo 1:1, pendiente de aclaración sobre si se incluye en beta.
 
 ### Material local
 
