@@ -212,3 +212,34 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 ## Actualización de este README
 
 Este archivo es la referencia resumida y viva del proyecto. Al avanzar, actualizar el plan cuando cambien alcance, fechas, estimaciones, stack o criterios de éxito. Los detalles de implementación, subtareas y criterios verificables permanecen en los Issues enlazados; GitHub Projects refleja su estado diario.
+
+## Preferencias confirmadas por el propietario (2026-11-03)
+
+Esta sección registra las respuestas del cuestionario y prevalece si alguna parte del plan inicial no coincide.
+
+- **Público inicial:** comunidad cerrada, como una clase o asociación; el uso principal es hablar en privado con amistades.
+- **Referencias:** estética y navegación inspiradas en Discord; ligereza y fiabilidad como objetivo, tomando como referencia las versiones clásicas de TeamSpeak. Corebite tendrá identidad visual propia con el tiempo.
+- **Plataformas:** navegador de escritorio, tablet y móvil. La integración con Linux es un objetivo; falta concretar si significa PWA, aplicación de escritorio, notificaciones, integración del sistema u otra cosa. No se prioriza una aplicación móvil nativa por ahora.
+- **Cuentas:** nombre de usuario y contraseña, con verificación de correo. El perfil visible puede mostrar nombre de usuario, avatar y presencia. La búsqueda debe funcionar por usuario y dentro de las comunidades.
+- **Mensajes:** conversación privada en tiempo real, historial, sincronización, edición, respuestas/citas, búsqueda y borrado con un plazo limitado.
+- **Privacidad:** E2EE para mensajes privados; el cifrado de archivos queda por decidir. Se desea recuperar claves mediante una copia protegida y usar varias sesiones de dispositivo. No recoger analíticas; limitar los datos y registros técnicos a lo necesario.
+- **Llamadas:** voz y vídeo individuales entre dos personas. El Issue CORE-17 inicial solo contempla voz: habrá que revisar alcance, estimación y criterios antes del Sprint.
+- **Archivos:** se desean varios tipos con límite inicial de 50 MB. Antes de implementarlo hay que definir tipos peligrosos, validación y controles de descarga.
+- **Avisos y apariencia:** avisos dentro de la aplicación y del navegador, configurables; diseño minimalista, oscuro por defecto, opción clara/oscura, temas, colores, paneles y tamaño de texto.
+- **Accesibilidad:** navegación por teclado, lectores de pantalla y texto ampliable.
+- **Alojamiento:** preferencia por el servidor Ubuntu disponible, con IP pública; comparar esta opción con servicios gestionados antes de cerrar la decisión.
+- **Código:** se prefiere mantener el código privado. La visibilidad actual del repositorio debe confirmarse antes de cambiarla.
+- **Fecha y aceptación de beta:** mantener 2027-05-01 como objetivo. La beta debe tener funciones principales operativas, criterios verificados, despliegue externo, restauración de copias probada, documentación y presentación.
+- **Prioridad al recortar alcance:** experiencia de uso e interfaz, manteniendo la seguridad mínima como requisito.
+
+### Comunidades privadas: alcance pendiente
+
+La comunidad cerrada y los servidores privados inspirados en Discord son parte de la visión. El cuestionario también deja los grupos avanzados y los canales para más adelante, así que aún hay que separar el servidor básico de sus funciones avanzadas. Antes de añadir tareas y horas, concretar creación, invitaciones, roles, permisos, canales y descubrimiento.
+
+### Evaluación pendiente de Matrix
+
+Matrix/Synapse no se ha elegido todavía. Su ventaja potencial es reutilizar un protocolo abierto de comunicación en tiempo real, un homeserver desplegable por cuenta propia y mecanismos E2EE por sala, en vez de diseñar el protocolo completo. Sus costes potenciales son la complejidad operativa del homeserver y la gestión de dispositivos, claves, verificación y recuperación; además, Synapse puede consumir bastante memoria en configuraciones pequeñas. La decisión debe basarse en un prototipo y mediciones en el servidor disponible. [Introducción oficial a Matrix](https://matrix.org/docs/guides/introduction/), [guía E2EE de Matrix](https://www.matrix.org/docs/matrix-concepts/end-to-end-encryption/) y [guía de administración de Synapse](https://element-hq.github.io/synapse/latest/usage/administration/admin_faq.html).
+
+### Material local revisado
+
+La carpeta de trabajo contiene un prototipo estático con páginas HTML de inicio, sesión, cuenta y términos; hojas CSS e imágenes. No encontré código JavaScript, backend, manifiesto de dependencias ni configuración de compilación en esa carpeta. Estos archivos todavía no forman parte del repositorio de GitHub. La página de inicio contiene textos de ejemplo y algunas rutas de navegación a páginas que no están en la carpeta; se consideran prototipo, no funcionalidades operativas.
