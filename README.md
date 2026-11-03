@@ -187,7 +187,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 ## Ideas posteriores a la beta
 
 - [CORE-13 · Evaluar E2EE para una versión posterior](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — estado Ideas; no tiene Sprint, fechas ni estimación.
-- [CORE-31 · Diseñar comunidades privadas y permisos personalizables](https://github.com/CristianGR-DEV/Secure-social-platform/issues/31) — fase posterior a beta, estado Ideas y sin Sprint/estimación. Creación por cualquier cuenta; entrada por invitación; roles editables por propietario y administradores autorizados, con permisos predefinidos por canal.
+- [CORE-31 · Diseñar comunidades privadas y permisos personalizables](https://github.com/CristianGR-DEV/Secure-social-platform/issues/31) — fase posterior a beta, estado Ideas y sin Sprint/estimación. Creación por cualquier cuenta; entrada por invitación; roles personalizables, varios por miembro, con rol base mínimo y editable. Denegar prevalece sobre permitir.
 - Vídeo 1:1 y cliente de escritorio Linux.
 
 ## Hitos
