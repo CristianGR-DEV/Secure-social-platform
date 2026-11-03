@@ -27,7 +27,7 @@ Objetivos de la beta:
 4. Ofrecer conversaciones privadas en tiempo real, historial y sincronización.
 5. Proteger cuentas, conexiones y datos almacenados. E2EE queda fuera de la beta y podrá reconsiderarse después.
 6. Permitir compartir archivos con validación de tipo y tamaño y autorización de descarga.
-7. Entregar llamadas de voz individuales mediante WebRTC en la beta; dejar el vídeo individual para una versión posterior y probar relay TURN si la conectividad lo requiere.
+7. Entregar llamadas 1:1 mediante WebRTC. Voz en beta; el alcance de vídeo está pendiente de aclaración por respuestas contradictorias. Probar relay TURN si la conectividad lo requiere.
 8. Ofrecer interfaz adaptable, accesible, en español e inglés, con temas y distribución personalizable.
 9. Entregar una beta desplegable, con copias de seguridad, monitorización, documentación y una presentación demostrable.
 
@@ -44,7 +44,7 @@ Objetivos de la beta:
 
 ### Funciones posteriores
 
-La creación de servidores privados/comunidades, grupos, canales, roles y permisos queda fuera de la primera beta. También quedan para después el cliente de escritorio Linux, las llamadas de vídeo/grupales, compartir pantalla, plugins y procesamiento de audio/vídeo. La beta prioriza web/PWA, chats privados y voz 1:1; vídeo 1:1 queda pendiente de aclarar.
+La creación de servidores privados/comunidades, grupos, canales, roles y permisos queda fuera de la primera beta. También quedan para después el cliente de escritorio Linux, las llamadas grupales, compartir pantalla, plugins y procesamiento avanzado de audio/vídeo. La beta prioriza web/PWA, chats privados y voz 1:1; falta aclarar si el vídeo 1:1 entra en esta beta.
 
 ## Cómo se quiere trabajar
 
@@ -90,7 +90,7 @@ La selección final de frameworks y algunos detalles de implementación queda su
 | Base de datos | PostgreSQL y migraciones iniciales |
 | Mensajería | Servicio propio Corebite, priorizando simplicidad y bajo consumo; medir entrega, historial, sincronización y recursos en Ubuntu |
 | Cifrado | Sin E2EE en la beta. Aplicar HTTPS, autorización, protección de datos almacenados y registros mínimos; reconsiderar E2EE tras la beta |
-| Voz/vídeo | WebRTC para voz 1:1 en beta; vídeo después; coturn si las pruebas de red lo requieren |
+| Voz/vídeo | WebRTC para voz 1:1 en beta; vídeo 1:1 por aclarar; coturn si las pruebas de red lo requieren |
 | Interfaz | Diseño propio inspirado en Discord; web/PWA adaptable en beta; escritorio Linux después; ligereza como objetivo de rendimiento |
 | Autenticación | Argon2id para contraseñas, sesiones revocables y cookies HttpOnly, Secure y SameSite en producción |
 | Archivos | Almacenamiento fuera del directorio público, validación de contenido/tamaño y descargas autorizadas |
@@ -127,7 +127,7 @@ La duración prevista es de cuatro semanas por Sprint. El cierre tiene dos seman
 | Cierre | 2027-04-18 a 2027-05-01 | Validación, release y exposición | CORE-30 | 12 h |
 | **Total beta** |  |  | **29 Issues planificados + 1 idea posterior** | **270 h provisionales** |
 
-Las 270 horas son una suma provisional tras sacar CORE-13 de la beta. Las estimaciones de CORE-03, CORE-11 y CORE-12 deben revisarse para la solución propia; también hay que confirmar que la PWA queda cubierta. Voz está prevista y vídeo/cliente escritorio Linux se posponen. Se recomienda reservar un 15–20% para imprevistos. La fecha objetivo de beta es el 1 de mayo de 2027, no una garantía.
+Las 270 horas son una suma provisional tras sacar CORE-13 de la beta. Las estimaciones de CORE-03, CORE-11 y CORE-12 deben revisarse para la solución propia; también hay que confirmar que la PWA queda cubierta. Voz está prevista; el vídeo 1:1 está pendiente de aclaración y el cliente de escritorio Linux se pospone. Se recomienda reservar un 15–20% para imprevistos. La fecha objetivo de beta es el 1 de mayo de 2027, no una garantía.
 
 ## Tareas planificadas
 
@@ -197,7 +197,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 | H1 · Análisis y arquitectura | 2026-11-28 | Requisitos, wireframes, ADR y base técnica |
 | H2 · Usuarios operativos | 2026-12-26 | Registro, perfiles, presencia y amistades |
 | H3 · Mensajería privada | 2027-01-23 | Mensajería privada operativa y sincronización fiable |
-| H4 · Multimedia | 2027-02-20 | Archivos y llamadas de voz 1:1 |
+| H4 · Multimedia | 2027-02-20 | Archivos y llamadas 1:1 (voz; vídeo pendiente de decisión) |
 | H5 · Experiencia y pruebas | 2027-03-20 | Personalización, seguridad y pruebas |
 | H6 · Beta desplegada | 2027-04-17 | Despliegue, copias de seguridad y documentación |
 | H7 · Entrega | 2027-05-01 | Beta validada y presentación |
