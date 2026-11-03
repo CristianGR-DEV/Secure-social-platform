@@ -25,9 +25,9 @@ Objetivos de la beta:
 2. Permitir registro, inicio y cierre de sesión, administración de sesiones y perfiles.
 3. Permitir buscar usuarios, gestionar amistades y bloquear contactos.
 4. Ofrecer conversaciones privadas en tiempo real, historial y sincronización.
-5. Validar el cifrado de extremo a extremo de las conversaciones privadas en clientes compatibles.
+5. Decidir en CORE-03 si E2EE cabe en el objetivo de ligereza y en la capacidad del servidor; implementarlo para mensajes privados solo si el prototipo confirma que es viable y su complejidad queda aceptada.
 6. Permitir compartir archivos con validación de tipo y tamaño y autorización de descarga.
-7. Permitir llamadas de voz individuales mediante WebRTC y probar conectividad con relay TURN.
+7. Entregar llamadas de voz individuales mediante WebRTC en la beta; dejar el vídeo individual para una versión posterior y probar relay TURN si la conectividad lo requiere.
 8. Ofrecer interfaz adaptable, accesible, en español e inglés, con temas y distribución personalizable.
 9. Entregar una beta desplegable, con copias de seguridad, monitorización, documentación y una presentación demostrable.
 
@@ -36,15 +36,15 @@ Objetivos de la beta:
 - Registro y sesiones seguras.
 - Perfiles, avatares, estados de presencia, búsqueda, amistades y bloqueo.
 - Interfaz principal y componentes reutilizables.
-- Mensajería privada, historial, sincronización y cifrado E2EE.
+- Mensajería privada, historial y sincronización. E2EE para mensajes queda condicionada al resultado de CORE-03 y a una medición en el servidor.
 - Archivos y llamadas de voz individuales.
-- Temas, paletas, ajustes exportables/importables y navegación personalizable.
+- Temas, paletas, ajustes exportables/importables, navegación personalizable y una PWA/aplicación de escritorio Linux prevista; su tecnología queda pendiente.
 - Pruebas funcionales y de seguridad, compatibilidad de navegadores, diseño responsive y accesibilidad.
 - Staging, despliegue en Ubuntu Server, copias de seguridad, restauración, monitorización, optimización y documentación.
 
 ### Funciones posteriores
 
-Los grupos avanzados, canales, llamadas grupales, compartir pantalla, plugins y procesamiento de audio o vídeo se mantienen fuera del alcance inicial de la beta. Se podrán priorizar en una versión posterior después de revisar la capacidad y el feedback.
+La creación de servidores privados/comunidades, grupos, canales, roles y permisos queda fuera de la primera beta. También quedan para después las llamadas de vídeo, llamadas grupales, compartir pantalla, plugins y procesamiento de audio/vídeo. Primero se validarán los chats privados y la voz 1:1.
 
 ## Cómo se quiere trabajar
 
@@ -88,16 +88,16 @@ La selección final de frameworks y algunos detalles de implementación queda su
 | Estructura | Monorepo con apps/web, apps/api y packages/shared |
 | Lenguaje | TypeScript para la base de frontend y backend |
 | Base de datos | PostgreSQL y migraciones iniciales |
-| Mensajería | Validar Matrix frente a una implementación propia; el plan de beta propone Synapse y matrix-js-sdk |
-| Cifrado | Usar la implementación Matrix E2EE elegida y validada; no crear criptografía propia |
+| Mensajería | Comparar Matrix/Synapse con un servicio propio y medir memoria, CPU y complejidad en Ubuntu antes de decidir |
+| Cifrado | E2EE no es requisito cerrado: decidir tras el prototipo; si se adopta, usar una implementación estable y no crear criptografía propia |
 | Voz | WebRTC para llamadas individuales; coturn como relay si las pruebas de red lo requieren |
-| Interfaz | Sistema de diseño, tokens CSS, responsive, navegación por teclado e internacionalización es/en |
+| Interfaz | Referencia visual Discord; diseño ligero y adaptable; web/PWA y aplicación de escritorio Linux objetivo; tecnología de escritorio pendiente |
 | Autenticación | Argon2id para contraseñas, sesiones revocables y cookies HttpOnly, Secure y SameSite en producción |
 | Archivos | Almacenamiento fuera del directorio público, validación de contenido/tamaño y descargas autorizadas |
-| Infraestructura | Docker Compose y beta objetivo en Ubuntu Server; proxy inverso y HTTPS cuando haya dominio y DNS |
+| Infraestructura | Probar primero en el Ubuntu disponible y medir recursos; Docker Compose previsto; comparar alojamiento gestionado después |
 | Integración continua | GitHub Actions para instalación y comprobaciones de lint/build |
 
-El framework web, el runtime/API, el ORM y otros detalles que no están decididos deben elegirse y documentarse en CORE-03 antes de depender de ellos. La arquitectura debe definir la relación entre las cuentas Corebite y las identidades Matrix, los límites de responsabilidad de cada servicio, el modelo de amenazas y la recuperación de claves.
+El framework web, el runtime/API, el ORM y el empaquetado Linux deben elegirse y documentarse antes de depender de ellos. CORE-03 debe comparar Matrix con mensajería propia, medir recursos en Ubuntu, definir el modelo de amenazas y decidir si la beta necesita E2EE. Si se omite E2EE, debe quedar claro que quien administre el servidor podría leer los mensajes.
 
 ## Principios de seguridad y calidad
 
@@ -106,8 +106,8 @@ El framework web, el runtime/API, el ORM y otros detalles que no están decidido
 - Proteger endpoints y sesiones; revocar sesiones cuando corresponda.
 - Validar archivos por tamaño, extensión y tipo real. No confiar solo en el MIME declarado por el cliente.
 - Guardar archivos fuera de rutas públicas predecibles y comprobar permisos antes de servirlos.
-- No afirmar que el servidor no puede leer contenido hasta validar E2EE de extremo a extremo.
-- No afirmar E2EE para llamadas de voz sin comprobarlo por separado.
+- No afirmar que el servidor no puede leer contenido hasta validar E2EE de extremo a extremo. Si se aplaza E2EE, aplicar HTTPS, control de acceso, protección de datos almacenados y registros mínimos; estas medidas no sustituyen E2EE.
+- No afirmar E2EE para llamadas de voz o vídeo sin comprobarlo por separado.
 - Probar pérdida de sesión, cambio de dispositivo y recuperación de claves; documentar límites.
 - Probar restauraciones de backups y proteger las copias y claves.
 - Priorizar accesibilidad, navegación por teclado, mensajes de error claros y compatibilidad en navegadores principales.
@@ -127,7 +127,7 @@ La duración prevista es de cuatro semanas por Sprint. El cierre tiene dos seman
 | Cierre | 2027-04-18 a 2027-05-01 | Validación, release y exposición | CORE-30 | 12 h |
 | **Total** |  |  | **30 Issues** | **292 h** |
 
-Las 292 horas son una estimación inicial de trabajo. Se recomienda reservar un 15–20% adicional para imprevistos. La beta tiene como fecha objetivo el 1 de mayo de 2027; no es una fecha garantizada.
+Las 292 horas son una estimación inicial de trabajo; voz está prevista y vídeo se traslada a después de la beta, por lo que habrá que revisar el total antes de cerrar el plan. Se recomienda reservar un 15–20% adicional para imprevistos. La beta tiene como fecha objetivo el 1 de mayo de 2027; no es una fecha garantizada.
 
 ## Tareas planificadas
 
@@ -190,7 +190,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 |---|---|---|
 | H1 · Análisis y arquitectura | 2026-11-28 | Requisitos, wireframes, ADR y base técnica |
 | H2 · Usuarios operativos | 2026-12-26 | Registro, perfiles, presencia y amistades |
-| H3 · Mensajería privada segura | 2027-01-23 | Mensajería E2EE validada en clientes compatibles |
+| H3 · Mensajería privada | 2027-01-23 | Mensajería privada operativa y decisión de E2EE documentada |
 | H4 · Multimedia | 2027-02-20 | Archivos y llamadas de voz 1:1 |
 | H5 · Experiencia y pruebas | 2027-03-20 | Personalización, seguridad y pruebas |
 | H6 · Beta desplegada | 2027-04-17 | Despliegue, copias de seguridad y documentación |
@@ -215,31 +215,29 @@ Este archivo es la referencia resumida y viva del proyecto. Al avanzar, actualiz
 
 ## Preferencias confirmadas por el propietario (2026-11-03)
 
-Esta sección registra las respuestas del cuestionario y prevalece si alguna parte del plan inicial no coincide.
+Esta sección prevalece sobre decisiones iniciales que no coincidan.
 
-- **Público inicial:** comunidad cerrada, como una clase o asociación; el uso principal es hablar en privado con amistades.
-- **Referencias:** estética y navegación inspiradas en Discord; ligereza y fiabilidad como objetivo, tomando como referencia las versiones clásicas de TeamSpeak. Corebite tendrá identidad visual propia con el tiempo.
-- **Plataformas:** navegador de escritorio, tablet y móvil. La integración con Linux es un objetivo; falta concretar si significa PWA, aplicación de escritorio, notificaciones, integración del sistema u otra cosa. No se prioriza una aplicación móvil nativa por ahora.
-- **Cuentas:** nombre de usuario y contraseña, con verificación de correo. El perfil visible puede mostrar nombre de usuario, avatar y presencia. La búsqueda debe funcionar por usuario y dentro de las comunidades.
-- **Mensajes:** conversación privada en tiempo real, historial, sincronización, edición, respuestas/citas, búsqueda y borrado con un plazo limitado.
-- **Privacidad:** E2EE para mensajes privados; el cifrado de archivos queda por decidir. Se desea recuperar claves mediante una copia protegida y usar varias sesiones de dispositivo. No recoger analíticas; limitar los datos y registros técnicos a lo necesario.
-- **Llamadas:** voz y vídeo individuales entre dos personas. El Issue CORE-17 inicial solo contempla voz: habrá que revisar alcance, estimación y criterios antes del Sprint.
-- **Archivos:** se desean varios tipos con límite inicial de 50 MB. Antes de implementarlo hay que definir tipos peligrosos, validación y controles de descarga.
-- **Avisos y apariencia:** avisos dentro de la aplicación y del navegador, configurables; diseño minimalista, oscuro por defecto, opción clara/oscura, temas, colores, paneles y tamaño de texto.
-- **Accesibilidad:** navegación por teclado, lectores de pantalla y texto ampliable.
-- **Alojamiento:** preferencia por el servidor Ubuntu disponible, con IP pública; comparar esta opción con servicios gestionados antes de cerrar la decisión.
-- **Código:** se prefiere mantener el código privado. La visibilidad actual del repositorio debe confirmarse antes de cambiarla.
-- **Fecha y aceptación de beta:** mantener 2027-05-01 como objetivo. La beta debe tener funciones principales operativas, criterios verificados, despliegue externo, restauración de copias probada, documentación y presentación.
-- **Prioridad al recortar alcance:** experiencia de uso e interfaz, manteniendo la seguridad mínima como requisito.
+- **Público:** comunidad cerrada, como una clase o asociación; el propósito inicial son chats privados con amistades.
+- **Visión:** interfaz inspirada en Discord y objetivo de ligereza/fiabilidad similar a TeamSpeak clásico, con identidad propia.
+- **Beta:** primero cuentas, perfiles, contactos, chat privado, archivos y voz 1:1. Los servidores/comunidades privadas, roles, permisos, canales y vídeo se posponen; no entran en la primera beta.
+- **Cuentas:** nombre de usuario y contraseña, correo verificado. Perfil público limitado a nombre de usuario, avatar y presencia; búsqueda por usuario o dentro de una comunidad cuando esa función se incorpore.
+- **Mensajes:** historial, sincronización, edición, respuestas/citas, búsqueda y borrado con plazo limitado.
+- **Cifrado:** mantener E2EE como opción a evaluar, no como requisito incondicional. Primero medir complejidad y recursos; si se descarta, proteger cuentas y chats con HTTPS, autorización, protección de datos almacenados y registros mínimos, indicando que el servidor podría leer el contenido.
+- **Recuperación y dispositivos:** se prefiere una copia protegida de claves y varias sesiones de dispositivo; si E2EE no se adopta, la recuperación no necesita resolver claves de chat.
+- **Archivos:** varios tipos, límite objetivo inicial de 50 MB. Definir tipos peligrosos y validación antes de permitir cualquier tipo.
+- **Llamadas:** voz 1:1 en la beta; vídeo después.
+- **Avisos y apariencia:** avisos dentro de la app y del navegador, configurables; diseño minimalista, oscuro por defecto, tema claro, paletas, paneles y tamaño de texto.
+- **Accesibilidad:** teclado, lectores de pantalla y texto ampliable.
+- **Linux:** objetivo de ofrecer web/PWA y escritorio Linux, con notificaciones e integración de audio. Falta decidir empaquetado y tecnología de escritorio.
+- **Alojamiento:** probar primero en el Ubuntu disponible y medir memoria, CPU, red y fiabilidad; más adelante comparar con alojamiento gestionado.
+- **Visibilidad:** el producto no será de código abierto; el propietario prefiere mantener el repositorio público por ahora.
+- **Objetivo de beta:** mantener el 1 de mayo de 2027; aceptación requiere funciones principales, criterios verificados, despliegue externo, restauración probada, documentación y presentación.
+- **Recorte de alcance:** priorizar interfaz y experiencia, manteniendo un nivel mínimo de seguridad.
 
-### Comunidades privadas: alcance pendiente
+### Decisión de arquitectura: Matrix o mensajería propia
 
-La comunidad cerrada y los servidores privados inspirados en Discord son parte de la visión. El cuestionario también deja los grupos avanzados y los canales para más adelante, así que aún hay que separar el servidor básico de sus funciones avanzadas. Antes de añadir tareas y horas, concretar creación, invitaciones, roles, permisos, canales y descubrimiento.
+Matrix reutiliza un protocolo abierto, sincronización en tiempo real, salas y bibliotecas existentes; permite alojar el servidor y evita diseñar desde cero todo el sistema de transporte de mensajes. A cambio, hay que integrar identidades Corebite/Matrix y manejar dispositivos, claves, verificación y recuperación. Synapse también puede requerir bastante memoria, por lo que se medirá en el servidor disponible. Una solución propia podría ajustarse mejor a las necesidades mínimas y reducir servicios, pero obliga a construir y mantener entrega, sincronización, historial y seguridad. Sin E2EE, el servidor puede leer el texto de los mensajes. La tarea CORE-03 comparará ambas opciones con un prototipo y datos del Ubuntu antes de decidir.
 
-### Evaluación pendiente de Matrix
+### Estado del prototipo local
 
-Matrix/Synapse no se ha elegido todavía. Su ventaja potencial es reutilizar un protocolo abierto de comunicación en tiempo real, un homeserver desplegable por cuenta propia y mecanismos E2EE por sala, en vez de diseñar el protocolo completo. Sus costes potenciales son la complejidad operativa del homeserver y la gestión de dispositivos, claves, verificación y recuperación; además, Synapse puede consumir bastante memoria en configuraciones pequeñas. La decisión debe basarse en un prototipo y mediciones en el servidor disponible. [Introducción oficial a Matrix](https://matrix.org/docs/guides/introduction/), [guía E2EE de Matrix](https://www.matrix.org/docs/matrix-concepts/end-to-end-encryption/) y [guía de administración de Synapse](https://element-hq.github.io/synapse/latest/usage/administration/admin_faq.html).
-
-### Material local revisado
-
-La carpeta de trabajo contiene un prototipo estático con páginas HTML de inicio, sesión, cuenta y términos; hojas CSS e imágenes. No encontré código JavaScript, backend, manifiesto de dependencias ni configuración de compilación en esa carpeta. Estos archivos todavía no forman parte del repositorio de GitHub. La página de inicio contiene textos de ejemplo y algunas rutas de navegación a páginas que no están en la carpeta; se consideran prototipo, no funcionalidades operativas.
+La carpeta de trabajo contiene páginas HTML para inicio, sesión, cuenta y términos, hojas CSS e imágenes. No encontré JavaScript, backend ni manifiesto de dependencias. El propietario quiere ordenar y corregir este prototipo antes de subirlo al repositorio. La página inicial todavía contiene texto de ejemplo; no se considera una función terminada.
