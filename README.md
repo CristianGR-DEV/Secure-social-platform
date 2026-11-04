@@ -81,12 +81,12 @@ Una tarea puede cerrarse cuando:
 
 ## Arquitectura y tecnologías previstas
 
-La selección final de frameworks y algunos detalles de implementación queda sujeta al prototipo técnico y al ADR de CORE-03. No se deben presentar esas decisiones pendientes como si ya estuvieran aprobadas.
+Tecnologías permitidas para el proyecto: HTML, CSS, JavaScript y PHP. El frontend se desarrollará con HTML/CSS/JavaScript y el backend con PHP. No se incorporarán otros lenguajes de programación. La elección de frameworks PHP, bibliotecas y herramientas compatibles queda pendiente de CORE-03 y debe respetar esta restricción.
 
 | Área | Plan actual |
 |---|---|
-| Estructura | Monorepo con apps/web, apps/api y packages/shared |
-| Lenguaje | TypeScript para la base de frontend y backend |
+| Estructura | Por definir en CORE-03 y CORE-04 según la arquitectura PHP |
+| Lenguajes | HTML, CSS y JavaScript en el frontend; PHP en el backend |
 | Base de datos | PostgreSQL y migraciones iniciales |
 | Mensajería | Servicio propio Corebite, priorizando simplicidad y bajo consumo; medir entrega, historial, sincronización y recursos en Ubuntu |
 | Cifrado | Sin E2EE en la beta. Aplicar HTTPS, autorización, protección de datos almacenados y registros mínimos; reconsiderar E2EE tras la beta |
@@ -97,7 +97,7 @@ La selección final de frameworks y algunos detalles de implementación queda su
 | Infraestructura | Probar primero en el Ubuntu disponible y medir recursos; Docker Compose previsto; comparar alojamiento gestionado después |
 | Integración continua | GitHub Actions para instalación y comprobaciones de lint/build |
 
-El framework web, el runtime/API, el ORM y la solución PWA deben elegirse y documentarse antes de depender de ellos. CORE-03 define una arquitectura propia ligera y mide recursos en Ubuntu. La administración del servidor puede leer los mensajes porque la beta no tendrá E2EE; documentar ese límite claramente.
+El framework PHP, la organización del backend, el acceso a PostgreSQL y las herramientas de frontend/PWA deben elegirse y documentarse antes de depender de ellos. Toda elección debe ser compatible con HTML, CSS, JavaScript y PHP. CORE-03 define una arquitectura propia ligera y mide recursos en Ubuntu. La administración del servidor puede leer los mensajes porque la beta no tendrá E2EE; documentar ese límite claramente.
 
 ## Principios de seguridad y calidad
 
@@ -138,7 +138,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 - [CORE-01 · Definir visión, objetivos, alcance y criterios de éxito](https://github.com/CristianGR-DEV/Secure-social-platform/issues/2) — 2026-11-03 a 2026-11-05 · 6 h · Urgente · Análisis.
 - [CORE-02 · Definir UX, flujos de usuario y wireframes](https://github.com/CristianGR-DEV/Secure-social-platform/issues/1) — 2026-11-03 a 2026-11-12 · 8 h · Alta · Análisis.
 - [CORE-03 · Diseñar y probar arquitectura ligera de mensajería propia](https://github.com/CristianGR-DEV/Secure-social-platform/issues/3) — 2026-11-05 a 2026-11-15 · 10 h provisionales · Urgente · Arquitectura.
-- [CORE-04 · Preparar repositorio, estructura de trabajo, TypeScript y CI inicial](https://github.com/CristianGR-DEV/Secure-social-platform/issues/4) — 2026-11-09 a 2026-11-18 · 8 h · Urgente · DevOps.
+- [CORE-04 · Preparar repositorio, estructura de trabajo, HTML/CSS/JavaScript, PHP y CI inicial](https://github.com/CristianGR-DEV/Secure-social-platform/issues/4) — 2026-11-09 a 2026-11-18 · 8 h · Urgente · DevOps.
 - [CORE-05 · Diseñar modelo de datos PostgreSQL y migraciones iniciales](https://github.com/CristianGR-DEV/Secure-social-platform/issues/5) — 2026-11-16 a 2026-11-28 · 8 h · Alta · Database.
 
 ### Sprint 2 — Interfaz, autenticación y usuarios · 50 h
@@ -187,7 +187,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 ## Ideas posteriores a la beta
 
 - [CORE-13 · Evaluar E2EE para una versión posterior](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — estado Ideas; no tiene Sprint, fechas ni estimación.
-- [CORE-31 · Diseñar comunidades privadas y permisos personalizables](https://github.com/CristianGR-DEV/Secure-social-platform/issues/31) — fase posterior a beta, estado Ideas y sin Sprint/estimación. Creación por cualquier cuenta; entrada por enlace autorizado de un solo uso que caduca en 24 horas, acceso inmediato y rol base automático; roles personalizables y múltiples por miembro, con rol base que permite ver canales accesibles, escribir, subir archivos y conectarse a voz; denegar prevalece. Los permisos se aplican en general con excepciones por canal. Administradores solo editan roles de menor nivel, nunca el del propietario.
+- [CORE-31 · Diseñar comunidades privadas y permisos personalizables](https://github.com/CristianGR-DEV/Secure-social-platform/issues/31) — fase posterior a beta, estado Ideas y sin Sprint/estimación. Creación por cualquier cuenta; entrada por enlace autorizado de un solo uso que caduca en 24 horas, acceso inmediato y rol base automático; roles personalizables y múltiples por miembro, con rol base que permite ver canales accesibles, escribir, subir archivos y conectarse a voz; denegar prevalece. Los permisos se aplican en general con excepciones por canal. Administradores solo editan roles de menor nivel, nunca el del propietario. Un miembro puede salir cuando quiera; la comunidad desaparece de su vista y pierde acceso. Para volver necesita invitación nueva y recibe la pertenencia como primera entrada, sin permisos anteriores. Solo propietario y administradores autorizados pueden expulsar o suspender. El propietario debe transferir la propiedad a un administrador antes de salir.
 - Vídeo 1:1 y cliente de escritorio Linux.
 
 ## Hitos
@@ -238,6 +238,7 @@ Estas respuestas reemplazan cualquier supuesto inicial que no coincida.
 - **Personalización:** tema claro/oscuro, paletas, distribución de paneles, tamaño de texto e importar/exportar ajustes.
 - **Infraestructura:** servidor Ubuntu e IP pública dinámica disponibles; el usuario puede configurar router y firewall. No hay dominio registrado. Comparar coste total y opciones de alojamiento; SMTP queda fuera de beta.
 - **Tecnología de mensajería:** servicio propio Corebite para beta, sin Matrix/Synapse; se quiere una explicación comparativa de ventajas y límites de Matrix.
+- **Tecnologías permitidas:** HTML, CSS, JavaScript y PHP. El frontend será HTML/CSS/JavaScript y el backend PHP; no se añadirán otros lenguajes. Framework PHP y herramientas compatibles quedan pendientes de decisión.
 - **Comunidades futuras:** servidores privados, canales, roles y permisos posteriores, con un modelo inspirado en Discord. Falta concretar jerarquía y permisos.
 - **Linux:** integración nativa como objetivo; cliente de escritorio Linux posterior a la beta.
 - **Código y repositorio:** Corebite no se publicará como producto de código abierto. El repositorio se mantiene público por la decisión previa.
@@ -274,7 +275,7 @@ HTTPS protege la conexión; Argon2id, autorización por conversación, límites 
 ### Ideas posteriores a la beta
 
 - [CORE-13 · Evaluar E2EE para mensajes privados](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — estudiar recuperación/dispositivos; E2EE de archivos queda fuera de la decisión actual.
-- Servidores privados, roles, permisos y canales.
+- Servidores privados, roles, permisos y canales; al salir, la membresía y permisos se reinician si se invita de nuevo. La conservación y visibilidad del contenido anterior sigue pendiente.
 - Vídeo 1:1 y cliente de escritorio Linux.
 
 ### Material local
