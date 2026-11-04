@@ -187,7 +187,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 ## Ideas posteriores a la beta
 
 - [CORE-13 · Evaluar E2EE para una versión posterior](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — estado Ideas; no tiene Sprint, fechas ni estimación.
-- [CORE-31 · Diseñar comunidades privadas y permisos personalizables](https://github.com/CristianGR-DEV/Secure-social-platform/issues/31) — fase posterior a beta, estado Ideas y sin Sprint/estimación. Creación por cualquier cuenta; entrada por enlace autorizado de un solo uso que caduca en 24 horas, acceso inmediato y rol base automático; roles personalizables y múltiples por miembro, con rol base que permite ver canales accesibles, escribir, subir archivos y conectarse a voz; denegar prevalece. Los permisos se aplican en general con excepciones por canal. Administradores solo editan roles de menor nivel, nunca el del propietario. Un miembro puede salir cuando quiera; la comunidad desaparece de su vista y pierde acceso. Para volver necesita invitación nueva y recibe la pertenencia como primera entrada, sin permisos anteriores. Solo propietario y administradores autorizados pueden expulsar o suspender. El propietario debe transferir la propiedad a un administrador antes de salir.
+- [CORE-31 · Diseñar comunidades privadas y permisos personalizables](https://github.com/CristianGR-DEV/Secure-social-platform/issues/31) — fase posterior a beta, estado Ideas y sin Sprint/estimación. Creación por cualquier cuenta; entrada por enlace autorizado de un solo uso que caduca en 24 horas, acceso inmediato y rol base automático; roles personalizables y múltiples por miembro, con rol base que permite ver canales accesibles, escribir, subir archivos y conectarse a voz; denegar prevalece. Los permisos se aplican en general con excepciones por canal. Administradores solo editan roles de menor nivel, nunca el del propietario. Un miembro puede salir cuando quiera; la comunidad desaparece de su vista y pierde acceso. Sus mensajes y archivos permanecen visibles para los demás y, si vuelve mediante una invitación nueva, también recupera la visibilidad de ese contenido; su pertenencia comienza de nuevo y no recupera los permisos anteriores. Solo propietario y administradores autorizados pueden expulsar o suspender. El propietario debe transferir la propiedad a un administrador antes de salir.
 - Vídeo 1:1 y cliente de escritorio Linux.
 
 ## Hitos
@@ -275,7 +275,7 @@ HTTPS protege la conexión; Argon2id, autorización por conversación, límites 
 ### Ideas posteriores a la beta
 
 - [CORE-13 · Evaluar E2EE para mensajes privados](https://github.com/CristianGR-DEV/Secure-social-platform/issues/13) — estudiar recuperación/dispositivos; E2EE de archivos queda fuera de la decisión actual.
-- Servidores privados, roles, permisos y canales; al salir, la membresía y permisos se reinician si se invita de nuevo. La conservación y visibilidad del contenido anterior sigue pendiente.
+- Servidores privados, roles, permisos y canales; al salir, la membresía y permisos se reinician si se invita de nuevo. El contenido anterior permanece para los miembros y vuelve a ser visible para quien reingresa, aunque se reinicien sus permisos.
 - Vídeo 1:1 y cliente de escritorio Linux.
 
 ### Material local
