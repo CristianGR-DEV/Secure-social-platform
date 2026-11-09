@@ -219,7 +219,7 @@ Las fechas por tarea y los valores de Priority, Estimate (h), Iteration y Module
 
 Este archivo es la referencia resumida y viva del proyecto. Al avanzar, actualizar el plan cuando cambien alcance, fechas, estimaciones, stack o criterios de éxito. Los detalles de implementación, subtareas y criterios verificables permanecen en los Issues enlazados; GitHub Projects refleja su estado diario.
 
-## Preferencias confirmadas por el propietario (2026-11-03)
+## Preferencias confirmadas por el propietario (actualizadas al 2026-11-09)
 
 Estas respuestas reemplazan cualquier supuesto inicial que no coincida.
 
