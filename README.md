@@ -245,17 +245,6 @@ Estas respuestas reemplazan cualquier supuesto inicial que no coincida.
 - **Fecha y éxito de beta:** mantener 2027-05-01. Beta terminada significa funciones principales, criterios verificados, despliegue externo, backups/restauración probados, documentación y presentación. Si hay que recortar, priorizar UX.
 - **Plan estimado:** 270 h provisionales. Comparar alojamiento y confirmar dominio, DNS dinámico y acceso externo antes del despliegue. SMTP se decidirá después de la beta.
 
-### Comparativa inicial de alojamiento (referencia: 2026-11-03)
-
-| Opción | Coste/servicio de referencia | Ventajas | Límites a comprobar |
-|---|---|---|---|
-| Ubuntu propio disponible | Sin alquiler adicional de servidor; calcular electricidad, conexión, mantenimiento y backup | Reutiliza hardware, control completo y útil para medir rendimiento real | Cortes eléctricos o de red, acceso entrante, IP fija/dinámica, router/ISP, seguridad y restauración |
-| VPS europeo Hetzner CPX22 | 2 vCPU, 4 GB RAM, 80 GB NVMe; 19,49 €/mes antes de IVA y coste adicional de IPv4 | Servidor público estable y escalable; menos dependencia de la red doméstica | Es un VPS que seguimos administrando; añadir copias, IPv4, IVA y almacenamiento si se requiere |
-| VPS DigitalOcean Basic | 2 vCPU, 4 GB RAM, 80 GB SSD; 24 USD/mes, con 4.000 GiB de transferencia | Configuración sencilla, precio mensual claro y región elegible | También es autogestionado; revisar impuestos, región, backups y cargos adicionales |
-| Plataforma gestionada Render | Precio por servicio, base de datos, almacenamiento y transferencia; web services con TLS/dominio/WebSockets | Reduce tareas del sistema operativo y ofrece servicios gestionados | Sumar aplicación + PostgreSQL + disco/tráfico; probar WebRTC/TURN y límites antes de adoptarla |
-
-**Propuesta provisional:** desarrollar y medir primero en Ubuntu propio. Para una beta accesible externamente, comparar su coste total y fiabilidad con un VPS europeo o una plataforma gestionada. No elegir proveedor hasta medir estabilidad de la conexión, consumo eléctrico y necesidades reales de CPU/RAM/almacenamiento. Los precios son referencias publicadas y pueden cambiar; confirmar en el checkout.
-
 **Dominio, IP y acceso externo pendientes:**
 - No hay dominio registrado; se probará primero con DNS dinámico sobre la IP pública cambiante, y se registrará un dominio antes de abrir la beta al público. El usuario puede configurar router/firewall. Cloudflare puede gestionar DNS, pero no registra dominios.
 - Para las primeras pruebas desde Internet en el Ubuntu propio, configurar DNS dinámico para que el registro apunte a la IP cambiante; abrir solo los puertos necesarios y probar desde una red externa. Registrar el dominio antes del lanzamiento público.
@@ -264,7 +253,6 @@ Estas respuestas reemplazan cualquier supuesto inicial que no coincida.
 - La voz WebRTC puede requerir un relay TURN; validarlo con el Issue CORE-18 y medir tráfico/costes.
 - Fórmula para estimar electricidad del servidor: vatios medios medidos × horas de uso × tarifa eléctrica; no usar el consumo máximo de la fuente como gasto medio.
 
-Fuentes oficiales de la referencia: [Hetzner Cloud y tarifas](https://docs.hetzner.com/general/infrastructure-and-availability/price-adjustment/), [DigitalOcean Droplets](https://www.digitalocean.com/pricing/droplets), [Render Pricing](https://render.com/pricing), [Brevo](https://help.brevo.com/hc/en-us/articles/208589409-About-Brevo-s-pricing-plans) y [gestión DNS de Cloudflare](https://developers.cloudflare.com/dns/manage-dns-records/).
 
 Los reportes de mensajes incluyen la categoría, un comentario y una copia del mensaje reportado para que administración revise el caso. Si el nombre de usuario o correo ya existe, el registro muestra un mensaje genérico que no revela cuál dato está duplicado.
 
@@ -278,6 +266,20 @@ HTTPS protege la conexión; Argon2id, autorización por conversación, límites 
 - Servidores privados, roles, permisos y canales; al salir, la membresía y permisos se reinician si se invita de nuevo. El contenido anterior permanece para los miembros y vuelve a ser visible para quien reingresa, aunque se reinicien sus permisos.
 - Vídeo 1:1 y cliente de escritorio Linux.
 
-### Material local
+### Archivos iniciales del proyecto (añadidos sin revisar)
 
-La carpeta de trabajo contiene páginas HTML para inicio, sesión, cuenta y términos, hojas CSS e imágenes. No encontré JavaScript, backend ni manifiesto de dependencias. Rediseñar y limpiar antes de subirlo al repositorio; la página inicial tiene textos de ejemplo y algunas rutas incompletas.
+Se incorporaron al repositorio los archivos existentes de la carpeta local, sin abrir ni modificar su contenido. Su revisión técnica y funcional queda pendiente.
+
+- [Index.html](Index.html)
+- [sesion.html](sesion.html)
+- [cuenta.html](cuenta.html)
+- [terminos.html](terminos.html)
+- [Media/CSS/estilo.css](Media/CSS/estilo.css)
+- [Media/CSS/sesion.css](Media/CSS/sesion.css)
+- [Media/CSS/cuenta.css](Media/CSS/cuenta.css)
+- [Media/CSS/terminos.css](Media/CSS/terminos.css)
+- [Media/IMG/Logo.png](Media/IMG/Logo.png)
+- [Media/IMG/default-avatar.png](Media/IMG/default-avatar.png)
+- [Media/IMG/facebook_.png](Media/IMG/facebook_.png)
+- [Media/IMG/instagram_.png](Media/IMG/instagram_.png)
+- [Media/IMG/tiktok_.png](Media/IMG/tiktok_.png)

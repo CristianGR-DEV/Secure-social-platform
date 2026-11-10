@@ -1,0 +1,267 @@
+/* ----------------------------------- Contenedor de la Página ----------------------------------- */
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background: transparent !important;
+  border: none !important;
+  padding: 0;
+}
+
+.auth-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  min-width: 320px;
+  margin: 20px;
+  padding: 40px 30px;
+  background-color: rgba(41, 55, 55, 0.6);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 2px dashed var(--color-secundario);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+/* ----------------------------------- Tarjeta y Formularios ----------------------------------- */
+.auth-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-card h2 {
+  text-align: center;
+  color: var(--texto-claro);
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+}
+
+.form-content {
+  width: 100%;
+  min-width: 100%; 
+  box-sizing: border-box;
+}
+
+/* ----------------------------------- Fieldset y Legend ----------------------------------- */
+fieldset {
+  width: 100%;
+  border: 1px dashed var(--color-secundario);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 20px;
+  display: block;
+  box-sizing: border-box;
+}
+
+legend {
+  color: var(--color-terciario);
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  padding: 0 10px;
+  letter-spacing: 1px;
+}
+
+/* ----------------------------------- Inputs y Etiquetas ----------------------------------- */
+.form-content label {
+  display: block;
+  color: var(--color-terciario);
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+
+.form-content input {
+  width: 100%;
+  background: var(--color-primario);
+  border: 2px dashed var(--color-secundario);
+  color: var(--texto-claro);
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+  transition: 0.3s;
+}
+
+.form-content input:focus { 
+  border-color: var(--color-terciario);
+  background: var(--color-primario);
+}
+
+fieldset input {
+  width: 100% !important;
+  display: block;
+}
+
+/* Estilo específico para tipo fecha */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+/* Forzamos a que los checkboxes no hereden el width 100% */
+.form-content input[type="checkbox"] {
+    width: auto !important;
+    height: auto;
+    margin: 0 10px 0 5px;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Ajuste del grupo para que el texto y el check se vean alineados */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    margin-top: 10px;
+}
+
+.checkbox-group label {
+    margin: 0;
+    display: inline;
+    cursor: pointer;
+}
+
+/* ----------------------------------- Checkbox y Enlaces ----------------------------------- */
+.checkbox-group {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.checkbox-group label {
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.checkbox-group a {
+  color: var(--color-terciario);
+  text-decoration: underline;
+}
+
+/* ----------------------------------- Checkbox Personalizado ----------------------------------- */
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+/* Ocultamos el checkbox original */
+.checkbox-group input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px !important;
+    height: 18px !important;
+    border: 2px dashed var(--color-secundario); /* Estilo punteado */
+    background: var(--color-primario);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    transition: 0.2s;
+    margin: 0;
+    flex-shrink: 0; /* Evita que se aplaste si el texto es largo */
+}
+
+/* Efecto cuando pasas el ratón */
+.checkbox-group input[type="checkbox"]:hover {
+    border-color: var(--color-terciario);
+}
+
+/* Estilo cuando está marcado */
+.checkbox-group input[type="checkbox"]:checked {
+    background-color: var(--color-terciario);
+    border: 2px solid var(--color-terciario); /* Se vuelve sólido al marcar */
+}
+
+/* El "Check" (el tic) usando un pseudo-elemento */
+.checkbox-group input[type="checkbox"]:checked::after {
+    content: '✔';
+    position: absolute;
+    color: var(--color-primario);
+    font-size: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.checkbox-group label {
+    font-size: 0.9rem;
+    color: var(--texto-claro);
+    cursor: pointer;
+    margin: 0;
+}
+
+.checkbox-group a {
+    color: var(--color-terciario);
+    text-decoration: underline;
+}
+
+/* ----------------------------------- Botones y Lógica ----------------------------------- */
+.btn-main {
+  width: 100%;
+  padding: 15px;
+  background-color: var(--texto-claro);
+  color: var(--color-primario);
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+.btn-main:hover {
+  background-color: var(--color-terciario);
+  transform: scale(1.02);
+}
+
+.toggle-label {
+  display: block;
+  text-align: center;
+  margin-top: 25px;
+  color: var(--color-terciario);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* --- Conmutación de Formularios (Checkbox Hack) --- */
+.auth-state-check { display: none; }
+.register-form { display: none; }
+.text-to-login { display: none; }
+
+.auth-state-check:checked ~ .auth-card .login-form { display: none; }
+.auth-state-check:checked ~ .auth-card .register-form { display: block; }
+
+.auth-state-check:checked ~ .auth-card .text-to-register { display: none; }
+.auth-state-check:checked ~ .auth-card .text-to-login { display: inline; }
+
+/* ----------------------------------- Responsive ----------------------------------- */
+@media (max-width: 768px) {
+  .auth-wrapper {
+    margin: 10px;
+    max-width: none;
+    padding: 20px 15px;
+  }
+  
+  fieldset {
+    padding: 10px;
+  }
+}

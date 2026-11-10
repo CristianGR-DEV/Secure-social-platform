@@ -1,0 +1,345 @@
+/* ----------------------------------- Estructura de la Página ----------------------------------- */
+
+.profile-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+    padding: 20px 0;
+    font-family: var(--fuente-principal);
+}
+
+.profile-container {
+    width: 95%;
+    max-width: 1000px;
+    background-color: var(--fondo-cristal);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: var(--borde-punteado);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ----------------------------------- Header del Perfil ----------------------------------- */
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    padding: 30px 40px;
+    background: var(--fondo-header); 
+    border-bottom: var(--borde-punteado);
+    gap: 25px;
+}
+
+.avatar-circle {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 3px dashed var(--color-terciario); 
+    overflow: hidden;
+    background: var(--color-primario);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-circle img {
+    width: 90%;
+    height: 90%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.user-info h2 {
+    color: var(--texto-claro);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+    font-size: clamp(1.2rem, 5vw, 1.8rem); 
+    word-break: break-all; 
+}
+
+.user-info p {
+    color: var(--color-terciario);
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* ----------------------------------- Cuerpo y Navegación Lateral ----------------------------------- */
+
+.profile-body {
+    display: flex;
+    flex: 1;
+    min-height: 500px;
+}
+
+.profile-aside {
+    width: 260px;
+    background: var(--fondo-aside);
+    border-right: var(--borde-punteado);
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-content {
+    flex: 1;
+    padding: 40px;
+    background: var(--fondo-content);
+}
+
+/* ----------------------------------- Lógica de Pestañas (Centrado de Iconos) ----------------------------------- */
+
+input[name="nav-tab"] { display: none; }
+
+.tab-label {
+    padding: 20px 25px;
+    color: var(--texto-claro);
+    cursor: pointer;
+    border-bottom: 1px dashed var(--borde-suave);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    
+    /* CENTRADO FLEXBOX */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.tab-label svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    stroke-width: 2;
+    transition: transform 0.3s ease;
+}
+
+.tab-label:hover {
+    background: var(--fondo-hover);
+}
+
+.tab-label:hover svg {
+    transform: scale(1.2);
+}
+
+.logout {
+    margin-top: auto; 
+    color: var(--error);
+    border-top: var(--borde-punteado);
+    text-decoration: none;
+}
+
+/* Estilo para la pestaña seleccionada */
+#tab-info:checked ~ .profile-aside label[for="tab-info"],
+#tab-config:checked ~ .profile-aside label[for="tab-config"],
+#tab-hilos:checked ~ .profile-aside label[for="tab-hilos"] {
+    background: var(--color-terciario);
+    color: var(--color-primario);
+    font-weight: bold;
+    border-bottom: 1px solid var(--color-terciario);
+}
+
+/* ----------------------------------- Contenedores de Sección ----------------------------------- */
+
+.content-box { display: none; }
+
+#tab-info:checked ~ .profile-content .box-info,
+#tab-config:checked ~ .profile-content .box-config,
+#tab-hilos:checked ~ .profile-content .box-hilos {
+    display: block;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.profile-content h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--texto-claro);
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.profile-content h3 svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--color-terciario);
+}
+
+/* ----------------------------------- Estilo Unificado para Tarjetas (Fieldsets) ----------------------------------- */
+
+.profile-form fieldset,
+.hilos-list fieldset {
+    border: 1px dashed var(--color-secundario);
+    border-radius: 8px;
+    margin-bottom: 25px;
+    padding: 25px;
+    background: var(--color-primario);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.profile-form fieldset:hover,
+.hilos-list fieldset:hover {
+    border-color: var(--color-terciario);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-form legend,
+.hilos-list legend {
+    color: var(--color-terciario);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.profile-form legend svg,
+.hilos-list legend svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--color-terciario);
+}
+
+/* ----------------------------------- Inputs y Etiquetas ----------------------------------- */
+
+.profile-form label,
+.hilos-list label {
+    display: block;
+    color: var(--color-terciario);
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    padding-left: 5px;
+}
+
+/* Estilo específico para resaltar el título del hilo */
+.hilos-list label {
+    color: var(--texto-claro);
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.profile-form input {
+    width: 100%;
+    background: var(--color-primario);
+    border: 2px dashed var(--color-secundario);
+    color: var(--texto-claro);
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    transition: 0.3s;
+}
+
+.profile-form input[readonly] {
+    opacity: 0.6;
+    border-style: solid;
+    cursor: not-allowed;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.profile-form input:focus:not([readonly]) {
+    border-color: var(--color-terciario);
+}
+
+/* ----------------------------------- Botones y Acciones ----------------------------------- */
+
+.btn-edit, .btn-main {
+    width: 100%;
+    padding: 16px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none; /* Por si se usa en enlaces <a> */
+}
+
+.btn-edit {
+    background-color: var(--color-secundario);
+    color: var(--color-primario);
+}
+
+.btn-main {
+    background-color: var(--texto-claro);
+    color: var(--color-primario);
+}
+
+.btn-edit:hover, .btn-main:hover {
+    background-color: var(--color-terciario);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ----------------------------------- Sección de Hilos (Ajustes de Lista) ----------------------------------- */
+
+.hilos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* ----------------------------------- Animaciones y Responsive ----------------------------------- */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(15px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 850px) {
+    .profile-body { flex-direction: column; }
+    
+    .profile-aside {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap; 
+        justify-content: center; 
+        border-right: none;
+        border-bottom: var(--borde-punteado);
+        padding: 10px;
+        gap: 5px; 
+    }
+
+    .tab-label {
+        flex: 1 1; 
+        padding: 12px 10px;
+        font-size: 0.75rem;
+        border: 1px dashed var(--borde-suave);
+        border-radius: 4px;
+        margin: 0;
+    }
+
+    .logout { 
+        width: 100%; 
+        border: 1px dashed var(--error);
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 350px) {
+    .profile-content { padding: 15px 10px; }
+    .profile-aside { flex-direction: column; }
+    .tab-label { width: 100%; border-radius: 0; }
+    .avatar-circle { width: 80px; height: 80px; }
+}

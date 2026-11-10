@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./Media/IMG/Logo.png" type="image/png">
+    <link rel="stylesheet" href="./Media/CSS/estilo.css">
+    <link rel="stylesheet" href="./Media/CSS/cuenta.css">
+    <title>Cuenta</title>
+</head>
+<body class="container">
+    <header>
+        <a href="./Index.html">
+            <div class="logo-box">
+                <img src="./Media/IMG/Logo.png" alt="Logo de la página" height="70" width="70">
+                <h1>Corebite</h1>
+            </div>
+        </a>
+
+        <input type="checkbox" id="menu-check">
+        <label for="menu-check" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+
+        <nav>
+            <div class="input">
+                <a class="value" href="./Index.html">Inicio</a>
+                <a class="value" href="#">Usuarios</a>
+                <a class="value" href="#">Hilos</a>
+                <a class="value active" href="./sesion.html">Cuenta</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="profile-page">
+        <div class="profile-container">
+            <section class="profile-header">
+                <div class="avatar-circle">
+                    <img src="./Media/IMG/default-avatar.png" alt="Foto de perfil">
+                </div>
+                <div class="user-info">
+                    <h2>NombreDeUsuario</h2>
+                    <p>Miembro desde: Feb 2026</p>
+                </div>
+            </section>
+
+            <div class="profile-body">
+                
+                <input type="radio" name="nav-tab" id="tab-info" checked>
+                <input type="radio" name="nav-tab" id="tab-config">
+                <input type="radio" name="nav-tab" id="tab-hilos">
+
+                <aside class="profile-aside">
+                    <label for="tab-info" class="tab-label">
+                        Mis Datos
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-fingerprint-pattern-icon lucide-fingerprint-pattern"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/></svg>
+                    </label>
+                    <label for="tab-config" class="tab-label">
+                        Seguridad
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-icon lucide-shield"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>   
+                    </label>
+                    <label for="tab-hilos" class="tab-label">
+                        Mis Hilos
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-spool-icon lucide-spool"><path d="M17 13.44 4.442 17.082A2 2 0 0 0 4.982 21H19a2 2 0 0 0 .558-3.921l-1.115-.32A2 2 0 0 1 17 14.837V7.66"/><path d="m7 10.56 12.558-3.642A2 2 0 0 0 19.018 3H5a2 2 0 0 0-.558 3.921l1.115.32A2 2 0 0 1 7 9.163v7.178"/></svg>
+                    </label>
+                    <a href="./sesion.html" class="tab-label logout">
+                        Cerrar Sesión
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                    </a>
+                </aside>
+
+                <section class="profile-content">
+                    
+                    <div class="content-box box-info">
+                        <h3>Información Personal</h3>
+                        <form class="profile-form">
+                            <fieldset>
+                                <legend>Datos de Identidad</legend>
+                                
+                                <label>Nombre de Usuario</label>
+                                <input type="text" value="JuanPerez123" readonly>
+
+                                <label>Correo Electrónico</label>
+                                <input type="email" value="juan@corebite.com" readonly>
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Información Adicional</legend>
+                                
+                                <label>Fecha de Nacimiento</label>
+                                <input type="date" value="1995-05-15" readonly>
+                            </fieldset>
+
+                            <button type="button" class="btn-edit">Habilitar Edición</button>
+                        </form>
+                    </div>
+
+                    <div class="content-box box-config">
+                        <h3>Seguridad de la Cuenta</h3>
+                        <form class="profile-form">
+                            <label>Contraseña Actual</label>
+                            <input type="password" placeholder="********">
+                            <label>Nueva Contraseña</label>
+                            <input type="password" placeholder="Nueva contraseña">
+                            <button type="submit" class="btn-main">Actualizar Contraseña</button>
+                        </form>
+                    </div>
+
+                    <div class="content-box box-hilos">
+                        <h3>Mis Hilos Publicados</h3>
+                        <div class="hilos-list">
+                            <fieldset>
+                                <legend>Hilo -1</legend>
+                                <label>Recetas de cocina de la abuela</label>
+                                <button type="submit" class="btn-main">Actualizar Hilo</button>
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Hilo -2</legend>
+                                <label>Practicas de programación en Python</label>
+                                <button type="submit" class="btn-main">Actualizar Hilo</button>
+                            </fieldset>
+                            <a href="./hilos.html" class="btn-main">Crear mi primer hilo</a>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="cont-1">
+            <img src="./Media/IMG/Logo.png" alt="Logo" class="logo-footer">
+            <h3>Corebite</h3>
+            <p>© 2026 Corebite. Todos los derechos reservados.</p>
+        </div>
+        
+        <div class="cont-2">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa dolores officia libero illo mollitia officiis sunt omnis esse quo consectetur architecto repellat corporis, odit aperiam, atque a vero quam voluptas? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores earum voluptatum vel exercitationem cupiditate blanditiis commodi sed corrupti ab omnis, possimus voluptatibus, laudantium necessitatibus iste animi pariatur fuga. Ipsa, odit.</p>
+            
+        </div>
+
+        <div class="cont-3">
+            <div class="social-links">
+                <a href="#"><img src="./Media/IMG/facebook_.png" alt="">Facebook</a>
+                <a href="#"><img src="./Media/IMG/tiktok_.png" alt="">TikTok</a>
+                <a href="#"><img src="./Media/IMG/instagram_.png" alt="">Instagram</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
