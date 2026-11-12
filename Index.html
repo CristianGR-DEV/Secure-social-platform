@@ -3,63 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./Media/IMG/Logo.png" type="image/png">
+    <meta name="theme-color" content="#10141c">
+    <meta name="description" content="Corebite reúne tus conversaciones privadas en un espacio ligero, claro y hecho para tu comunidad.">
+    <link rel="icon" href="./Media/SVG/corebite-mark.svg?v=20261112" type="image/svg+xml">
     <link rel="stylesheet" href="./Media/CSS/estilo.css">
-    <title>Corebite | Comunidades y conversaciones</title>
+    <link rel="stylesheet" href="./Media/CSS/landing.css">
+    <link rel="stylesheet" href="./Media/CSS/landing-fixes.css?v=20261112-mobile4">
+    <title>Corebite — Tu gente, siempre cerca</title>
+    <link rel="stylesheet" href="./Media/CSS/site-footer.css?v=20261112-footer3">
+    <link rel="stylesheet" href="./Media/CSS/site-cursor.css?v=20261112-cursor2">
 </head>
-<body class="container">
-    <header>
-        <a href="./Index.html">
-            <div class="logo-box">
-                <img src="./Media/IMG/Logo.png" alt="" height="48" width="48">
-                <h1>Corebite</h1>
-            </div>
-        </a>
+<body class="container landing-page site-shell">
+    <header class="landing-header">
+  <a class="brand" href="./Index.html" aria-label="Corebite, volver al landing"><img src="./Media/SVG/corebite-mark.svg?v=20261112" alt="" width="42" height="42"><span>corebite</span></a>
+  <div class="landing-actions"><a class="login-link" href="./php/sesion.php">Iniciar sesión</a><a class="button button-small" href="./php/sesion.php?mode=register">Crear cuenta <span aria-hidden="true">↗</span></a></div>
+</header>
 
-        <input type="checkbox" id="menu-check" aria-label="Abrir o cerrar el menú">
-        <label for="menu-check" class="hamburger" aria-hidden="true" tabindex="-1">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
-
-        <nav>
-            <div class="input">
-                <a class="value active ui-icon-button" href="./Index.html" aria-current="page"><span class="svg-icon icon-house" aria-hidden="true"></span> Inicio</a>
-                <a class="value ui-icon-button" href="./php/sesion.php"><span class="svg-icon icon-user" aria-hidden="true"></span> Cuenta</a>
-            </div>
-        </nav>
-    </header>
     <main id="contenido">
-        <section class="home-hero" aria-labelledby="welcome-title">
-            <p class="eyebrow">Comunicación sencilla, comunidades a tu manera</p>
-            <h2 id="welcome-title">Tus conversaciones, en un solo lugar.</h2>
-            <p>Corebite está en construcción: una plataforma ligera para reunirte y conversar con tus comunidades.</p>
-            <a class="primary-link" href="./php/sesion.php">Explorar la cuenta</a>
-        </section>
-        <section class="home-intro" aria-labelledby="intro-title">
-            <h2 id="intro-title">Un espacio para tu comunidad</h2>
-            <p>Estamos preparando servidores privados, conversaciones y herramientas para que cada grupo tenga su propio espacio.</p>
-        </section>
-    </main>
-
-    <footer>
-        <div class="cont-1">
-            <img src="./Media/IMG/Logo.png" alt="Logo" class="logo-footer">
-            <h3>Corebite</h3>
-            <p>© 2026 Corebite. Todos los derechos reservados.</p>
-        </div>
-        
-        <div class="cont-2">
-            <p>Una plataforma de comunicación ligera para comunidades, actualmente en desarrollo.</p>
-            
-        </div>
-
-        <div class="cont-3">
-            <div class="social-links">
-                <a href="./terminos.html">Términos de servicio</a>
+        <section class="landing-hero" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow"><span class="eyebrow-dot"></span> Un lugar para estar en contacto</p>
+                <h1 id="hero-title">Tu gente,<br><span>siempre cerca.</span></h1>
+                <p class="hero-description">Conversaciones privadas y espacios compartidos para que tu comunidad se encuentre, hable y siga en contacto.</p>
+                <div class="hero-actions">
+                    <a class="button" href="./php/sesion.php?mode=register">Empieza con Corebite <span aria-hidden="true">→</span></a>
+                    <a class="secondary-link" href="#experiencia">Descubre el espacio <span aria-hidden="true">↓</span></a>
+                </div>
+                <div class="hero-note"><span class="note-mark">✳</span><span>Una experiencia sencilla, con privacidad en el centro.</span></div>
             </div>
-        </div>
-    </footer>
+
+            <div class="hero-art" aria-label="Vista previa de una conversación de Corebite" role="img">
+                <div class="art-glow"></div>
+                <div class="chat-window">
+                    <div class="window-top"><span class="window-dots"><i></i><i></i><i></i></span><span>tu espacio</span><span class="window-live"><i></i> conectado</span></div>
+                    <div class="preview-layout">
+                        <aside class="preview-rail" aria-hidden="true"><b class="rail-logo">c</b><span>✦</span><span>◈</span><span>⌂</span><span class="rail-plus">+</span></aside>
+                        <div class="preview-chats">
+                            <p class="preview-label">MENSAJES</p>
+                            <div class="preview-search">⌕ <span>Buscar conversación</span></div>
+                            <div class="preview-contact selected"><span class="avatar avatar-lilac">S</span><span><b>Sofía</b><small>¡Ya estoy por aquí!</small></span><i class="online"></i></div>
+                            <div class="preview-contact"><span class="avatar avatar-green">R</span><span><b>Rodrigo</b><small>¿Hablamos luego?</small></span></div>
+                            <div class="preview-contact"><span class="avatar avatar-peach">M</span><span><b>Mi grupo</b><small>3 personas activas</small></span></div>
+                        </div>
+                        <div class="preview-conversation">
+                            <div class="conversation-head"><span class="avatar avatar-lilac">S</span><span><b>Sofía</b><small><i class="online"></i> En línea</small></span><span class="head-icons">⌕ &nbsp; ◉ &nbsp; ···</span></div>
+                            <div class="conversation-body"><p class="day-label">HOY</p><div class="bubble-row"><span class="avatar avatar-lilac small-avatar">S</span><span><b>Sofía <small>10:22</small></b><p>¿Te vienes a charlar un rato?</p></span></div><div class="bubble-row own"><span class="avatar avatar-blue small-avatar">C</span><span><b>Tú <small>10:24</small></b><p>¡Claro! Ya estoy aquí ✨</p></span></div><div class="typing"><i></i><i></i><i></i><span>Sofía está escribiendo</span></div></div>
+                            <div class="fake-composer"><span>＋</span><span>Escribe un mensaje…</span><b>↗</b></div>
+                        </div>
+                    </div>
+                    <div class="floating-tag"><span>✳</span> Tu espacio, a tu manera</div>
+                </div>
+                <span class="art-star star-one">✳</span><span class="art-star star-two">✦</span>
+            </div>
+        </section>
+
+        <section class="experience-section" id="experiencia" aria-labelledby="experience-title">
+            <div class="section-heading"><p class="eyebrow">Hecho para estar juntos</p><h2 id="experience-title">Menos ruido.<br><span>Más conexión.</span></h2><p>Corebite está construyendo un espacio cómodo para tus conversaciones de cada día.</p></div>
+            <div class="feature-grid">
+                <article class="feature-card feature-card-large"><span class="feature-icon">◌</span><p class="feature-kicker">01 · CONVERSACIONES</p><h3>Habla con tu gente</h3><p>Encuentra tus chats privados y vuelve a la conversación sin perderte entre ventanas.</p><span class="feature-decoration chat-lines"><i></i><i></i><i></i></span></article>
+                <article class="feature-card"><span class="feature-icon">⌘</span><p class="feature-kicker">02 · TU ESPACIO</p><h3>Un lugar que se siente tuyo</h3><p>Colores, paneles y pequeños detalles para que la interfaz encaje contigo.</p><span class="swatches"><i></i><i></i><i></i><i></i></span></article>
+                <article class="feature-card"><span class="feature-icon">✳</span><p class="feature-kicker">03 · SENCILLEZ</p><h3>Todo en su sitio</h3><p>Una experiencia clara y adaptable, tanto en el ordenador como en el móvil.</p><span class="mini-layout"><i></i><i></i><i></i></span></article>
+            </div>
+        </section>
+
+        <section class="journey-section" aria-labelledby="journey-title">
+            <div class="journey-heading"><p class="eyebrow">Un sitio que evoluciona contigo</p><h2 id="journey-title">De un “hola”<br><span>a sentirte en casa.</span></h2><p>Corebite está creciendo paso a paso. La idea es que entrar, encontrar a los tuyos y seguir una conversación se sienta natural.</p></div>
+            <div class="journey-steps">
+                <article class="journey-step"><span class="step-number">01</span><span class="step-symbol">⌕</span><h3>Encuentra tu espacio</h3><p>Una entrada sencilla para llegar a tus conversaciones y comunidades.</p><span class="step-connector"></span></article>
+                <article class="journey-step"><span class="step-number">02</span><span class="step-symbol">◌</span><h3>Sigue la conversación</h3><p>Chats privados pensados para que retomar el hilo sea fácil.</p><span class="step-connector"></span></article>
+                <article class="journey-step"><span class="step-number">03</span><span class="step-symbol">✳</span><h3>Hazlo tuyo</h3><p>Una interfaz adaptable, con opciones visuales para sentirla más cercana.</p></article>
+            </div>
+            <div class="journey-footnote"><span>✦</span> La beta está en construcción. Algunas funciones y elementos visuales todavía son una vista previa.</div>
+        </section>
+
+        <section class="privacy-strip" id="principios"><div class="privacy-icon"><span>◇</span></div><div><p class="feature-kicker">DISEÑADO CON INTENCIÓN</p><h2>La privacidad empieza por ser claros.</h2><p>Corebite está en desarrollo. La beta prioriza conversaciones privadas y seguridad de cuenta; el cifrado de extremo a extremo no forma parte de esta primera etapa.</p></div><a href="./terminos.html" class="privacy-link">Conoce el proyecto <span aria-hidden="true">↗</span></a></section>
+
+        <section class="closing-cta"><p class="eyebrow">Tu próxima conversación empieza aquí</p><h2>Haz sitio para estar más cerca.</h2><a class="button" href="./php/sesion.php?mode=register">Crear mi cuenta <span aria-hidden="true">→</span></a><span class="cta-orbit orbit-a"></span><span class="cta-orbit orbit-b"></span></section>
+    </main>
+    <footer class="site-footer" data-site-footer aria-label="Pie de página de Corebite"></footer>
+    <script src="./Media/JS/site-footer.js" defer></script>
 </body>
 </html>

@@ -28,15 +28,16 @@ $messages = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#17191f">
     <title>Chat | Corebite</title>
-    <link rel="icon" href="../Media/IMG/Logo.png" type="image/png">
+    <link rel="icon" href="../Media/SVG/corebite-mark.svg?v=20261112" type="image/svg+xml">
     <link rel="stylesheet" href="../Media/CSS/estilo.css">
     <link rel="stylesheet" href="../Media/CSS/workspace.css">
     <script src="../Media/JS/workspace.js" defer></script>
+    <link rel="stylesheet" href="../Media/CSS/site-cursor.css?v=20261112-cursor2">
 </head>
 <body class="chat-page" data-theme="discord" data-channel-position="left" data-server-position="left">
     <div class="app-shell" id="app-shell">
         <aside class="server-rail" aria-label="Servidores">
-            <a class="home-server" href="workspace.php" aria-label="Inicio de Corebite"><img src="../Media/IMG/Logo.png" alt=""></a>
+            <a class="home-server" href="workspace.php" aria-label="Inicio de Corebite"><img src="../Media/SVG/corebite-mark.svg?v=20261112" alt=""></a>
             <button class="dm-rail-button" type="button" id="dm-view-toggle" aria-label="Mensajes directos" title="Mensajes directos"><span class="svg-icon icon-messages" aria-hidden="true"></span></button>
             <span class="rail-divider"></span>
             <?php foreach ($servers as $index => $server): ?>

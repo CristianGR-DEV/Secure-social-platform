@@ -3,35 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./Media/IMG/Logo.png" type="image/png">
+    <link rel="icon" href="./Media/SVG/corebite-mark.svg?v=20261112" type="image/svg+xml">
     <link rel="stylesheet" href="./Media/CSS/estilo.css">
     <link rel="stylesheet" href="./Media/CSS/terminos.css">
+    <link rel="stylesheet" href="./Media/CSS/site-pages.css">
     <title>Términos de servicio | Corebite</title>
+    <link rel="stylesheet" href="./Media/CSS/site-footer.css?v=20261112-footer3">
+    <link rel="stylesheet" href="./Media/CSS/site-cursor.css?v=20261112-cursor2">
 </head>
-<body class="container">
+<body class="container site-shell legal-landing">
 
-    <header>
-        <a href="./Index.html">
-            <div class="logo-box">
-                <img src="./Media/IMG/Logo.png" alt="" height="48" width="48">
-                <h1>Corebite</h1>
-            </div>
-        </a>
-
-        <input type="checkbox" id="menu-check" aria-label="Abrir o cerrar el menú">
-        <label for="menu-check" class="hamburger" aria-hidden="true" tabindex="-1">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
-
-        <nav>
-            <div class="input">
-                <a class="value ui-icon-button" href="./Index.html"><span class="svg-icon icon-house" aria-hidden="true"></span> Inicio</a>
-                <a class="value ui-icon-button" href="./php/sesion.php"><span class="svg-icon icon-user" aria-hidden="true"></span> Cuenta</a>
-            </div>
-        </nav>
-    </header>
+    <header class="landing-header">
+  <a class="brand" href="./Index.html" aria-label="Corebite, volver al landing"><img src="./Media/SVG/corebite-mark.svg?v=20261112" alt="" width="42" height="42"><span>corebite</span></a>
+  <div class="landing-actions"><a class="login-link" href="./php/sesion.php">Iniciar sesión</a><a class="button button-small" href="./php/sesion.php?mode=register">Crear cuenta <span aria-hidden="true">↗</span></a></div>
+</header>
 
     <main class="legal-page">
         <div class="legal-wrapper">
@@ -65,28 +50,13 @@
                 </div>
 
                 <div class="legal-actions">
-                    <a href="./php/sesion.php" class="btn-back">Volver al Registro</a>
+                    <a href="./php/sesion.php?mode=register" class="btn-back">Volver al Registro</a>
                 </div>
             </section>
         </div>
     </main>
 
-    <footer>
-        <div class="cont-1">
-            <img src="./Media/IMG/Logo.png" alt="Logo" class="logo-footer">
-            <h3>Corebite</h3>
-            <p>© 2026 Corebite. Todos los derechos reservados.</p>
-        </div>
-        
-        <div class="cont-2">
-            <p>Este texto es un borrador de trabajo. Debe revisarse y completarse antes de que Corebite acepte registros o se publique como acuerdo legal.</p>
-        </div>
-
-        <div class="cont-3">
-            <div class="social-links">
-                <a href="./terminos.html">Términos de servicio</a>
-            </div>
-        </div>
-    </footer>
+    <footer class="site-footer" data-site-footer aria-label="Pie de página de Corebite"></footer>
+    <script src="./Media/JS/site-footer.js" defer></script>
 </body>
 </html>

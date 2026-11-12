@@ -1,0 +1,40 @@
+.auth-landing { position:relative; isolation:isolate; min-height:100vh; overflow-x:hidden; background:#10141c; color:#f5f4f8; }
+.auth-landing::before { content:""; position:fixed; z-index:-1; inset:-20%; pointer-events:none; background:radial-gradient(ellipse at 22% 28%,rgba(97,83,155,.2),transparent 35%),radial-gradient(ellipse at 78% 70%,rgba(66,97,158,.16),transparent 38%),radial-gradient(ellipse at 55% 5%,rgba(157,113,164,.1),transparent 25%); animation:authGlow 18s ease-in-out infinite alternate; }
+.auth-landing>header { position:sticky; top:0; z-index:1000; min-height:70px; padding:10px clamp(18px,6vw,92px); border:0; border-bottom:1px dashed rgba(181,171,220,.28); background:rgba(16,20,28,.94); box-shadow:0 10px 32px rgba(0,0,0,.25); backdrop-filter:blur(18px); }
+.auth-landing>header>a { color:#f7f4fc; text-decoration:none; }
+.auth-landing .logo-box { gap:10px; }.auth-landing .logo-box img { width:40px;height:40px; }
+.auth-landing header h1 { font-size:21px;letter-spacing:-.06em; }
+.auth-landing header nav { display:block;position:static;min-width:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none; }
+.auth-landing header nav .input { gap:6px;padding:5px;border:1px solid rgba(194,181,225,.17);border-radius:12px;background:rgba(255,255,255,.035); }
+.auth-landing header nav .value { min-height:38px;padding:8px 15px;border:1px solid transparent;border-radius:8px;color:#c9c5d4;font-size:12px; }
+.auth-landing header nav .value:hover,.auth-landing header nav .value:focus-visible { border-color:rgba(186,169,224,.35);background:rgba(151,130,196,.16);color:#fff;outline:0; }
+.auth-landing .auth-page { position:relative;z-index:1;min-height:calc(100vh - 190px);padding:54px 18px; }
+.auth-landing .auth-wrapper { width:min(100%,520px);margin:0;padding:30px;border:1px dashed rgba(183,166,224,.36);border-radius:16px;background:linear-gradient(145deg,rgba(38,35,55,.94),rgba(20,24,33,.97) 70%);box-shadow:0 25px 85px rgba(0,0,0,.35),0 0 55px rgba(104,86,154,.12);backdrop-filter:blur(18px);animation:authEnter .55s cubic-bezier(.2,.7,.2,1) both; }
+.auth-landing .auth-card h2 { margin:0 0 9px;color:#fbf9ff;font-size:27px;letter-spacing:-.04em;text-align:left;text-transform:none; }
+.auth-landing .auth-card h2::after { content:"";display:block;width:42px;margin-top:13px;border-bottom:2px dashed #ac9bdb; }
+.auth-landing .form-content { min-width:0; }
+.auth-landing fieldset { margin:17px 0;padding:15px;border:1px dashed rgba(181,171,220,.22);border-radius:10px;background:rgba(255,255,255,.018); }
+.auth-landing legend { color:#bca9e8;font-size:10px;letter-spacing:.11em; }
+.auth-landing .form-content label { margin:0 0 6px 2px;color:#cfcbda;font-size:12px; }
+.auth-landing .form-content input:not([type="checkbox"]) { min-height:43px;margin:0 0 14px;padding:10px 12px;border:1px solid rgba(181,171,220,.22);border-radius:8px;background:rgba(10,13,20,.65);color:#f5f4f8;font-size:13px;transition:border-color .2s,box-shadow .2s,background .2s; }
+.auth-landing .form-content input:not([type="checkbox"]):focus { border-color:#ac9bdb;background:rgba(14,16,25,.9);box-shadow:0 0 0 3px rgba(172,155,219,.13);outline:0; }
+.auth-landing .form-content input::placeholder { color:#777484; }
+.auth-landing .form-content input[type="date"]::-webkit-calendar-picker-indicator { filter:invert(1); }
+.auth-landing .checkbox-group { align-items:flex-start;gap:10px;margin:13px 0 0; }
+.auth-landing .checkbox-group label { color:#c4c0cf;font-size:11px;line-height:1.6; }
+.auth-landing .checkbox-group a { color:#c3b1ed; }
+.auth-landing .btn-main { position:relative;overflow:hidden;width:100%;min-height:46px;margin-top:8px;padding:0 18px;border:1px solid rgba(207,194,241,.48);border-radius:9px;background:linear-gradient(115deg,#7966ac,#586bd1 70%,#6575dd);box-shadow:0 7px 22px rgba(79,77,152,.24),inset 0 1px 0 rgba(255,255,255,.2);color:#fff;font-size:12px;font-weight:700;letter-spacing:.02em;text-transform:none;cursor:pointer;animation:authButtonGlow 3.8s ease-in-out infinite;transition:transform .2s,filter .2s,box-shadow .2s; }
+.auth-landing .btn-main:hover { transform:translateY(-2px);filter:brightness(1.1);box-shadow:0 13px 30px rgba(100,85,168,.42); }
+.auth-landing .btn-main:active { transform:scale(.985); }
+.auth-landing .toggle-label { display:inline-block;margin-top:17px;color:#cbbaf0;font-size:12px;text-decoration:none; }
+.auth-landing .toggle-label:hover { color:#fff;text-decoration:underline; }
+.auth-landing .prototype-note { margin:0 0 14px;border-color:#ac9bdb;border-radius:5px;background:rgba(172,155,219,.1); }
+.auth-landing>footer { position:relative;z-index:1;margin:0 18px 18px;padding:18px 22px;border:1px dashed rgba(181,171,220,.2);border-radius:12px;background:rgba(17,20,28,.84); }
+.auth-landing>footer .cont-1 { display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap; }
+.auth-landing>footer .cont-1 h3,.auth-landing>footer .cont-1 p { margin:0; }.auth-landing>footer .logo-footer { width:29px;height:29px; }
+.auth-landing>footer .cont-2 { color:#9693a2;font-size:11px; }.auth-landing>footer .social-links a { color:#c3b1ed;font-size:11px; }
+@keyframes authGlow { from{background-position:0% 20%;opacity:.65}to{background-position:100% 80%;opacity:.95} }
+@keyframes authEnter { from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)} }
+@keyframes authButtonGlow { 0%,100%{box-shadow:0 7px 22px rgba(79,77,152,.22),inset 0 1px 0 rgba(255,255,255,.2)}50%{box-shadow:0 10px 28px rgba(108,91,177,.4),inset 0 1px 0 rgba(255,255,255,.27)} }
+@media(max-width:768px) { .auth-landing>header{min-height:62px;padding:8px 14px}.auth-landing header h1{font-size:18px}.auth-landing .logo-box img{width:34px;height:34px}.auth-landing header nav{display:block;position:static;min-width:0;padding:0}.auth-landing header nav .value{min-height:34px;padding:6px 10px;font-size:10px}.auth-landing .auth-page{min-height:calc(100vh - 160px);padding:26px 14px}.auth-landing .auth-wrapper{margin:0;padding:22px 17px}.auth-landing>footer{margin:0 12px 12px;padding:15px}.auth-landing>footer .cont-2{flex-basis:100%;text-align:center} }
+@media(prefers-reduced-motion:reduce) { .auth-landing::before,.auth-landing .auth-wrapper,.auth-landing .btn-main{animation:none}.auth-landing .form-content input,.auth-landing .btn-main{transition:none} }

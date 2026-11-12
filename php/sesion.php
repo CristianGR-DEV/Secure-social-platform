@@ -11,27 +11,30 @@ $errors = [
     'storage' => 'No se pudieron guardar los datos. Comprueba los permisos del servidor.',
 ];
 $error = $errors[$_GET['error'] ?? ''] ?? '';
+$startInRegistration = ($_GET['mode'] ?? '') === 'register';
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="../Media/IMG/Logo.png" type="image/png">
+    <link rel="icon" href="../Media/SVG/corebite-mark.svg?v=20261112" type="image/svg+xml">
     <link rel="stylesheet" href="../Media/CSS/estilo.css">
     <link rel="stylesheet" href="../Media/CSS/sesion.css">
+    <link rel="stylesheet" href="../Media/CSS/auth-landing.css">
+    <link rel="stylesheet" href="../Media/CSS/site-pages.css">
     <title>Iniciar sesión o crear cuenta | Corebite</title>
+    <link rel="stylesheet" href="../Media/CSS/site-footer.css?v=20261112-footer3">
+    <link rel="stylesheet" href="../Media/CSS/site-cursor.css?v=20261112-cursor2">
 </head>
-<body class="container">
-    <header>
-        <a href="../Index.html"><div class="logo-box"><img src="../Media/IMG/Logo.png" alt="" height="48" width="48"><h1>Corebite</h1></div></a>
-        <input type="checkbox" id="menu-check" aria-label="Abrir o cerrar el menú">
-        <label for="menu-check" class="hamburger" aria-hidden="true" tabindex="-1"><span></span><span></span><span></span></label>
-        <nav><div class="input"><a class="value ui-icon-button" href="../Index.html"><span class="svg-icon icon-house" aria-hidden="true"></span> Inicio</a><a class="value ui-icon-button" href="./sesion.php"><span class="svg-icon icon-user" aria-hidden="true"></span> Cuenta</a></div></nav>
-    </header>
+<body class="container auth-landing site-shell">
+    <header class="landing-header">
+  <a class="brand" href="../Index.html" aria-label="Corebite, volver al landing"><img src="../Media/SVG/corebite-mark.svg?v=20261112" alt="" width="42" height="42"><span>corebite</span></a>
+  <div class="landing-actions"><a class="login-link" href="./sesion.php">Iniciar sesión</a><a class="button button-small" href="./sesion.php?mode=register">Crear cuenta <span aria-hidden="true">↗</span></a></div>
+</header>
     <main class="auth-page">
         <div class="auth-wrapper">
-            <input type="checkbox" id="toggle-auth" class="auth-state-check">
+            <input type="checkbox" id="toggle-auth" class="auth-state-check" <?= $startInRegistration ? 'checked' : '' ?>>
             <div class="auth-card">
                 <?php if ($error !== ''): ?><p class="prototype-note" role="alert"><?= h($error) ?></p><?php endif; ?>
                 <div class="form-content login-form">
@@ -80,10 +83,7 @@ $error = $errors[$_GET['error'] ?? ''] ?? '';
             </div>
         </div>
     </main>
-    <footer>
-        <div class="cont-1"><img src="../Media/IMG/Logo.png" alt="Logo" class="logo-footer"><h3>Corebite</h3><p>© 2026 Corebite. Todos los derechos reservados.</p></div>
-        <div class="cont-2"><p>Una plataforma de comunicación ligera para comunidades, actualmente en desarrollo.</p></div>
-        <div class="cont-3"><div class="social-links"><a href="../terminos.html">Términos de servicio</a></div></div>
-    </footer>
+    <footer class="site-footer" data-site-footer aria-label="Pie de página de Corebite"></footer>
+    <script src="../Media/JS/site-footer.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,37 @@
+/* Header y footer compartidos por acceso y página legal. */
+.site-shell { position:relative;isolation:isolate;min-height:100vh;overflow-x:hidden;background:#10141c;color:#f5f4f8; }
+.site-shell::before { content:"";position:fixed;z-index:-1;inset:-18%;pointer-events:none;background:radial-gradient(ellipse at 22% 28%,rgba(97,83,155,.17),transparent 35%),radial-gradient(ellipse at 78% 70%,rgba(66,97,158,.13),transparent 38%);animation:siteGlow 20s ease-in-out infinite alternate; }
+.site-shell>header.landing-header { position:fixed!important;inset:0 0 auto;z-index:10000!important;display:flex;align-items:center;justify-content:space-between;gap:24px;width:100%;height:70px;padding:0 clamp(18px,6vw,92px);border:0;border-bottom:1px dashed rgba(181,171,220,.28);background:rgba(16,20,28,.94);box-shadow:0 10px 32px rgba(0,0,0,.3);backdrop-filter:blur(18px);pointer-events:auto; }
+.site-shell>header .brand { display:inline-flex;align-items:center;gap:10px;color:#f7f4fc;font-size:21px;font-weight:800;letter-spacing:-.06em;text-decoration:none; }
+.site-shell>header .brand img { width:40px;height:40px;object-fit:contain; }
+.site-shell>header .landing-nav { display:flex;align-items:center;gap:5px;height:auto;padding:5px;border:1px solid rgba(194,181,225,.17);border-radius:12px;background:rgba(255,255,255,.035); }
+.site-shell>header .landing-nav a { display:flex;align-items:center;min-height:38px;padding:0 15px;border:1px solid transparent;border-radius:8px;color:#c9c5d4;font-size:12px;text-decoration:none;transition:background .2s,border-color .2s,color .2s; }
+.site-shell>header .landing-nav a:hover,.site-shell>header .landing-nav a:focus-visible { border-color:rgba(186,169,224,.35);background:rgba(151,130,196,.16);color:#fff; }
+.site-shell>header .landing-actions { display:flex;align-items:center;gap:18px; }
+.site-shell>header .login-link { display:inline-flex;align-items:center;min-height:40px;padding:0 5px;color:#e2dced;font-size:12px;font-weight:700;text-decoration:none; }
+.site-shell>header .button { position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:38px;padding:0 14px;overflow:hidden;border:1px solid rgba(207,194,241,.45);border-radius:8px;background:linear-gradient(115deg,#7966ac,#586bd1 70%,#6575dd);box-shadow:0 7px 22px rgba(79,77,152,.25);color:#fff;font-size:11px;font-weight:700;text-decoration:none;animation:siteButton 4s ease-in-out infinite; }
+.site-shell>header .button:hover { filter:brightness(1.12);transform:translateY(-1px); }
+.site-shell>main { position:relative;z-index:1;padding-top:70px; }
+.site-shell>footer { position:relative;z-index:1;width:auto;margin:0 18px 18px;padding:22px;border:1px dashed rgba(181,171,220,.22);border-radius:12px;background:rgba(17,20,28,.88); }
+.site-shell>footer .cont-1 { display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap; }
+.site-shell>footer .cont-1 h3,.site-shell>footer .cont-1 p { margin:0; }
+.site-shell>footer .logo-footer { width:30px;height:30px;object-fit:contain; }
+.site-shell>footer .cont-2 { color:#9693a2;font-size:11px; }
+.site-shell>footer .social-links a { color:#c3b1ed;font-size:11px; }
+.auth-landing.site-shell>.auth-page { min-height:calc(100vh - 70px);padding-top:54px; }
+.legal-landing.site-shell>.legal-page { min-height:calc(100vh - 70px);padding:35px 18px 55px; }
+.legal-landing .legal-wrapper { width:min(100%,980px);max-width:980px;margin:0;padding:clamp(24px,5vw,52px);border:1px dashed rgba(183,166,224,.36);border-radius:16px;background:linear-gradient(145deg,rgba(38,35,55,.94),rgba(20,24,33,.97) 70%);box-shadow:0 25px 85px rgba(0,0,0,.3),0 0 55px rgba(104,86,154,.1); }
+.legal-landing .legal-content h2 { margin:0;text-align:left;color:#fbf9ff;font-size:clamp(26px,4vw,40px);letter-spacing:-.045em;text-transform:none; }
+.legal-landing .last-update { margin:10px 0 30px;text-align:left;color:#aaa6b6;font-size:11px; }
+.legal-landing .legal-scroll { max-height:none;overflow:visible;padding:0;text-align:left; }
+.legal-landing .legal-scroll h3 { margin:27px 0 10px;padding:0 0 8px;border-bottom:1px dashed rgba(181,171,220,.25);color:#c7b9ed;font-size:16px; }
+.legal-landing .legal-scroll p,.legal-landing .legal-scroll li { color:#c4c0cf;font-size:13px;line-height:1.8; }
+.legal-landing .legal-scroll ul { padding-left:22px; }
+.legal-landing .legal-scroll li::marker { color:#ad99dc; }
+.legal-landing .legal-actions { justify-content:flex-start;margin-top:28px; }
+.legal-landing .btn-back { display:inline-flex;align-items:center;min-height:42px;padding:0 16px;border:1px solid rgba(207,194,241,.4);border-radius:8px;background:linear-gradient(115deg,#7966ac,#586bd1);color:#fff;font-size:11px;text-decoration:none;text-transform:none;transition:transform .2s,filter .2s; }
+.legal-landing .btn-back:hover { transform:translateY(-2px);filter:brightness(1.1); }
+@keyframes siteGlow { from{background-position:0 20%;opacity:.65}to{background-position:100% 80%;opacity:.95} }
+@keyframes siteButton { 0%,100%{box-shadow:0 7px 22px rgba(79,77,152,.22)}50%{box-shadow:0 9px 27px rgba(108,91,177,.38)} }
+@media(max-width:760px) { .site-shell>header.landing-header{height:62px;padding:0 14px;gap:8px}.site-shell>header .brand{font-size:17px}.site-shell>header .brand img{width:32px;height:32px}.site-shell>header .landing-nav{display:none}.site-shell>header .landing-actions{gap:9px}.site-shell>header .login-link{font-size:10px}.site-shell>header .button{min-height:34px;padding:0 10px;font-size:10px}.site-shell>main{padding-top:62px}.auth-landing.site-shell>.auth-page,.legal-landing.site-shell>.legal-page{min-height:calc(100vh - 62px)}.legal-landing.site-shell>.legal-page{padding:20px 12px 35px}.legal-landing .legal-wrapper{padding:22px 18px}.legal-landing .legal-scroll h3{font-size:14px}.legal-landing .legal-scroll p,.legal-landing .legal-scroll li{font-size:12px}.site-shell>footer{margin:0 12px 12px;padding:15px}.site-shell>footer .cont-2{flex-basis:100%;text-align:center} }
+@media(prefers-reduced-motion:reduce){.site-shell::before,.site-shell>header .button{animation:none}}
