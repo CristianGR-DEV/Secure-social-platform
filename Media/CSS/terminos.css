@@ -34,7 +34,7 @@
 .last-update {
   text-align: center;
   font-size: 0.8rem;
-  color: var(--color-secundario);
+  color: #c7cbd1;
   margin-bottom: 30px;
 }
 
@@ -86,6 +86,7 @@
 
 .btn-back {
   padding: 12px 25px;
+  border: 1px dashed var(--color-secundario);
   background-color: var(--color-terciario);
   color: var(--color-primario);
   text-decoration: none;

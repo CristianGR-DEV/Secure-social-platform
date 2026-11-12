@@ -91,7 +91,8 @@
 
 /* ----------------------------------- Lógica de Pestañas (Centrado de Iconos) ----------------------------------- */
 
-input[name="nav-tab"] { display: none; }
+input[name="nav-tab"] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#tab-info:focus-visible ~ .profile-aside label[for="tab-info"], #tab-config:focus-visible ~ .profile-aside label[for="tab-config"], #tab-personalizacion:focus-visible ~ .profile-aside label[for="tab-personalizacion"] { outline: 3px solid #aeb5ff; outline-offset: -3px; }
 
 .tab-label {
     padding: 20px 25px;
@@ -136,11 +137,11 @@ input[name="nav-tab"] { display: none; }
 /* Estilo para la pestaña seleccionada */
 #tab-info:checked ~ .profile-aside label[for="tab-info"],
 #tab-config:checked ~ .profile-aside label[for="tab-config"],
-#tab-hilos:checked ~ .profile-aside label[for="tab-hilos"] {
+#tab-personalizacion:checked ~ .profile-aside label[for="tab-personalizacion"] {
     background: var(--color-terciario);
     color: var(--color-primario);
     font-weight: bold;
-    border-bottom: 1px solid var(--color-terciario);
+    border-bottom: 1px dashed var(--color-terciario);
 }
 
 /* ----------------------------------- Contenedores de Sección ----------------------------------- */
@@ -149,7 +150,7 @@ input[name="nav-tab"] { display: none; }
 
 #tab-info:checked ~ .profile-content .box-info,
 #tab-config:checked ~ .profile-content .box-config,
-#tab-hilos:checked ~ .profile-content .box-hilos {
+#tab-personalizacion:checked ~ .profile-content .box-personalizacion {
     display: block;
     animation: fadeIn 0.4s ease-out;
 }
@@ -174,7 +175,7 @@ input[name="nav-tab"] { display: none; }
 /* ----------------------------------- Estilo Unificado para Tarjetas (Fieldsets) ----------------------------------- */
 
 .profile-form fieldset,
-.hilos-list fieldset {
+.appearance-form fieldset {
     border: 1px dashed var(--color-secundario);
     border-radius: 8px;
     margin-bottom: 25px;
@@ -184,14 +185,14 @@ input[name="nav-tab"] { display: none; }
 }
 
 .profile-form fieldset:hover,
-.hilos-list fieldset:hover {
+.appearance-form fieldset:hover {
     border-color: var(--color-terciario);
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .profile-form legend,
-.hilos-list legend {
+.appearance-form legend {
     color: var(--color-terciario);
     font-weight: bold;
     text-transform: uppercase;
@@ -204,7 +205,7 @@ input[name="nav-tab"] { display: none; }
 }
 
 .profile-form legend svg,
-.hilos-list legend svg {
+.appearance-form legend svg {
     width: 16px;
     height: 16px;
     stroke: var(--color-terciario);
@@ -213,7 +214,7 @@ input[name="nav-tab"] { display: none; }
 /* ----------------------------------- Inputs y Etiquetas ----------------------------------- */
 
 .profile-form label,
-.hilos-list label {
+.appearance-form label {
     display: block;
     color: var(--color-terciario);
     font-size: 0.8rem;
@@ -222,7 +223,7 @@ input[name="nav-tab"] { display: none; }
 }
 
 /* Estilo específico para resaltar el título del hilo */
-.hilos-list label {
+.appearance-form label {
     color: var(--texto-claro);
     font-size: 1rem;
     text-align: center;
@@ -259,7 +260,7 @@ input[name="nav-tab"] { display: none; }
     width: 100%;
     padding: 16px;
     border-radius: 8px;
-    border: none;
+    border: 1px dashed var(--color-secundario);
     font-weight: bold;
     cursor: pointer;
     text-transform: uppercase;
@@ -289,7 +290,7 @@ input[name="nav-tab"] { display: none; }
 
 /* ----------------------------------- Sección de Hilos (Ajustes de Lista) ----------------------------------- */
 
-.hilos-list {
+.appearance-form {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -343,3 +344,11 @@ input[name="nav-tab"] { display: none; }
     .tab-label { width: 100%; border-radius: 0; }
     .avatar-circle { width: 80px; height: 80px; }
 }
+.prototype-note { padding: .8rem 1rem; border-left: 3px dashed var(--color-terciario); background: rgba(174, 181, 255, .08); color: #d5d7dc; font-size: .9rem; }
+.appearance-form select { width:100%; margin:0 0 18px; padding:12px; border:2px dashed var(--color-secundario); border-radius:8px; background:var(--color-primario); color:var(--texto-claro); }
+.appearance-form .preference-check { display:flex; align-items:center; gap:10px; padding:8px 0; color:var(--texto-claro); }
+.appearance-form .preference-check input { width:18px; height:18px; margin:0; accent-color:var(--color-terciario); }
+.appearance-form #appearance-save-status { min-height:1em; margin-top:12px; }
+button:disabled { opacity: .65; cursor: not-allowed; transform: none; box-shadow: none; }
+.logout-form { margin-top: auto; }
+.logout-form .logout { width: 100%; margin-top: 0; border: 0; background: transparent; font: inherit; text-align: center; }

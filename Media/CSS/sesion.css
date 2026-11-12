@@ -13,10 +13,10 @@
   position: relative;
   width: 100%;
   max-width: 500px;
-  min-width: 320px;
+  min-width: 0;
   margin: 20px;
   padding: 40px 30px;
-  background-color: rgba(41, 55, 55, 0.6);
+  background-color: var(--fondo-cristal);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 2px dashed var(--color-secundario);
@@ -220,7 +220,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-color: var(--texto-claro);
   color: var(--color-primario);
   border-radius: 8px;
-  border: none;
+  border: 1px dashed var(--color-secundario);
   font-weight: bold;
   cursor: pointer;
   text-transform: uppercase;
@@ -243,7 +243,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* --- Conmutación de Formularios (Checkbox Hack) --- */
-.auth-state-check { display: none; }
+.auth-state-check { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.auth-state-check:focus-visible ~ .auth-card .toggle-label { outline: 3px solid #aeb5ff; outline-offset: 3px; }
 .register-form { display: none; }
 .text-to-login { display: none; }
 
@@ -256,7 +257,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 /* ----------------------------------- Responsive ----------------------------------- */
 @media (max-width: 768px) {
   .auth-wrapper {
-    margin: 10px;
+    margin: 0;
     max-width: none;
     padding: 20px 15px;
   }
@@ -265,3 +266,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     padding: 10px;
   }
 }
+.prototype-note { padding: .8rem 1rem; border-left: 3px dashed var(--color-terciario); background: rgba(174, 181, 255, .08); color: #d5d7dc; font-size: .9rem; }
+.btn-main:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+#menu-check:focus-visible + .hamburger { outline: 3px solid #aeb5ff; outline-offset: 3px; }

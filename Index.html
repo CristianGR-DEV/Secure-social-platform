@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./Media/IMG/Logo.png" type="image/png">
     <link rel="stylesheet" href="./Media/CSS/estilo.css">
-    <title>Corebite</title>
+    <title>Corebite | Comunidades y conversaciones</title>
 </head>
 <body class="container">
     <header>
         <a href="./Index.html">
             <div class="logo-box">
-                <img src="./Media/IMG/Logo.png" alt="Logo de la página" height="70" width="70">
+                <img src="./Media/IMG/Logo.png" alt="" height="48" width="48">
                 <h1>Corebite</h1>
             </div>
         </a>
 
-        <input type="checkbox" id="menu-check">
-        <label for="menu-check" class="hamburger">
+        <input type="checkbox" id="menu-check" aria-label="Abrir o cerrar el menú">
+        <label for="menu-check" class="hamburger" aria-hidden="true" tabindex="-1">
             <span></span>
             <span></span>
             <span></span>
@@ -25,54 +25,22 @@
 
         <nav>
             <div class="input">
-                <a class="value active" href="./Index.html">Inicio</a>
-                <a class="value" href="#">Usuarios</a>
-                <a class="value" href="#">Hilos</a>
-                <a class="value" href="./cuenta.html">Cuenta</a>
+                <a class="value active ui-icon-button" href="./Index.html" aria-current="page"><span class="svg-icon icon-house" aria-hidden="true"></span> Inicio</a>
+                <a class="value ui-icon-button" href="./php/sesion.php"><span class="svg-icon icon-user" aria-hidden="true"></span> Cuenta</a>
             </div>
         </nav>
     </header>
-    <main>
-        <div class="grid-container">
-            <div class="button-hilo">1</div>
-            <div class="button-hilo">2</div>
-            <div class="button-hilo">3</div>
-            <div class="button-hilo">4</div>
-            <div class="button-hilo">5</div>
-            <div class="button-hilo">6</div>
-        </div>
-
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-        <h2>Bienvenido a nuestra página</h2>
-        <p>Este es un párrafo de ejemplo para demostrar el uso de estilos CSS en una página HTML. Aquí puedes agregar más contenido según tus necesidades.</p>
-
+    <main id="contenido">
+        <section class="home-hero" aria-labelledby="welcome-title">
+            <p class="eyebrow">Comunicación sencilla, comunidades a tu manera</p>
+            <h2 id="welcome-title">Tus conversaciones, en un solo lugar.</h2>
+            <p>Corebite está en construcción: una plataforma ligera para reunirte y conversar con tus comunidades.</p>
+            <a class="primary-link" href="./php/sesion.php">Explorar la cuenta</a>
+        </section>
+        <section class="home-intro" aria-labelledby="intro-title">
+            <h2 id="intro-title">Un espacio para tu comunidad</h2>
+            <p>Estamos preparando servidores privados, conversaciones y herramientas para que cada grupo tenga su propio espacio.</p>
+        </section>
     </main>
 
     <footer>
@@ -83,15 +51,13 @@
         </div>
         
         <div class="cont-2">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa dolores officia libero illo mollitia officiis sunt omnis esse quo consectetur architecto repellat corporis, odit aperiam, atque a vero quam voluptas? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores earum voluptatum vel exercitationem cupiditate blanditiis commodi sed corrupti ab omnis, possimus voluptatibus, laudantium necessitatibus iste animi pariatur fuga. Ipsa, odit.</p>
+            <p>Una plataforma de comunicación ligera para comunidades, actualmente en desarrollo.</p>
             
         </div>
 
         <div class="cont-3">
             <div class="social-links">
-                <a href="#"><img src="./Media/IMG/facebook_.png" alt="">Facebook</a>
-                <a href="#"><img src="./Media/IMG/tiktok_.png" alt="">TikTok</a>
-                <a href="#"><img src="./Media/IMG/instagram_.png" alt="">Instagram</a>
+                <a href="./terminos.html">Términos de servicio</a>
             </div>
         </div>
     </footer>

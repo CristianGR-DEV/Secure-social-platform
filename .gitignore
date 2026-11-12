@@ -1,0 +1,12 @@
+﻿# Datos locales y sesiones — nunca subir al repositorio
+/corebite-data/
+/accounts.json
+/accounts.json.lock
+/sessions/
+/php/sessions/
+/php/accounts.json
+*.lock
+/vendor/
+/node_modules/
+.env
+.env.*

@@ -1,0 +1,159 @@
+﻿<?php
+declare(strict_types=1);
+require_once __DIR__ . '/includes.php';
+$account = require_login();
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../Media/IMG/Logo.png" type="image/png">
+    <link rel="stylesheet" href="../Media/CSS/estilo.css">
+    <link rel="stylesheet" href="../Media/CSS/cuenta.css">
+    <script src="../Media/JS/account-settings.js" defer></script>
+    <title>Cuenta | Corebite</title>
+</head>
+<body class="container">
+    <header>
+        <a href="../Index.html">
+            <div class="logo-box">
+                <img src="../Media/IMG/Logo.png" alt="" height="48" width="48">
+                <h1>Corebite</h1>
+            </div>
+        </a>
+
+        <input type="checkbox" id="menu-check" aria-label="Abrir o cerrar el menú">
+        <label for="menu-check" class="hamburger" aria-hidden="true" tabindex="-1">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+
+        <nav>
+            <div class="input">
+                <a class="value ui-icon-button" href="workspace.php"><span class="svg-icon icon-messages" aria-hidden="true"></span> Chat</a>
+                <a class="value active ui-icon-button" href="./cuenta.php" aria-current="page"><span class="svg-icon icon-user" aria-hidden="true"></span> Cuenta</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="profile-page">
+        <div class="profile-container">
+            <section class="profile-header">
+                <div class="avatar-circle">
+                    <img src="../Media/IMG/default-avatar.png" alt="Foto de perfil">
+                </div>
+                <div class="user-info">
+                    <h2><?= h($account['username']) ?></h2>
+                    <p>Miembro desde: <?= h(date('F Y', strtotime($account['created_at']))) ?></p>
+                </div>
+            </section>
+
+            <div class="profile-body">
+
+                <input type="radio" name="nav-tab" id="tab-info" checked>
+                <input type="radio" name="nav-tab" id="tab-config">
+                <input type="radio" name="nav-tab" id="tab-personalizacion">
+
+                <aside class="profile-aside">
+                    <label for="tab-info" class="tab-label">
+                        Mis Datos
+                        <span class="svg-icon icon-user" aria-hidden="true"></span>
+                    </label>
+                    <label for="tab-config" class="tab-label">
+                        Seguridad
+                        <span class="svg-icon icon-shield" aria-hidden="true"></span>
+                    </label>
+                    <label for="tab-personalizacion" class="tab-label">
+                        Personalización
+                        <span class="svg-icon icon-palette" aria-hidden="true"></span>
+                    </label>
+                    <form action="auth.php" method="post" class="logout-form"><input type="hidden" name="csrf" value="<?= h($_SESSION['csrf']) ?>"><input type="hidden" name="action" value="logout"><button type="submit" class="tab-label logout">
+                        Cerrar Sesión
+                        <span class="svg-icon icon-logout" aria-hidden="true"></span>
+                    </button></form>
+                </aside>
+
+                <section class="profile-content">
+
+                    <div class="content-box box-info">
+                        <h3>Información Personal</h3>
+                        <p class="prototype-note">Datos de tu cuenta. Puedes consultar la información guardada.</p>
+                        <form class="profile-form">
+                            <fieldset>
+                                <legend>Datos de Identidad</legend>
+
+                                <label for="profile-username">Nombre de Usuario</label>
+                                <input id="profile-username" type="text" value="<?= h($account['username']) ?>" readonly>
+
+                                <label for="profile-email">Correo Electrónico</label>
+                                <input id="profile-email" type="email" value="<?= h($account['email']) ?>" readonly>
+                            </fieldset>
+
+                            <fieldset>
+                                <legend>Información Adicional</legend>
+
+                                <label for="profile-birthdate">Fecha de Nacimiento</label>
+                                <input id="profile-birthdate" type="date" value="<?= h($account['birthdate'] ?? '') ?>" readonly>
+                            </fieldset>
+
+                            <button type="button" class="btn-edit" disabled>Edición aún no disponible</button>
+                        </form>
+                    </div>
+
+                    <div class="content-box box-config">
+                        <h3>Seguridad de la Cuenta</h3>
+                        <p class="prototype-note">El cambio de contraseña estará disponible cuando se conecte el sistema de cuentas.</p>
+                    </div>
+
+                    <div class="content-box box-personalizacion">
+                        <h3>Personalización</h3>
+                        <p class="prototype-note">Ajusta Corebite a tu gusto. Los cambios se aplican en la interfaz del chat y se guardan en este navegador.</p>
+                        <form class="profile-form appearance-form" id="account-appearance-form">
+                            <fieldset>
+                                <legend>Colores y tema</legend>
+                                <label for="account-theme"><span class="svg-icon icon-palette" aria-hidden="true"></span> Paleta de color</label>
+                                <select id="account-theme"><option value="discord">Corebite oscuro</option><option value="midnight">Medianoche azul</option><option value="light">Claro</option></select>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Posición de los menús</legend>
+                                <label for="account-server-position"><span class="svg-icon icon-server" aria-hidden="true"></span> Barra de servidores</label>
+                                <select id="account-server-position"><option value="left">A la izquierda</option><option value="right">A la derecha</option></select>
+                                <label for="account-channel-position"><span class="svg-icon icon-panel" aria-hidden="true"></span> Menú de canales y conversaciones</label>
+                                <select id="account-channel-position"><option value="left">A la izquierda</option><option value="right">A la derecha</option></select>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Paneles</legend>
+                                <label class="preference-check" for="account-show-members"><input type="checkbox" id="account-show-members"> Mostrar el panel lateral de miembros o contacto</label>
+                            </fieldset>
+                            <button type="submit" class="btn-main">Guardar apariencia</button>
+                            <p class="prototype-note" id="appearance-save-status" role="status" aria-live="polite"></p>
+                        </form>
+                    </div>
+
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="cont-1">
+            <img src="../Media/IMG/Logo.png" alt="Logo" class="logo-footer">
+            <h3>Corebite</h3>
+            <p>© 2026 Corebite. Todos los derechos reservados.</p>
+        </div>
+
+        <div class="cont-2">
+            <p>Una plataforma de comunicación ligera para comunidades, actualmente en desarrollo.</p>
+
+        </div>
+
+        <div class="cont-3">
+            <div class="social-links">
+                <a href="../terminos.html">Términos de servicio</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

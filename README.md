@@ -11,7 +11,7 @@ Este README reúne el alcance y la planificación del proyecto. Describe lo que 
 - Board: https://github.com/users/CristianGR-DEV/projects/1/views/3
 - Backlog: https://github.com/users/CristianGR-DEV/projects/1/views/1
 - Roadmap: https://github.com/users/CristianGR-DEV/projects/1/views/2
-- Issues CORE-01 a CORE-30: https://github.com/CristianGR-DEV/Secure-social-platform/issues
+- Issues CORE-01 a CORE-31: https://github.com/CristianGR-DEV/Secure-social-platform/issues
 
 En GitHub Projects se gestionan el estado, Sprint, módulo, prioridad, fechas y esfuerzo estimado de cada tarea. Las vistas deben reflejar el estado real del trabajo.
 
@@ -266,20 +266,15 @@ HTTPS protege la conexión; Argon2id, autorización por conversación, límites 
 - Servidores privados, roles, permisos y canales; al salir, la membresía y permisos se reinician si se invita de nuevo. El contenido anterior permanece para los miembros y vuelve a ser visible para quien reingresa, aunque se reinicien sus permisos.
 - Vídeo 1:1 y cliente de escritorio Linux.
 
-### Archivos iniciales del proyecto (añadidos sin revisar)
+### Prototipo local actual (2026-11-12)
 
-Se incorporaron al repositorio los archivos existentes de la carpeta local, sin abrir ni modificar su contenido. Su revisión técnica y funcional queda pendiente.
+El prototipo actual ya reemplaza las páginas estáticas de acceso y cuenta por páginas PHP, y contiene:
 
-- [Index.html](Index.html)
-- [sesion.html](sesion.html)
-- [cuenta.html](cuenta.html)
-- [terminos.html](terminos.html)
-- [Media/CSS/estilo.css](Media/CSS/estilo.css)
-- [Media/CSS/sesion.css](Media/CSS/sesion.css)
-- [Media/CSS/cuenta.css](Media/CSS/cuenta.css)
-- [Media/CSS/terminos.css](Media/CSS/terminos.css)
-- [Media/IMG/Logo.png](Media/IMG/Logo.png)
-- [Media/IMG/default-avatar.png](Media/IMG/default-avatar.png)
-- [Media/IMG/facebook_.png](Media/IMG/facebook_.png)
-- [Media/IMG/instagram_.png](Media/IMG/instagram_.png)
-- [Media/IMG/tiktok_.png](Media/IMG/tiktok_.png)
+- Registro, inicio y cierre de sesión con sesiones PHP y datos de cuenta en JSON local.
+- Perfil de cuenta y una interfaz de chat de muestra con navegación de servidores, canales y mensajes directos.
+- Búsqueda local en conversaciones, personalización de tema y posiciones de paneles, además de ajustes visuales por conversación.
+- Maquetación responsive para escritorio, tablet y móvil, con iconos SVG locales.
+
+La interfaz, los mensajes, los contactos, los canales y varias acciones siguen siendo de muestra. Mensajería persistente, amistades, perfiles editables, llamadas, base de datos y CI aún no están implementados. Los archivos locales de cuentas y sesiones se excluyen del repositorio.
+
+Archivos principales: [php/](php/), [Media/CSS/](Media/CSS/), [Media/JS/](Media/JS/), [Media/SVG/](Media/SVG/), [Index.html](Index.html) y [terminos.html](terminos.html).

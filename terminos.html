@@ -6,20 +6,20 @@
     <link rel="icon" href="./Media/IMG/Logo.png" type="image/png">
     <link rel="stylesheet" href="./Media/CSS/estilo.css">
     <link rel="stylesheet" href="./Media/CSS/terminos.css">
-    <title>Términos de Servicio</title>
+    <title>Términos de servicio | Corebite</title>
 </head>
 <body class="container">
 
     <header>
         <a href="./Index.html">
             <div class="logo-box">
-                <img src="./Media/IMG/Logo.png" alt="Logo de la página" height="70" width="70">
+                <img src="./Media/IMG/Logo.png" alt="" height="48" width="48">
                 <h1>Corebite</h1>
             </div>
         </a>
 
-        <input type="checkbox" id="menu-check">
-        <label for="menu-check" class="hamburger">
+        <input type="checkbox" id="menu-check" aria-label="Abrir o cerrar el menú">
+        <label for="menu-check" class="hamburger" aria-hidden="true" tabindex="-1">
             <span></span>
             <span></span>
             <span></span>
@@ -27,10 +27,8 @@
 
         <nav>
             <div class="input">
-                <a class="value" href="./Index.html">Inicio</a>
-                <a class="value" href="./usuarios.html">Usuarios</a>
-                <a class="value" href="./hilos.html">Hilos</a>
-                <a class="value" href="./sesion.html">Cuenta</a>
+                <a class="value ui-icon-button" href="./Index.html"><span class="svg-icon icon-house" aria-hidden="true"></span> Inicio</a>
+                <a class="value ui-icon-button" href="./php/sesion.php"><span class="svg-icon icon-user" aria-hidden="true"></span> Cuenta</a>
             </div>
         </nav>
     </header>
@@ -39,7 +37,7 @@
         <div class="legal-wrapper">
             <section class="legal-content">
                 <h2>Términos y Condiciones de Servicio</h2>
-                <p class="last-update">Última actualización: 3 de febrero de 2026</p>
+                <p class="last-update">Borrador de trabajo · pendiente de revisión antes de publicar</p>
 
                 <div class="legal-scroll">
                     <h3>1. Aceptación de los Términos</h3>
@@ -60,14 +58,14 @@
                     <p>Sigues siendo el dueño del contenido que publicas, pero al hacerlo en Corebite, nos otorgas una licencia mundial para mostrar, distribuir y reproducir dicho contenido dentro de nuestra infraestructura.</p>
 
                     <h3>5. Privacidad</h3>
-                    <p>Tus datos están protegidos bajo nuestra política de encriptación. No compartimos tu número de teléfono ni correo electrónico con terceros con fines comerciales sin tu consentimiento explícito.</p>
+                    <p>La política de privacidad y el tratamiento de datos se definirán antes de habilitar el registro y publicar el servicio.</p>
 
                     <h3>6. Limitación de Responsabilidad</h3>
                     <p>Corebite no se hace responsable por la veracidad de las opiniones vertidas por los usuarios en los hilos públicos.</p>
                 </div>
 
                 <div class="legal-actions">
-                    <a href="./sesion.html" class="btn-back">Volver al Registro</a>
+                    <a href="./php/sesion.php" class="btn-back">Volver al Registro</a>
                 </div>
             </section>
         </div>
@@ -81,14 +79,12 @@
         </div>
         
         <div class="cont-2">
-            <p>Este documento es un acuerdo legal entre el usuario y Corebite. El uso continuado del sitio implica la aceptación de cualquier modificación futura en estos términos.</p>
+            <p>Este texto es un borrador de trabajo. Debe revisarse y completarse antes de que Corebite acepte registros o se publique como acuerdo legal.</p>
         </div>
 
         <div class="cont-3">
             <div class="social-links">
-                <a href="#"><img src="./Media/IMG/facebook_.png" alt="">Facebook</a>
-                <a href="#"><img src="./Media/IMG/tiktok_.png" alt="">TikTok</a>
-                <a href="#"><img src="./Media/IMG/instagram_.png" alt="">Instagram</a>
+                <a href="./terminos.html">Términos de servicio</a>
             </div>
         </div>
     </footer>
