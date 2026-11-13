@@ -70,6 +70,6 @@ try {
     }
 } catch (Throwable $error) {
     error_log('Corebite auth error: ' . $error->getMessage());
-    fail('storage');
+    corebite_render_error_page(500);
 }
 fail('request');

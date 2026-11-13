@@ -1,0 +1,166 @@
+.error-page {
+  display: block;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--cb-bg);
+  color: var(--cb-text);
+}
+.error-page > .ascii-background { opacity: .86; }
+.error-page.site-shell > .error-main {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 40px 20px 34px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
+}
+.error-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 21px;
+  color: var(--cb-accent-bright);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .18em;
+}
+.error-eyebrow span { color: var(--cb-text-muted); letter-spacing: .12em; }
+.error-code {
+  width: max-content;
+  max-width: calc(100vw - 36px);
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+  color: var(--cb-accent-bright);
+  font-family: var(--cb-font);
+  font-size: clamp(6rem, 22vw, 15rem);
+  font-weight: 850;
+  line-height: .88;
+  letter-spacing: -.09em;
+  white-space: nowrap;
+  text-shadow: 0 0 24px rgba(172, 155, 219, .2);
+  user-select: none;
+}
+.error-loader {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 27px 0 24px;
+  color: var(--cb-accent-soft);
+  font: 11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: .12em;
+}
+.error-loader-label { color: var(--cb-text-muted); }
+.error-scan {
+  min-width: 7ch;
+  margin: 0;
+  color: var(--cb-accent-bright);
+  font: 700 15px/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: .03em;
+  text-shadow: 0 0 12px rgba(172, 155, 219, .58);
+}
+.error-main h2 {
+  margin: 0 0 10px;
+  color: var(--cb-text);
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 750;
+  letter-spacing: -.045em;
+}
+.error-message {
+  max-width: 480px;
+  margin: 0;
+  color: var(--cb-text-secondary);
+  font-size: 14px;
+  line-height: 1.75;
+}
+.error-page .error-home {
+  position: relative;
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  margin-top: 27px;
+  padding: 0 23px;
+  overflow: hidden;
+  border: 1px solid rgba(207, 194, 241, .52);
+  border-radius: 9px;
+  background: linear-gradient(115deg, #7966ac, #586bd1 70%, #6575dd);
+  box-shadow: 0 9px 24px rgba(79, 77, 152, .32), inset 0 1px 0 rgba(255, 255, 255, .22);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .01em;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, filter .2s ease;
+}
+.error-page .error-home::before {
+  position: absolute;
+  inset: -80% auto -80% -65%;
+  width: 42%;
+  transform: rotate(25deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .28), transparent);
+  content: "";
+  transition: left .55s ease;
+  pointer-events: none;
+}
+.error-page .error-home:hover,
+.error-page .error-home:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(231, 220, 255, .92);
+  box-shadow: 0 13px 30px rgba(100, 85, 168, .45), inset 0 1px 0 rgba(255, 255, 255, .3);
+  filter: brightness(1.08);
+}
+.error-page .error-home:hover::before { left: 125%; }
+.error-page .error-home:active { transform: translateY(0) scale(.985); }
+.error-page .error-home span { position: relative; z-index: 1; }
+.error-page .error-home-arrow {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  align-items: center;
+  justify-content: center;
+}
+.error-page .error-home-arrow svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.error-page .error-home-label { font-size: 13px; }
+.error-page .error-home { isolation: isolate; }
+.error-page .error-home { text-shadow: none; }
+.error-signature {
+  margin: 44px 0 0;
+  color: var(--cb-text-muted);
+  font-size: 9px;
+  letter-spacing: .15em;
+}
+@media (max-width: 600px) {
+  .error-page.site-shell > .error-main { padding: 30px 16px; }
+  .error-eyebrow { margin-bottom: 18px; font-size: 9px; }
+  .error-code { font-size: clamp(5rem, 24vw, 8rem); letter-spacing: -.08em; }
+  .error-loader { flex-direction: column; gap: 6px; margin: 22px 0 20px; font-size: 10px; }
+  .error-message { max-width: 340px; font-size: 12px; }
+  .error-signature { margin-top: 34px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .error-page .error-scan { animation: none; }
+}

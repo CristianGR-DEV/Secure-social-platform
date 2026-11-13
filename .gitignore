@@ -1,4 +1,4 @@
-﻿# Datos locales y sesiones — nunca subir al repositorio
+# Datos locales y sesiones — nunca subir al repositorio
 /corebite-data/
 /accounts.json
 /accounts.json.lock
@@ -10,3 +10,6 @@
 /node_modules/
 .env
 .env.*
+
+# Fotos de perfil subidas por cuentas locales; no publicar datos de usuarios
+/Media/IMG/profiles/

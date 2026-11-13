@@ -1,6 +1,29 @@
 <?php
 declare(strict_types=1);
 
+function corebite_render_error_page(int $code): never
+{
+    if (headers_sent()) exit;
+    $errorCode = in_array($code, [404, 500], true) ? $code : 500;
+    http_response_code($errorCode);
+    header('Content-Type: text/html; charset=utf-8');
+    require dirname(__DIR__) . '/error-page.php';
+    exit;
+}
+
+set_exception_handler(static function (Throwable $exception): void {
+    error_log('Corebite unhandled exception: ' . $exception->getMessage());
+    corebite_render_error_page(500);
+});
+
+register_shutdown_function(static function (): void {
+    $lastError = error_get_last();
+    $fatalTypes = [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR, E_RECOVERABLE_ERROR];
+    if ($lastError === null || !in_array($lastError['type'], $fatalTypes, true)) return;
+    error_log('Corebite fatal error: ' . $lastError['message']);
+    corebite_render_error_page(500);
+});
+
 function start_corebite_session(): void
 {
     if (session_status() === PHP_SESSION_ACTIVE) return;
@@ -23,6 +46,39 @@ function start_corebite_session(): void
 function h(?string $value): string
 {
     return htmlspecialchars($value ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function profile_image_file(array $account): ?string
+{
+    $file = $account['profile_image'] ?? null;
+    return is_string($file) && preg_match('/^[a-f0-9]{32}\.(?:png|jpg|webp)$/', $file) ? $file : null;
+}
+
+function profile_image_src(array $account, string $prefix = '../Media/IMG'): string
+{
+    $file = profile_image_file($account);
+    return $file === null ? $prefix . '/default-avatar.png' : $prefix . '/profiles/' . rawurlencode($file);
+}
+
+function account_presence(array $account): string
+{
+    $presence = $account['presence'] ?? 'online';
+    return is_string($presence) && in_array($presence, ['online', 'away', 'busy', 'offline'], true) ? $presence : 'online';
+}
+
+function presence_label(string $presence): string
+{
+    return match ($presence) {
+        'away' => 'Ausente',
+        'busy' => 'No molestar',
+        'offline' => 'Invisible',
+        default => 'En línea',
+    };
+}
+
+function presence_class(string $presence): string
+{
+    return in_array($presence, ['away', 'busy', 'offline'], true) ? $presence : '';
 }
 
 function storage_path(): string

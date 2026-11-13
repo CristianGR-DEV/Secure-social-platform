@@ -9,15 +9,17 @@ $account = require_login();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../Media/SVG/corebite-mark.svg?v=20261112" type="image/svg+xml">
-    <link rel="stylesheet" href="../Media/CSS/estilo.css">
+    <link rel="stylesheet" href="../Media/CSS/estilo.css?v=20261113-scrollbars1">
     <link rel="stylesheet" href="../Media/CSS/site-pages.css">
     <link rel="stylesheet" href="../Media/CSS/cuenta.css">
     <script src="../Media/JS/account-settings.js" defer></script>
     <title>Cuenta | Corebite</title>
     <link rel="stylesheet" href="../Media/CSS/site-footer.css?v=20261112-footer3">
     <link rel="stylesheet" href="../Media/CSS/site-cursor.css?v=20261112-cursor2">
+    <link rel="stylesheet" href="../Media/CSS/design-system.css?v=20261113-design8">
 </head>
 <body class="container auth-landing site-shell">
+    <canvas class="ascii-background" data-ascii-background aria-hidden="true"></canvas>
     <header class="landing-header">
   <a class="brand" href="../Index.html" aria-label="Corebite, volver al landing"><img src="../Media/SVG/corebite-mark.svg?v=20261112" alt="" width="42" height="42"><span>corebite</span></a>
   <div class="landing-actions"><a class="login-link" href="./sesion.php">Iniciar sesión</a><a class="button button-small" href="./sesion.php?mode=register">Crear cuenta <span aria-hidden="true">↗</span></a></div>
@@ -27,10 +29,10 @@ $account = require_login();
         <div class="profile-container">
             <section class="profile-header">
                 <div class="avatar-circle">
-                    <img src="../Media/IMG/default-avatar.png" alt="Foto de perfil">
+                    <img src="<?= h(profile_image_src($account)) ?>" alt="Foto de perfil">
                 </div>
                 <div class="user-info">
-                    <h2><?= h($account['username']) ?></h2>
+                    <h2 data-ascii-reveal><?= h($account['username']) ?></h2>
                     <p>Miembro desde: <?= h(date('F Y', strtotime($account['created_at']))) ?></p>
                 </div>
             </section>
@@ -123,6 +125,8 @@ $account = require_login();
     </main>
 
     <footer class="site-footer" data-site-footer aria-label="Pie de página de Corebite"></footer>
+<script src="../Media/JS/ascii-background.js?v=20261113-1" defer></script>
+    <script src="../Media/JS/ascii-dissolve.js?v=20261113-3" defer></script>
     <script src="../Media/JS/site-footer.js" defer></script>
 </body>
 </html>

@@ -3,13 +3,26 @@
   const dialog = document.querySelector('#account-settings-dialog');
   const chatDialog = document.querySelector('#chat-settings-dialog');
   const toast = document.querySelector('#toast');
-  const themeSelect = document.querySelector('#theme-select');
-  const channelSelect = document.querySelector('#channel-position');
-  const serverSelect = document.querySelector('#server-position');
+  const themeChoices = [...document.querySelectorAll('input[name="theme-choice"]')];
+  const themeColorInputs = Object.fromEntries([...document.querySelectorAll('[data-theme-color]')].map(input => [input.dataset.themeColor, input]));
+  const customThemePreview = document.querySelector('[data-theme-preview="custom"]');
+  const channelChoices = [...document.querySelectorAll('input[name="channel-position"]')];
+  const serverChoices = [...document.querySelectorAll('input[name="server-position"]')];
+  const dmCardSizeChoices = [...document.querySelectorAll('input[name="dm-card-size"]')];
   const memberSelect = document.querySelector('#show-members');
-  const dmChatStyleSelect = document.querySelector('#dm-chat-style');
-  const dmChatFontSizeSelect = document.querySelector('#dm-chat-font-size');
-  const dmChatFontFamilySelect = document.querySelector('#dm-chat-font-family');
+  const profileForm = document.querySelector('#profile-form');
+  const profileSaveStatus = document.querySelector('#profile-save-status');
+  const profileAvatarInput = document.querySelector('#profile-avatar');
+  const profileAvatarPreview = document.querySelector('#profile-avatar-preview');
+  const accountDataToggle = document.querySelector('#account-data-toggle');
+  const accountDataDetails = document.querySelector('#account-data-details');
+  const userStatusTrigger = document.querySelector('#user-status-trigger');
+  const userStatusMenu = document.querySelector('#user-status-menu');
+  const presenceOptions = [...document.querySelectorAll('[data-presence-option]')];
+  const publicProfileDialog = document.querySelector('#public-profile-dialog');
+  const dmChatStyleChoices = [...document.querySelectorAll('input[name="dm-chat-style"]')];
+  const dmChatFontSizeChoices = [...document.querySelectorAll('input[name="dm-chat-font-size"]')];
+  const dmChatFontFamilyChoices = [...document.querySelectorAll('input[name="dm-chat-font-family"]')];
   const dmChatTextColorInput = document.querySelector('#dm-chat-text-color');
   const dmChatSettingsContact = document.querySelector('#chat-settings-contact');
   const membersToggle = document.querySelector('#members-toggle');
@@ -34,28 +47,173 @@
   } catch { /* Los ajustes de chat vuelven a sus valores iniciales. */ }
   let toastTimer;
 
-  let preferences = { theme: 'discord', channelPosition: 'left', serverPosition: 'left', showMembers: true };
+  const defaultThemeColors = { background: '#10141c', surface: '#191b27', accent: '#ac9bdb', text: '#f7f4fc' };
+  let preferences = { theme: 'discord', channelPosition: 'left', serverPosition: 'left', showMembers: true, dmCardSize: 'standard', colors: { ...defaultThemeColors } };
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
-    if (['discord', 'midnight', 'light'].includes(saved.theme)) preferences.theme = saved.theme;
+    if (['discord', 'midnight', 'light', 'custom'].includes(saved.theme)) preferences.theme = saved.theme;
     if (['left', 'right'].includes(saved.channelPosition)) preferences.channelPosition = saved.channelPosition;
     if (['left', 'right'].includes(saved.serverPosition)) preferences.serverPosition = saved.serverPosition;
     if (typeof saved.showMembers === 'boolean') preferences.showMembers = saved.showMembers;
+    if (['standard', 'compact'].includes(saved.dmCardSize)) preferences.dmCardSize = saved.dmCardSize;
+    if (saved.colors && typeof saved.colors === 'object') {
+      Object.keys(defaultThemeColors).forEach(key => {
+        if (typeof saved.colors[key] === 'string' && /^#[0-9a-f]{6}$/i.test(saved.colors[key])) preferences.colors[key] = saved.colors[key];
+      });
+    }
   } catch { /* Usa los valores iniciales cuando el almacenamiento del navegador no esté disponible. */ }
 
   function applyPreferences(save = false) {
     document.body.dataset.theme = preferences.theme;
+    const customProperties = ['--app-bg', '--panel', '--panel-deep', '--raised', '--line', '--text', '--muted', '--accent', '--input'];
+    if (preferences.theme === 'custom') {
+      const colors = preferences.colors;
+      document.body.style.setProperty('--app-bg', colors.background);
+      document.body.style.setProperty('--panel', colors.surface);
+      document.body.style.setProperty('--panel-deep', `color-mix(in srgb, ${colors.background} 58%, ${colors.surface})`);
+      document.body.style.setProperty('--raised', `color-mix(in srgb, ${colors.surface} 78%, ${colors.accent})`);
+      document.body.style.setProperty('--line', `color-mix(in srgb, ${colors.accent} 36%, ${colors.surface})`);
+      document.body.style.setProperty('--text', colors.text);
+      document.body.style.setProperty('--muted', `color-mix(in srgb, ${colors.text} 64%, ${colors.surface})`);
+      document.body.style.setProperty('--accent', colors.accent);
+      document.body.style.setProperty('--input', `color-mix(in srgb, ${colors.background} 58%, ${colors.surface})`);
+      document.body.style.colorScheme = getLuminance(colors.background) > .58 ? 'light' : 'dark';
+    } else {
+      customProperties.forEach(property => document.body.style.removeProperty(property));
+      document.body.style.removeProperty('color-scheme');
+    }
     shell.dataset.channelPosition = preferences.channelPosition;
     shell.dataset.serverPosition = preferences.serverPosition;
+    shell.dataset.dmCardSize = preferences.dmCardSize;
     shell.classList.toggle('members-hidden', !preferences.showMembers);
-    themeSelect.value = preferences.theme;
-    channelSelect.value = preferences.channelPosition;
-    serverSelect.value = preferences.serverPosition;
+    themeChoices.forEach(input => {
+      input.checked = input.value === preferences.theme;
+      input.closest('[data-theme-card]')?.classList.toggle('is-selected', input.checked);
+    });
+    channelChoices.forEach(input => {
+      input.checked = input.value === preferences.channelPosition;
+      input.closest('[data-layout-card]')?.classList.toggle('is-selected', input.checked);
+    });
+    serverChoices.forEach(input => {
+      input.checked = input.value === preferences.serverPosition;
+      input.closest('[data-layout-card]')?.classList.toggle('is-selected', input.checked);
+    });
+    dmCardSizeChoices.forEach(input => {
+      input.checked = input.value === preferences.dmCardSize;
+      input.closest('[data-dm-card-choice]')?.classList.toggle('is-selected', input.checked);
+    });
+    Object.entries(themeColorInputs).forEach(([key, input]) => { input.value = preferences.colors[key]; });
+    if (customThemePreview) {
+      customThemePreview.style.setProperty('--preview-bg', preferences.colors.background);
+      customThemePreview.style.setProperty('--preview-panel', preferences.colors.surface);
+      customThemePreview.style.setProperty('--preview-accent', preferences.colors.accent);
+      customThemePreview.style.setProperty('--preview-text', preferences.colors.text);
+    }
     memberSelect.checked = preferences.showMembers;
     membersToggle.setAttribute('aria-pressed', String(preferences.showMembers));
     if (save) {
       try { localStorage.setItem(storageKey, JSON.stringify(preferences)); } catch { showToast('No se pudieron guardar los ajustes en este navegador.'); }
     }
+  }
+
+  function applyCurrentProfile(profile) {
+    document.querySelectorAll('[data-current-username]').forEach(element => { element.textContent = profile.username; });
+    document.querySelectorAll('[data-self-avatar]').forEach(avatar => {
+      const image = avatar.querySelector('[data-avatar-image]');
+      const initial = avatar.querySelector('[data-avatar-initial]');
+      if (image) { image.src = profile.avatar; image.hidden = !profile.hasCustomAvatar; }
+      if (initial) { initial.textContent = profile.initial; initial.hidden = profile.hasCustomAvatar; }
+      else if (!profile.hasCustomAvatar && avatar.children.length === 0) avatar.textContent = profile.initial;
+    });
+    document.querySelectorAll('[data-current-profile-photo]').forEach(image => { image.src = profile.avatar; });
+    if (profileAvatarPreview.src.startsWith('blob:')) URL.revokeObjectURL(profileAvatarPreview.src);
+    profileAvatarPreview.src = profile.avatar;
+    profileAvatarPreview.dataset.savedSrc = profile.avatar;
+    const ownCard = document.querySelector('[data-current-profile-card]');
+    if (ownCard) {
+      const card = JSON.parse(ownCard.dataset.userProfile || '{}');
+      ownCard.dataset.userProfile = JSON.stringify({ ...card, username: profile.username, initial: profile.initial, avatar: profile.avatar, hasCustomAvatar: profile.hasCustomAvatar, about: profile.about, activities: profile.activities });
+      const name = ownCard.querySelector('[data-current-username]');
+      if (name) name.textContent = profile.username;
+    }
+  }
+
+  const presenceLabels = { online: 'En línea', away: 'Ausente', busy: 'No molestar', offline: 'Invisible' };
+  function paintPresence(status) {
+    const label = presenceLabels[status] || presenceLabels.online;
+    const statusClass = status === 'online' ? '' : status;
+    document.querySelectorAll('[data-current-presence-label]').forEach(element => { element.textContent = label; });
+    document.querySelectorAll('[data-current-presence-dot]').forEach(dot => {
+      dot.classList.remove('away', 'busy', 'offline');
+      if (statusClass) dot.classList.add(statusClass);
+    });
+    userStatusTrigger.setAttribute('aria-label', `Cambiar estado (${label})`);
+    presenceOptions.forEach(option => {
+      const selected = option.dataset.presenceOption === status;
+      option.classList.toggle('selected', selected);
+      option.setAttribute('aria-checked', String(selected));
+    });
+  }
+  function closeUserStatusMenu() {
+    userStatusMenu.hidden = true;
+    userStatusTrigger.setAttribute('aria-expanded', 'false');
+  }
+  async function choosePresence(status) {
+    const csrf = document.querySelector('#csrf-token').value;
+    presenceOptions.forEach(option => { option.disabled = true; });
+    try {
+      const response = await fetch('status-update.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', Accept: 'application/json' },
+        body: new URLSearchParams({ csrf, status }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.ok) throw new Error(result.message || 'No se pudo actualizar el estado.');
+      paintPresence(result.status);
+      closeUserStatusMenu();
+    } catch (error) {
+      showToast(error.message || 'No se pudo actualizar el estado.');
+    } finally {
+      presenceOptions.forEach(option => { option.disabled = false; });
+    }
+  }
+  userStatusTrigger.addEventListener('click', () => {
+    const open = userStatusMenu.hidden;
+    userStatusMenu.hidden = !open;
+    userStatusTrigger.setAttribute('aria-expanded', String(open));
+  });
+  presenceOptions.forEach(option => option.addEventListener('click', () => choosePresence(option.dataset.presenceOption)));
+  document.addEventListener('click', event => {
+    if (!userStatusMenu.hidden && !userStatusMenu.contains(event.target) && !userStatusTrigger.contains(event.target)) closeUserStatusMenu();
+  });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && !userStatusMenu.hidden) closeUserStatusMenu(); });
+
+  function showPublicProfile(profile) {
+    document.querySelector('#public-profile-name').textContent = profile.username || 'Miembro';
+    document.querySelector('#public-profile-avatar').src = profile.avatar || '../Media/IMG/default-avatar.png';
+    document.querySelector('#public-profile-avatar').alt = profile.username ? `Foto de perfil de ${profile.username}` : '';
+    document.querySelector('#public-profile-about').textContent = profile.about || 'Este miembro todavía no ha escrito una presentación.';
+    const joined = profile.joined ? new Date(profile.joined) : null;
+    document.querySelector('#public-profile-member-since').textContent = joined && !Number.isNaN(joined.getTime()) ? `Miembro desde ${joined.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}` : 'Miembro de Corebite';
+    const list = document.querySelector('#public-profile-activities');
+    list.replaceChildren();
+    const activities = Array.isArray(profile.activities) ? profile.activities.slice(0, 3) : [];
+    if (activities.length === 0) {
+      const empty = document.createElement('li');
+      empty.textContent = 'Todavía no hay notas de actividad.';
+      list.append(empty);
+    } else activities.forEach(activity => {
+      const item = document.createElement('li');
+      item.textContent = activity;
+      list.append(item);
+    });
+    if (!publicProfileDialog.open) publicProfileDialog.showModal();
+  }
+
+  function getLuminance(hex) {
+    const channels = hex.slice(1).match(/.{2}/g).map(value => parseInt(value, 16) / 255);
+    const linear = channels.map(value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4);
+    return linear[0] * .2126 + linear[1] * .7152 + linear[2] * .0722;
   }
 
   function showToast(message) {
@@ -83,16 +241,19 @@
     dmChat.style.setProperty('--dm-chat-font-size', chatSizes[settings.fontSize]);
     dmChat.style.setProperty('--dm-chat-font-family', chatFamilies[settings.fontFamily]);
     dmChat.style.setProperty('--dm-chat-text-color', settings.textColor);
-    dmChatStyleSelect.value = settings.style;
-    dmChatFontSizeSelect.value = settings.fontSize;
-    dmChatFontFamilySelect.value = settings.fontFamily;
+    [[dmChatStyleChoices, settings.style], [dmChatFontSizeChoices, settings.fontSize], [dmChatFontFamilyChoices, settings.fontFamily]].forEach(([choices, selected]) => choices.forEach(input => {
+      input.checked = input.value === selected;
+      input.closest('.chat-choice')?.classList.toggle('is-selected', input.checked);
+    }));
     dmChatTextColorInput.value = settings.textColor;
+    document.querySelector('#dm-chat-text-color-value').textContent = settings.textColor.toUpperCase();
+    document.querySelector('.chat-color-swatch').style.backgroundColor = settings.textColor;
   }
   function saveDmChatSettings() {
     dmChatSettings[activeContactId] = {
-      style: dmChatStyleSelect.value,
-      fontSize: dmChatFontSizeSelect.value,
-      fontFamily: dmChatFontFamilySelect.value,
+      style: dmChatStyleChoices.find(input => input.checked)?.value || defaultDmChatSettings.style,
+      fontSize: dmChatFontSizeChoices.find(input => input.checked)?.value || defaultDmChatSettings.fontSize,
+      fontFamily: dmChatFontFamilyChoices.find(input => input.checked)?.value || defaultDmChatSettings.fontFamily,
       textColor: dmChatTextColorInput.value,
     };
     applyDmChatSettings();
@@ -114,11 +275,79 @@
   document.querySelectorAll('.settings-trigger').forEach(button => button.addEventListener('click', () => openSettings(button.dataset.settingsStart || 'personalization')));
   document.querySelectorAll('[data-settings-tab]').forEach(button => button.addEventListener('click', () => openSettings(button.dataset.settingsTab)));
   document.querySelectorAll('[data-settings-close]').forEach(button => button.addEventListener('click', () => dialog.close()));
-  themeSelect.addEventListener('change', () => { preferences.theme = themeSelect.value; applyPreferences(true); });
-  channelSelect.addEventListener('change', () => { preferences.channelPosition = channelSelect.value; applyPreferences(true); });
-  serverSelect.addEventListener('change', () => { preferences.serverPosition = serverSelect.value; applyPreferences(true); });
+  accountDataToggle.addEventListener('click', () => {
+    const reveal = accountDataDetails.hidden;
+    accountDataDetails.hidden = !reveal;
+    accountDataToggle.setAttribute('aria-expanded', String(reveal));
+    accountDataToggle.querySelector('.account-data-toggle-label').textContent = reveal ? 'Ocultar datos de la cuenta' : 'Mostrar datos de la cuenta';
+  });
+  profileAvatarInput.addEventListener('change', () => {
+    const file = profileAvatarInput.files?.[0];
+    if (!file) return;
+    if ((file.type && !['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) || file.size > 5 * 1024 * 1024) {
+      profileAvatarInput.value = '';
+      profileAvatarPreview.src = profileAvatarPreview.dataset.savedSrc;
+      profileSaveStatus.textContent = 'Elige una imagen PNG, JPG o WebP de hasta 5 MB.';
+      return;
+    }
+    if (profileAvatarPreview.src.startsWith('blob:')) URL.revokeObjectURL(profileAvatarPreview.src);
+    profileAvatarPreview.src = URL.createObjectURL(file);
+    profileSaveStatus.textContent = '';
+  });
+  profileForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    profileSaveStatus.textContent = 'Guardando perfil…';
+    const submit = profileForm.querySelector('button[type="submit"]');
+    submit.disabled = true;
+    try {
+      const response = await fetch(profileForm.action, { method: 'POST', body: new FormData(profileForm), headers: { Accept: 'application/json' } });
+      const result = await response.json();
+      if (!response.ok || !result.ok) throw new Error(result.message || 'No se pudo guardar el perfil.');
+      applyCurrentProfile(result.profile);
+      profileSaveStatus.textContent = result.message;
+      showToast(result.message);
+    } catch (error) {
+      profileSaveStatus.textContent = error.message || 'No se pudo guardar el perfil. Inténtalo de nuevo.';
+    } finally {
+      submit.disabled = false;
+    }
+  });
+  document.querySelectorAll('.profile-member-button').forEach(button => button.addEventListener('click', () => {
+    try { showPublicProfile(JSON.parse(button.dataset.userProfile || '{}')); }
+    catch { showToast('No se pudo cargar el perfil.'); }
+  }));
+  document.querySelector('#public-profile-close').addEventListener('click', () => publicProfileDialog.close());
+  publicProfileDialog.addEventListener('click', event => { if (event.target === publicProfileDialog) publicProfileDialog.close(); });
+  themeChoices.forEach(input => input.addEventListener('change', () => {
+    if (!input.checked) return;
+    preferences.theme = input.value;
+    applyPreferences(true);
+  }));
+  Object.entries(themeColorInputs).forEach(([key, input]) => input.addEventListener('input', () => {
+    preferences.theme = 'custom';
+    preferences.colors[key] = input.value;
+    applyPreferences(true);
+  }));
+  channelChoices.forEach(input => input.addEventListener('change', () => {
+    if (!input.checked) return;
+    preferences.channelPosition = input.value;
+    applyPreferences(true);
+  }));
+  serverChoices.forEach(input => input.addEventListener('change', () => {
+    if (!input.checked) return;
+    preferences.serverPosition = input.value;
+    applyPreferences(true);
+  }));
+  dmCardSizeChoices.forEach(input => input.addEventListener('change', () => {
+    if (!input.checked) return;
+    preferences.dmCardSize = input.value;
+    applyPreferences(true);
+  }));
   memberSelect.addEventListener('change', () => { preferences.showMembers = memberSelect.checked; applyPreferences(true); });
-  [dmChatStyleSelect, dmChatFontSizeSelect, dmChatFontFamilySelect].forEach(control => control.addEventListener('change', saveDmChatSettings));
+  [...dmChatStyleChoices, ...dmChatFontSizeChoices, ...dmChatFontFamilyChoices].forEach(control => control.addEventListener('change', () => {
+    if (!control.checked) return;
+    saveDmChatSettings();
+  }));
   dmChatTextColorInput.addEventListener('input', saveDmChatSettings);
   document.querySelector('#dm-chat-settings-open').addEventListener('click', () => {
     applyDmChatSettings();
@@ -215,21 +444,28 @@
     closeDmSearch(true);
     document.querySelectorAll('.dm-contact').forEach(item => item.classList.remove('active'));
     button.classList.add('active');
-    const name = button.dataset.dm; const status = button.dataset.status;
+    const name = button.dataset.dm;
+    const contactProfile = button.dataset.contactProfile ? JSON.parse(button.dataset.contactProfile) : null;
+    const statusKey = contactProfile?.status || button.dataset.statusKey || ({ 'Ausente': 'away', 'No molestar': 'busy' }[button.dataset.status] || 'online');
+    const status = contactProfile?.statusLabel || button.dataset.status || presenceLabels[statusKey] || presenceLabels.online;
     activeContactId = button.dataset.contactId || name.toLocaleLowerCase('es');
     dmChatSettingsContact.textContent = name;
     applyDmChatSettings();
     document.querySelector('#dm-overview-name').textContent = name;
     document.querySelector('#dm-overview-status').textContent = status;
     const overviewDot = document.querySelector('.dm-overview-nameblock .presence-dot');
-    overviewDot.classList.toggle('away', status === 'Ausente');
-    overviewDot.classList.toggle('busy', status === 'No molestar');
-    document.querySelector('#dm-overview-description').textContent = button.dataset.description;
-    document.querySelector('#dm-overview-avatar').alt = `Foto de perfil de ${name}`;
+    overviewDot.classList.remove('away', 'busy', 'offline');
+    if (statusKey !== 'online') overviewDot.classList.add(statusKey);
+    document.querySelector('#dm-overview-description').textContent = contactProfile?.about || button.dataset.description || 'Este usuario todavía no ha escrito una presentación.';
+    const overviewAvatar = document.querySelector('#dm-overview-avatar');
+    overviewAvatar.src = contactProfile?.avatar || button.dataset.avatar || '../Media/IMG/default-avatar.png';
+    overviewAvatar.alt = `Foto de perfil de ${name}`;
     const activityList = document.querySelector('#dm-activity-list'); activityList.replaceChildren();
-    (button.dataset.activity || '').split('|').filter(Boolean).forEach(activity => { const item = document.createElement('li'); item.textContent = activity; activityList.append(item); });
+    const activities = contactProfile ? contactProfile.activities : (button.dataset.activity || '').split('|').filter(Boolean);
+    (Array.isArray(activities) ? activities : []).slice(0, 3).forEach(activity => { const item = document.createElement('li'); item.textContent = activity; activityList.append(item); });
     const conversation = document.querySelector('#dm-message-list'); conversation.replaceChildren();
-    (dmMessages[name] || []).forEach(([author, text, time]) => appendPrivateMessage(author, text, time));
+    const conversationMessages = contactProfile ? [] : (dmMessages[name] || []);
+    conversationMessages.forEach(([author, text, time]) => appendPrivateMessage(author, text, time));
     dmMessageSearch.value = ''; dmMessageSearch.dispatchEvent(new Event('input'));
     document.querySelector('#dm-message-input').placeholder = `Enviar mensaje a ${name}`;
     shell.classList.remove('mobile-channels-open');

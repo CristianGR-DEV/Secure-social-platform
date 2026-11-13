@@ -103,3 +103,15 @@
   .landing-page .bubble-row p { max-width:100%; overflow-wrap:anywhere; }
   .landing-page .floating-tag { right:6px; max-width:calc(100% - 18px); white-space:normal; }
 }
+
+
+
+/* El hover eleva solo el contenido; las líneas punteadas de los pasos quedan fijas. */
+.landing-page .journey-step { transition: border-color .28s ease, box-shadow .28s ease; }
+.landing-page .journey-step-content { transition: transform .28s ease; }
+.landing-page .journey-step:hover { transform: none; border-color: rgba(190,173,232,.55); box-shadow: 0 16px 45px rgba(0,0,0,.2); }
+.landing-page .journey-step:hover .journey-step-content { transform: translateY(-5px); }
+@media (prefers-reduced-motion: reduce) {
+  .landing-page .journey-step-content { transition: none; }
+  .landing-page .journey-step:hover .journey-step-content { transform: none; }
+}
