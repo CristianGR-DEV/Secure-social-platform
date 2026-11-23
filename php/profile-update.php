@@ -70,7 +70,7 @@ try {
         $current = null;
         foreach ($accounts as $index => $entry) {
             if (($entry['id'] ?? null) === ($account['id'] ?? null)) $current = $index;
-            elseif (strcasecmp((string)($entry['username'] ?? ''), $username) === 0) return ['ok' => false, 'reason' => 'username'];
+
         }
         if ($current === null) return ['ok' => false, 'reason' => 'account'];
         $oldImage = profile_image_file($accounts[$current]);

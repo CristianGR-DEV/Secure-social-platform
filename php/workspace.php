@@ -10,27 +10,26 @@ $hasCustomAvatar = profile_image_file($account) !== null;
 $currentPresence = account_presence($account);
 $currentPresenceLabel = presence_label($currentPresence);
 $currentPresenceClass = presence_class($currentPresence);
-$publicMembers = with_accounts(static function (array &$accounts): array {
+$dmExamples = [];
+$publicMembers = with_accounts(static function (array &$accounts) use ($account, &$dmExamples): array {
     $members = [];
     foreach ($accounts as $entry) {
         if (!is_array($entry) || !is_string($entry['id'] ?? null) || !is_string($entry['username'] ?? null)) continue;
-        $members[] = [
-            'id' => $entry['id'],
-            'username' => $entry['username'],
-            'initial' => mb_strtoupper(mb_substr($entry['username'], 0, 1, 'UTF-8'), 'UTF-8'),
-            'avatar' => profile_image_src($entry),
-            'hasCustomAvatar' => profile_image_file($entry) !== null,
-            'about' => is_string($entry['about'] ?? null) ? $entry['about'] : '',
-            'activities' => is_array($entry['recent_activities'] ?? null) ? array_values(array_filter($entry['recent_activities'], 'is_string')) : [],
-            'joined' => is_string($entry['created_at'] ?? null) ? $entry['created_at'] : '',
-            'presence' => account_presence($entry),
-            'status' => account_presence($entry),
-            'statusLabel' => presence_label(account_presence($entry)),
-            'statusClass' => presence_class(account_presence($entry)),
+        $isFriend = in_array($entry['id'], $account['friends'] ?? [], true) && in_array($account['id'], $entry['friends'] ?? [], true);
+        if ($isFriend && $entry['id'] !== $account['id']) {
+            $history = dm_preview_history($account, $entry);
+            if ($history) {
+                $dmExamples['account-' . $entry['id']] = $history;
+            }
+        }
+        $members[] = public_member_profile($entry) + [
+            'requested' => in_array($account['id'], $entry['friend_requests'] ?? [], true),
+            'isFriend' => $isFriend,
         ];
     }
     return $members;
 });
+$dmFriends = array_values(array_filter($publicMembers, static fn($member) => $member['isFriend'] && $member['id'] !== $account['id']));
 $servers = [
     ['name' => 'Corebite', 'badge' => 'C'],
     ['name' => 'Comunidad', 'badge' => 'C'],
@@ -56,21 +55,25 @@ $messages = [
     <title>Chat | Corebite</title>
     <link rel="icon" href="../Media/SVG/corebite-mark.svg?v=20261112" type="image/svg+xml">
     <link rel="stylesheet" href="../Media/CSS/estilo.css?v=20261113-scrollbars1">
-    <link rel="stylesheet" href="../Media/CSS/workspace.css?v=20261113-presence3">
-    <script src="../Media/JS/workspace.js?v=20261113-presence2" defer></script>
+    <link rel="stylesheet" href="../Media/CSS/workspace.css?v=classic-groups1">
+    <script src="../Media/JS/workspace.js?v=dm-order1" defer></script>
+    <script src="../Media/JS/home-folders.js?v=dm-order1" defer></script>
     <link rel="stylesheet" href="../Media/CSS/site-cursor.css?v=20261112-cursor2">
     <link rel="stylesheet" href="../Media/CSS/design-system.css?v=20261113-design10">
 </head>
 <body class="chat-page" data-theme="discord" data-channel-position="left" data-server-position="left">
     <div class="app-shell" id="app-shell">
         <aside class="server-rail" aria-label="Servidores">
-            <a class="home-server" href="workspace.php" aria-label="Inicio de Corebite"><img src="../Media/SVG/corebite-mark.svg?v=20261112" alt=""></a>
+            <div class="rail-links">
+            <button class="home-server" id="friends-toggle" type="button" aria-label="Inicio de Corebite" title="Inicio de Corebite" aria-controls="friends-view" aria-pressed="false"><img src="../Media/SVG/corebite-mark.svg?v=20261112" alt=""></button>
+            <button class="home-bell" id="home-bell" type="button" aria-label="Notificaciones" hidden><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 6-2 7-2 8h16c0-1-2-2-2-8ZM10 20a2 2 0 0 0 4 0" stroke-linecap="round" stroke-linejoin="round"/></svg><b></b></button>
             <button class="dm-rail-button" type="button" id="dm-view-toggle" aria-label="Mensajes directos" title="Mensajes directos"><span class="svg-icon icon-messages" aria-hidden="true"></span></button>
             <span class="rail-divider"></span>
             <?php foreach ($servers as $index => $server): ?>
                 <button class="server-icon <?= $index === 0 ? 'selected' : '' ?>" type="button" data-server="<?= h($server['name']) ?>" title="<?= h($server['name']) ?>" aria-label="Servidor <?= h($server['name']) ?>"><span><?= h($server['badge']) ?></span></button>
             <?php endforeach; ?>
             <button class="server-add" type="button" data-toast="La creación de servidores llegará en una próxima etapa." aria-label="Añadir servidor"><span class="svg-icon icon-plus" aria-hidden="true"></span></button>
+            </div>
         </aside>
 
         <aside class="channel-sidebar" aria-label="Navegación">
@@ -87,33 +90,23 @@ $messages = [
             </nav>
             </div>
             <section class="dm-navigation" id="dm-navigation" aria-label="Conversaciones privadas" hidden>
-                <div class="dm-sidebar-heading"><h2>Mensajes directos</h2><button type="button" class="icon-button" data-toast="Iniciar una nueva conversación estará disponible más adelante" aria-label="Nueva conversación"><span class="svg-icon icon-plus" aria-hidden="true"></span></button></div>
+                <div class="dm-sidebar-heading"><h2>Mensajes directos</h2><button type="button" class="icon-button" id="dm-new" aria-label="Nueva conversación"><span class="svg-icon icon-plus" aria-hidden="true"></span></button></div>
                 <label class="visually-hidden" for="dm-search">Buscar conversaciones</label>
                 <input class="dm-search" id="dm-search" type="search" placeholder="Buscar o iniciar conversación">
-                <div class="dm-list" id="dm-list">
-                    <button type="button" class="dm-contact active" data-contact-id="sofia" data-dm="Sofía" data-status="En línea" data-initial="S" data-color="lavender" data-description="Diseñadora y aficionada a las comunidades. Siempre dispuesta a ayudar." data-activity="Diseñando una comunidad nueva|Compartió una idea en general">
-                        <span class="user-avatar dm-avatar lavender">S<i class="presence-dot"></i></span><span class="dm-contact-copy"><strong>Sofía</strong><small>¡Nos vemos luego!</small></span><span class="dm-time">10:24</span>
-                    </button>
-                    <button type="button" class="dm-contact" data-contact-id="rodrigo" data-dm="Rodrigo" data-status="Ausente" data-initial="R" data-color="mint" data-description="Amante de los videojuegos y las charlas tranquilas." data-activity="Jugó en el canal de voz|Visitó el canal general">
-                        <span class="user-avatar dm-avatar mint">R<i class="presence-dot away"></i></span><span class="dm-contact-copy"><strong>Rodrigo</strong><small>¿Has visto el canal nuevo?</small></span><span class="dm-time">Ayer</span>
-                    </button>
-                    <button type="button" class="dm-contact" data-contact-id="alex" data-dm="Alex" data-status="No molestar" data-initial="A" data-color="blue" data-description="Desarrollador. Le interesan el código abierto y Linux." data-activity="Actualizó su perfil|Compartió un enlace">
-                        <span class="user-avatar dm-avatar blue">A<i class="presence-dot busy"></i></span><span class="dm-contact-copy"><strong>Alex</strong><small>Perfecto, gracias 👌</small></span><span class="dm-time">Lun</span>
-                    </button>
-                    <button type="button" class="dm-contact" data-contact-id="noa" data-dm="Noa" data-status="En línea" data-initial="N" data-color="rose" data-description="Le gusta compartir ilustraciones y descubrir música." data-activity="Compartió una imagen|Se unió a Corebite">
-                        <span class="user-avatar dm-avatar rose">N<i class="presence-dot"></i></span><span class="dm-contact-copy"><strong>Noa</strong><small>Compartió una imagen</small></span><span class="dm-time">Dom</span>
-                    </button>
-                    <?php foreach ($publicMembers as $member): ?>
-                        <?php if (($member['id'] ?? '') === ($account['id'] ?? null)) continue; ?>
-                        <?php $contactProfile = $member; unset($contactProfile['id']); $contactProfileJson = json_encode($contactProfile, JSON_UNESCAPED_UNICODE | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP); ?>
-                        <button type="button" class="dm-contact" data-contact-id="account-<?= h($member['id']) ?>" data-dm="<?= h($member['username']) ?>" data-status="<?= h($member['statusLabel']) ?>" data-status-key="<?= h($member['status']) ?>" data-contact-profile="<?= h($contactProfileJson === false ? '{}' : $contactProfileJson) ?>">
-                            <span class="user-avatar dm-avatar lavender"><span data-avatar-initial <?= $member['hasCustomAvatar'] ? 'hidden' : '' ?>><?= h($member['initial']) ?></span><img data-avatar-image src="<?= h($member['avatar']) ?>" alt="" <?= $member['hasCustomAvatar'] ? '' : 'hidden' ?>><i class="presence-dot <?= h($member['statusClass']) ?>"></i></span>
-                            <span class="dm-contact-copy"><strong><?= h($member['username']) ?></strong><small><?= h($member['statusLabel']) ?></small></span><span class="dm-time">Perfil</span>
-                        </button>
-                    <?php endforeach; ?>
+                <div class="dm-list" id="dm-list" data-account-id="<?= h($account['id']) ?>">
                 </div>
-                <p class="dm-empty" id="dm-empty" hidden>No hay conversaciones que coincidan con la búsqueda.</p>
-                <div class="dm-prototype-note">Conversaciones de muestra · todavía no se guardan.</div>
+                <template id="dm-contact-template">
+                    <button type="button" class="dm-contact">
+                        <span class="user-avatar dm-avatar lavender"><span data-avatar-initial></span><img data-avatar-image alt=""><i class="presence-dot"></i></span>
+                        <span class="dm-contact-copy"><strong></strong><small></small></span>
+                        <span class="dm-unread" hidden></span>
+                        <span class="dm-preview"></span>
+                    </button>
+                </template>
+                <script type="application/json" id="dm-examples"><?= json_encode($dmExamples, JSON_HEX_TAG | JSON_THROW_ON_ERROR) ?></script>
+                <script type="application/json" id="dm-friends"><?= json_encode($dmFriends, JSON_HEX_TAG | JSON_THROW_ON_ERROR) ?></script>
+                <p class="dm-empty" id="dm-empty" hidden></p>
+                <div class="dm-prototype-note">Los mensajes privados siguen en vista previa.</div>
             </section>
             <div class="user-panel" id="user-panel">
                 <input type="hidden" id="csrf-token" value="<?= $csrf ?>">
@@ -127,11 +120,53 @@ $messages = [
                         <button type="button" role="menuitemradio" aria-checked="<?= $currentPresence === $presenceValue ? 'true' : 'false' ?>" data-presence-option="<?= h($presenceValue) ?>" class="user-status-option <?= $currentPresence === $presenceValue ? 'selected' : '' ?>"><i class="presence-dot <?= h(presence_class($presenceValue)) ?>" aria-hidden="true"></i><span><?= h($presenceText) ?></span><span class="status-option-check" aria-hidden="true">✓</span></button>
                     <?php endforeach; ?>
                 </div>
-                <button class="icon-button settings-trigger account-menu-trigger" type="button" data-settings-start="account" title="Ajustes de cuenta" aria-label="Ajustes de cuenta"><span class="svg-icon icon-settings" aria-hidden="true"></span></button>
-                <form action="auth.php" method="post" class="logout-mini"><input type="hidden" name="csrf" value="<?= $csrf ?>"><input type="hidden" name="action" value="logout"><button class="icon-button" type="submit" title="Cerrar sesión" aria-label="Cerrar sesión"><span class="svg-icon icon-logout" aria-hidden="true"></span></button></form>
+                <div class="account-actions"><button class="icon-button settings-trigger account-menu-trigger" type="button" data-settings-start="account" title="Ajustes de cuenta" aria-label="Ajustes de cuenta"><span class="svg-icon icon-settings" aria-hidden="true"></span><span class="account-action-label">Ajustes</span></button>
+                <form action="auth.php" method="post" class="logout-mini"><input type="hidden" name="csrf" value="<?= $csrf ?>"><input type="hidden" name="action" value="logout"><button class="icon-button" type="submit" title="Cerrar sesión" aria-label="Cerrar sesión"><span class="svg-icon icon-logout" aria-hidden="true"></span><span class="account-action-label">Cerrar sesión</span></button></form></div>
             </div>
         </aside>
 
+        <section class="chat-main friends-view" id="friends-view" aria-label="Inicio de Corebite" hidden>
+            <nav class="folder-tabs" aria-label="Secciones de inicio">
+                <button type="button" data-folder="servers">Servidores públicos</button>
+                <button type="button" data-folder="people" aria-current="page">Buscar amigos</button>
+                <button type="button" data-folder="inbox">Notificaciones</button>
+            </nav>
+            <section class="folder-content" data-folder-panel="servers" hidden>
+                <h2>Buscar servidores públicos</h2>
+                <label for="server-query">Nombre del servidor</label>
+                <input type="search" id="server-query" autocomplete="off">
+                <p>Servidores de muestra</p>
+                <?php foreach ($servers as $server): ?>
+                    <button type="button" class="directory-server" data-directory-server="<?= h($server['name']) ?>"><?= h($server['name']) ?></button>
+                <?php endforeach; ?>
+                <p id="server-empty" hidden>No se encontraron servidores.</p>
+            </section>
+            <section class="folder-content" data-folder-panel="inbox" hidden>
+                <h2>Notificaciones</h2><div id="home-inbox"></div><p role="status" id="inbox-feedback"></p>
+            </section>
+            <section class="folder-content" data-folder-panel="people">
+            <h1 id="friends-title">Buscar amigos</h1>
+
+            <label for="friend-query">Nombre de usuario o nombre#código</label>
+            <div class="friend-query-row">
+                <input type="search" id="friend-query" placeholder="Nombre o nombre#código" maxlength="40" autocomplete="off">
+                <button id="friend-code-help" type="button" aria-label="Dónde ver mi código de amistad" aria-controls="friend-code-tip" aria-expanded="false"></button>
+                <p id="friend-code-tip" hidden>Para ver tu código, abre <strong>Ajustes de cuenta → Mi perfil</strong> y pulsa <strong>Mostrar datos de la cuenta</strong>.</p>
+            </div>
+            <p id="friend-feedback" role="status"></p>
+            <div class="friend-results">
+                <?php foreach ($publicMembers as $member): if ($member['id'] === $account['id']) continue;
+                    $incoming = in_array($member['id'], $account['friend_requests'] ?? [], true);
+                ?>
+                    <article class="friend-result" data-name="<?= h($member['username']) ?>" data-incoming="<?= $incoming ? '1' : '0' ?>" hidden>
+                        <img src="<?= h($member['avatar']) ?>" width="40" height="40" alt="">
+                        <div><strong><?= h($member['username']) ?></strong></div>
+                        <button type="button" data-request-to="<?= h($member['id']) ?>" <?= $member['requested'] || $incoming ? 'disabled' : '' ?>><?= $incoming ? 'Solicitud recibida' : ($member['requested'] ? 'Solicitud enviada' : 'Enviar solicitud de amistad') ?></button>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </section>
+        </section>
         <main class="chat-main" id="server-chat">
             <header class="chat-header">
                 <div class="current-channel"><button class="icon-button" type="button" id="channels-toggle" aria-label="Abrir menú de canales" aria-expanded="false"><span class="svg-icon icon-menu" aria-hidden="true"></span></button><span class="svg-icon icon-hash" aria-hidden="true"></span><strong id="current-channel-name">general</strong><span class="header-subtitle">Un lugar para conversar</span></div>
@@ -158,11 +193,11 @@ $messages = [
             <div class="dm-top-shell">
             <section class="dm-profile-overview" aria-label="Información del contacto">
                 <div class="dm-overview-person">
-                    <img class="dm-overview-avatar" id="dm-overview-avatar" src="../Media/IMG/default-avatar.png" alt="Foto de perfil de Sofía">
-                <div class="dm-overview-nameblock"><h1 id="dm-overview-name" data-ascii-reveal>Sofía</h1><p><i class="presence-dot"></i><span id="dm-overview-status">En línea</span></p></div>
+                    <img class="dm-overview-avatar" id="dm-overview-avatar" src="../Media/IMG/default-avatar.png" alt="">
+                <div class="dm-overview-nameblock"><h1 id="dm-overview-name"></h1><p><i class="presence-dot"></i><span id="dm-overview-status"></span></p></div>
                 </div>
-                <section class="dm-overview-card dm-about-card"><h2>Sobre mí</h2><p id="dm-overview-description">Diseñadora y aficionada a las comunidades. Siempre dispuesta a ayudar.</p></section>
-                <section class="dm-overview-card dm-activity-card"><h2>Actividad reciente</h2><ul id="dm-activity-list"><li>Diseñando una comunidad nueva</li><li>Compartió una idea en general</li></ul></section>
+                <section class="dm-overview-card dm-about-card"><h2>Sobre mí</h2><p id="dm-overview-description"></p></section>
+                <section class="dm-overview-card dm-activity-card"><h2>Actividad reciente</h2><ul id="dm-activity-list"></ul></section>
                 <div class="dm-chat-tools" aria-label="Herramientas de conversación">
                     <button class="icon-button" type="button" id="dm-search-toggle" aria-label="Buscar en conversación" title="Buscar"><span class="svg-icon icon-search" aria-hidden="true"></span></button>
                     <button class="icon-button" type="button" id="dm-call-button" data-toast="Las llamadas estarán disponibles más adelante" aria-label="Llamar" title="Llamar"><span class="svg-icon icon-phone" aria-hidden="true"></span></button>
@@ -172,16 +207,12 @@ $messages = [
             </section>
             </div>
             <section class="message-scroll dm-message-scroll" id="dm-message-scroll" aria-label="Mensajes privados">
-                <div class="message-list" id="dm-message-list">
-                    <article class="message"><div class="user-avatar message-avatar lavender">S</div><div class="message-body"><div class="message-meta"><strong>Sofía</strong><time>10:20</time></div><p>¡Hola! ¿Cómo va el proyecto?</p></div></article>
-                    <article class="message"><div class="user-avatar message-avatar" data-self-avatar><span data-avatar-initial <?= $hasCustomAvatar ? 'hidden' : '' ?>><?= $initial ?></span><img data-avatar-image src="<?= h($profileAvatarSrc) ?>" alt="" <?= $hasCustomAvatar ? '' : 'hidden' ?>></div><div class="message-body"><div class="message-meta"><strong data-current-username><?= $username ?></strong><time>10:22</time></div><p>Avanzando con el diseño de Corebite 😊</p></div></article>
-                    <article class="message"><div class="user-avatar message-avatar lavender">S</div><div class="message-body"><div class="message-meta"><strong>Sofía</strong><time>10:24</time></div><p>¡Qué bien! Cuando esté listo, enséñame cómo quedan los chats.</p></div></article>
-                </div>
+                <div class="message-list" id="dm-message-list"></div>
             </section>
             <form class="message-composer" id="dm-message-form">
                 <button class="icon-button attach-button" type="button" data-toast="Los archivos adjuntos estarán disponibles más adelante" aria-label="Adjuntar archivo"><span class="svg-icon icon-plus" aria-hidden="true"></span></button>
                 <label class="visually-hidden" for="dm-message-input">Escribe un mensaje privado</label>
-                <input id="dm-message-input" name="message" autocomplete="off" maxlength="1000" placeholder="Enviar mensaje a Sofía" required>
+                <input id="dm-message-input" name="message" autocomplete="off" maxlength="1000" placeholder="Escribe un mensaje" required>
                 <button class="send-button" type="submit" aria-label="Enviar mensaje" title="Enviar"><span class="svg-icon icon-send" aria-hidden="true"></span></button>
             </form>
             <p class="prototype-hint">Vista previa: estos mensajes no se envían ni se guardan.</p>
@@ -240,6 +271,7 @@ $messages = [
                 <div class="account-data-box">
                     <button class="account-data-toggle" id="account-data-toggle" type="button" aria-expanded="false" aria-controls="account-data-details"><span class="svg-icon icon-eye" aria-hidden="true"></span><span class="account-data-toggle-label">Mostrar datos de la cuenta</span></button>
                     <dl class="account-data-details" id="account-data-details" hidden>
+                        <div><dt>Mi código de amistad</dt><dd>#<?= h($account['friend_code']) ?></dd></div>
                         <div><dt>Correo electrónico</dt><dd><?= h((string)($account['email'] ?? '')) ?></dd></div>
                         <div><dt>Teléfono</dt><dd><?= h((string)($account['phone'] ?? '')) ?: 'No indicado' ?></dd></div>
                         <div><dt>Fecha de nacimiento</dt><dd><?= !empty($account['birthdate']) ? h(date('d/m/Y', strtotime((string)$account['birthdate']))) : 'No indicada' ?></dd></div>
@@ -367,7 +399,7 @@ $messages = [
             <div class="chat-settings-heading">
                 <p class="dialog-eyebrow">Personalización de conversación</p>
                 <h2 id="chat-settings-title">Ajustes del chat</h2>
-                <p>Estas opciones solo se aplican al chat con <strong id="chat-settings-contact">Sofía</strong>.</p>
+                <p>Estas opciones solo se aplican al chat con <strong id="chat-settings-contact"></strong>.</p>
             </div>
         </header>
         <div class="chat-settings-content">
@@ -375,8 +407,8 @@ $messages = [
                 <legend>Estilo de los mensajes</legend>
                 <div class="chat-choice-grid chat-style-choices">
                     <label class="chat-choice is-selected"><input type="radio" name="dm-chat-style" value="classic" checked><span class="chat-style-preview" data-style-preview="classic" aria-hidden="true"><i></i><i></i></span><strong>Corebite</strong><small>Clásico</small></label>
-                    <label class="chat-choice"><input type="radio" name="dm-chat-style" value="bubbles"><span class="chat-style-preview" data-style-preview="bubbles" aria-hidden="true"><i></i><i></i></span><strong>Tarjetas</strong><small>Mensajes en bloques</small></label>
-                    <label class="chat-choice"><input type="radio" name="dm-chat-style" value="compact"><span class="chat-style-preview" data-style-preview="compact" aria-hidden="true"><i></i><i></i></span><strong>Compacto</strong><small>Más conversación</small></label>
+                    <label class="chat-choice"><input type="radio" name="dm-chat-style" value="bubbles"><span class="chat-style-preview" data-style-preview="bubbles" aria-hidden="true"><i></i><i></i></span><strong>Tarjetas</strong><small>Agrupa mensajes seguidos</small></label>
+                    <label class="chat-choice"><input type="radio" name="dm-chat-style" value="compact"><span class="chat-style-preview" data-style-preview="compact" aria-hidden="true"><i></i><i></i></span><strong>Burbujas</strong><small>Una por mensaje</small></label>
                 </div>
             </fieldset>
             <fieldset class="chat-setting-section">

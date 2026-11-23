@@ -4,8 +4,8 @@ require_once __DIR__ . '/includes.php';
 start_corebite_session();
 if (!empty($_SESSION['account_id'])) { header('Location: workspace.php'); exit; }
 $errors = [
-    'login' => 'Usuario o contraseña incorrectos.',
-    'exists' => 'El usuario o el correo ya está registrado.',
+    'login' => 'Acceso incorrecto. Si compartes nombre, usa tu correo o nombre#código.',
+    'exists' => 'No se pudo completar el registro con esos datos.',
     'invalid' => 'Revisa los campos: algunos datos no son válidos o las contraseñas no coinciden.',
     'request' => 'La solicitud ha caducado. Recarga la página e inténtalo de nuevo.',
     'storage' => 'No se pudieron guardar los datos. Comprueba los permisos del servidor.',
@@ -49,7 +49,7 @@ $startInRegistration = ($_GET['mode'] ?? '') === 'register';
                         <input type="hidden" name="csrf" value="<?= h($_SESSION['csrf']) ?>">
                         <input type="hidden" name="action" value="login">
                         <label for="login-user">Nombre de Usuario</label>
-                        <input type="text" id="login-user" name="username" placeholder="Tu usuario" autocomplete="username" required>
+                        <input type="text" id="login-user" name="username" placeholder="Nombre#123456 o correo" autocomplete="username" required>
                         <label for="login-pass">Contraseña</label>
                         <div class="password-field">
                             <input type="password" id="login-pass" name="password" placeholder="••••••••" autocomplete="current-password" required data-password-input>

@@ -91,6 +91,16 @@ function storage_path(): string
     return $directory . DIRECTORY_SEPARATOR . 'accounts.json';
 }
 
+function new_friend_code(array $used): string
+{
+    $start = random_int(0, 999999);
+    for ($i = 0; $i < 1000000; $i++) {
+        $code = sprintf('%06d', ($start + $i) % 1000000);
+        if (!isset($used[$code])) return $code;
+    }
+    throw new RuntimeException('No quedan códigos disponibles.');
+}
+
 function with_accounts(callable $callback): mixed
 {
     $path = storage_path();
@@ -100,8 +110,17 @@ function with_accounts(callable $callback): mixed
         $raw = is_file($path) ? file_get_contents($path) : false;
         $accounts = $raw === false || trim($raw) === '' ? [] : json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
         if (!is_array($accounts)) throw new RuntimeException('El archivo de cuentas JSON no tiene un formato válido.');
+        $used = array_fill_keys(array_column($accounts, 'friend_code'), true);
+        foreach ($accounts as &$entry) {
+            if (!isset($entry['friend_code'])) {
+                $entry['friend_code'] = new_friend_code($used);
+                $used[$entry['friend_code']] = true;
+            }
+        }
+        unset($entry);
         $result = $callback($accounts);
         $json = json_encode($accounts, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+        if ($raw === $json . PHP_EOL) return $result;
         if (file_put_contents($path, $json . PHP_EOL, LOCK_EX) === false) throw new RuntimeException('No se pudieron guardar los datos.');
         @chmod($path, 0600);
         return $result;
@@ -109,6 +128,37 @@ function with_accounts(callable $callback): mixed
         flock($lock, LOCK_UN);
         fclose($lock);
     }
+}
+
+function dm_preview_history(array $account, array $friend): array
+{
+    $history = [];
+    foreach ($account['dm_example_outbox'][$friend['id']] ?? [] as $message) {
+        $history[] = $message + ['own' => true];
+    }
+    foreach ($friend['dm_example_outbox'][$account['id']] ?? [] as $message) {
+        $history[] = $message + ['own' => false];
+    }
+    usort($history, static fn($a, $b) => $a['sentAt'] <=> $b['sentAt']);
+    return $history;
+}
+
+function public_member_profile(array $entry): array
+{
+    return [
+        'id' => $entry['id'],
+        'username' => $entry['username'],
+        'initial' => mb_strtoupper(mb_substr($entry['username'], 0, 1, 'UTF-8'), 'UTF-8'),
+        'avatar' => profile_image_src($entry),
+        'hasCustomAvatar' => profile_image_file($entry) !== null,
+        'about' => is_string($entry['about'] ?? null) ? $entry['about'] : '',
+        'activities' => is_array($entry['recent_activities'] ?? null) ? array_values(array_filter($entry['recent_activities'], 'is_string')) : [],
+        'joined' => is_string($entry['created_at'] ?? null) ? $entry['created_at'] : '',
+        'presence' => account_presence($entry),
+        'status' => account_presence($entry),
+        'statusLabel' => presence_label(account_presence($entry)),
+        'statusClass' => presence_class(account_presence($entry)),
+    ];
 }
 
 function require_login(): array

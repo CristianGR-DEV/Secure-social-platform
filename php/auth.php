@@ -36,8 +36,9 @@ try {
         ];
         $created = with_accounts(static function (array &$accounts) use ($account, $username, $email): bool {
             foreach ($accounts as $entry) {
-                if (strcasecmp((string)($entry['username'] ?? ''), $username) === 0 || strcasecmp((string)($entry['email'] ?? ''), $email) === 0) return false;
+                if (strcasecmp((string)($entry['email'] ?? ''), $email) === 0) return false;
             }
+            $account['friend_code'] = new_friend_code(array_fill_keys(array_column($accounts, 'friend_code'), true));
             $accounts[] = $account;
             return true;
         });
@@ -52,7 +53,12 @@ try {
         $username = trim((string)($_POST['username'] ?? ''));
         $password = (string)($_POST['password'] ?? '');
         $account = with_accounts(static function (array &$accounts) use ($username): ?array {
-            foreach ($accounts as $entry) if (strcasecmp((string)($entry['username'] ?? ''), $username) === 0) return $entry;
+            $matches = [];
+            foreach ($accounts as $entry) {
+                if (strcasecmp($entry['username'] . '#' . $entry['friend_code'], $username) === 0 || strcasecmp($entry['email'], $username) === 0) return $entry;
+                if (strcasecmp($entry['username'], $username) === 0) $matches[] = $entry;
+            }
+            if (count($matches) === 1) return $matches[0];
             return null;
         });
         if ($account === null || !password_verify($password, (string)($account['password_hash'] ?? ''))) fail('login');

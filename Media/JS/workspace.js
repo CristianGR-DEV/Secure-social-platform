@@ -39,7 +39,9 @@
   const dmConversationJump = document.querySelector('#dm-conversation-jump');
   const storageKey = 'corebite.appearance.v1';
   const dmChatStorageKey = 'corebite.dm-chat-settings.v1';
-  let activeContactId = 'sofia';
+  let activeContactId = null;
+  const dmContacts = new Map();
+  const dmList = document.querySelector('#dm-list');
   let dmChatSettings = {};
   try {
     const savedChats = JSON.parse(localStorage.getItem(dmChatStorageKey) || '{}');
@@ -177,6 +179,19 @@
       presenceOptions.forEach(option => { option.disabled = false; });
     }
   }
+  const mobileLayout = window.matchMedia('(max-width: 900px)');
+  const accountPanel = userStatusTrigger.closest('.user-panel');
+  const accountSidebar = accountPanel.parentElement;
+  const accountRail = document.querySelector('.server-rail');
+  const accountActions = accountPanel.querySelector('.account-actions');
+
+  function placeAccountPanel() {
+    closeUserStatusMenu();
+    (mobileLayout.matches ? accountRail : accountSidebar).append(accountPanel);
+    (mobileLayout.matches ? userStatusMenu : accountPanel).append(accountActions);
+  }
+  placeAccountPanel();
+  mobileLayout.addEventListener('change', placeAccountPanel);
   userStatusTrigger.addEventListener('click', () => {
     const open = userStatusMenu.hidden;
     userStatusMenu.hidden = !open;
@@ -225,14 +240,14 @@
 
   const chatSizes = { small: '12px', normal: '14px', large: '16px', xlarge: '18px' };
   const chatFamilies = { system: 'system-ui, sans-serif', arial: 'Arial, sans-serif', verdana: 'Verdana, sans-serif', trebuchet: '"Trebuchet MS", sans-serif', georgia: 'Georgia, serif' };
-  const defaultDmChatSettings = { style: 'classic', fontSize: 'normal', fontFamily: 'system', textColor: '#f2f3f5' };
+  const defaultDmChatSettings = { style: 'classic', fontSize: 'normal', fontFamily: 'system', textColor: null };
   function getDmChatSettings(contactId = activeContactId) {
     const saved = dmChatSettings[contactId] || {};
     return {
       style: ['classic', 'bubbles', 'compact'].includes(saved.style) ? saved.style : defaultDmChatSettings.style,
       fontSize: ['small', 'normal', 'large', 'xlarge'].includes(saved.fontSize) ? saved.fontSize : defaultDmChatSettings.fontSize,
       fontFamily: ['system', 'arial', 'verdana', 'trebuchet', 'georgia'].includes(saved.fontFamily) ? saved.fontFamily : defaultDmChatSettings.fontFamily,
-      textColor: typeof saved.textColor === 'string' && /^#[0-9a-f]{6}$/i.test(saved.textColor) ? saved.textColor : defaultDmChatSettings.textColor,
+      textColor: typeof saved.textColor === 'string' && (saved.customTextColor || saved.textColor.toLowerCase() !== '#f2f3f5') && /^#[0-9a-f]{6}$/i.test(saved.textColor) ? saved.textColor : defaultDmChatSettings.textColor,
     };
   }
   function applyDmChatSettings() {
@@ -240,21 +255,23 @@
     dmChat.dataset.chatStyle = settings.style;
     dmChat.style.setProperty('--dm-chat-font-size', chatSizes[settings.fontSize]);
     dmChat.style.setProperty('--dm-chat-font-family', chatFamilies[settings.fontFamily]);
-    dmChat.style.setProperty('--dm-chat-text-color', settings.textColor);
+    dmChat.style.setProperty('--dm-chat-text-color', settings.textColor || 'var(--text)');
     [[dmChatStyleChoices, settings.style], [dmChatFontSizeChoices, settings.fontSize], [dmChatFontFamilyChoices, settings.fontFamily]].forEach(([choices, selected]) => choices.forEach(input => {
       input.checked = input.value === selected;
       input.closest('.chat-choice')?.classList.toggle('is-selected', input.checked);
     }));
-    dmChatTextColorInput.value = settings.textColor;
-    document.querySelector('#dm-chat-text-color-value').textContent = settings.textColor.toUpperCase();
-    document.querySelector('.chat-color-swatch').style.backgroundColor = settings.textColor;
+    const effectiveColor = settings.textColor || getComputedStyle(document.body).getPropertyValue('--text').trim();
+    dmChatTextColorInput.value = effectiveColor;
+    document.querySelector('#dm-chat-text-color-value').textContent = effectiveColor.toUpperCase();
+    document.querySelector('.chat-color-swatch').style.backgroundColor = effectiveColor;
   }
-  function saveDmChatSettings() {
+  function saveDmChatSettings(changeTextColor = false) {
     dmChatSettings[activeContactId] = {
       style: dmChatStyleChoices.find(input => input.checked)?.value || defaultDmChatSettings.style,
       fontSize: dmChatFontSizeChoices.find(input => input.checked)?.value || defaultDmChatSettings.fontSize,
       fontFamily: dmChatFontFamilyChoices.find(input => input.checked)?.value || defaultDmChatSettings.fontFamily,
-      textColor: dmChatTextColorInput.value,
+      textColor: changeTextColor ? dmChatTextColorInput.value : getDmChatSettings().textColor,
+      customTextColor: changeTextColor || Boolean(getDmChatSettings().textColor),
     };
     applyDmChatSettings();
     try { localStorage.setItem(dmChatStorageKey, JSON.stringify(dmChatSettings)); }
@@ -264,6 +281,10 @@
   applyPreferences();
   applyDmChatSettings();
   function openSettings(tab) {
+    if (!userStatusMenu.hidden) {
+      closeUserStatusMenu();
+      userStatusTrigger.focus();
+    }
     document.querySelectorAll('[data-settings-panel]').forEach(panel => {
       const active = panel.dataset.settingsPanel === tab;
       panel.hidden = !active;
@@ -348,7 +369,7 @@
     if (!control.checked) return;
     saveDmChatSettings();
   }));
-  dmChatTextColorInput.addEventListener('input', saveDmChatSettings);
+  dmChatTextColorInput.addEventListener('input', () => saveDmChatSettings(true));
   document.querySelector('#dm-chat-settings-open').addEventListener('click', () => {
     applyDmChatSettings();
     chatDialog.showModal();
@@ -356,23 +377,119 @@
   document.querySelector('#chat-settings-close').addEventListener('click', () => chatDialog.close());
   membersToggle.addEventListener('click', () => { preferences.showMembers = !preferences.showMembers; applyPreferences(true); });
 
+  const friendsToggle = document.querySelector('#friends-toggle');
+  const friendView = document.querySelector('#friends-view');
+  const friendQuery = document.querySelector('#friend-query');
+  const feedback = document.querySelector('#friend-feedback');
+  const codeHelp = document.querySelector('#friend-code-help');
+  const codeTip = document.querySelector('#friend-code-tip');
+  function setCodeHelp(open) {
+    codeTip.hidden = !open;
+    codeHelp.setAttribute('aria-expanded', String(open));
+  }
+  codeHelp.addEventListener('click', () => setCodeHelp(codeTip.hidden));
+  document.addEventListener('click', event => {
+    if (!codeHelp.contains(event.target) && !codeTip.contains(event.target)) setCodeHelp(false);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !codeTip.hidden) {
+      setCodeHelp(false);
+      codeHelp.focus();
+    }
+  });
+  let searchRevision = 0;
+  async function filterFriends() {
+    const revision = ++searchRevision;
+    const query = friendQuery.value.trim().toLocaleLowerCase('es');
+    const tagged = query.includes('#');
+    let matchedId = null;
+    if (tagged) {
+      for (const card of friendView.querySelectorAll('.friend-results .friend-result')) card.hidden = true;
+      if (!/^.+#[0-9]{6}$/.test(query)) {
+        feedback.textContent = 'Escribe el nombre y los seis dígitos del código.';
+        return;
+      }
+      feedback.textContent = 'Buscando…';
+      try {
+        const response = await fetch('friend-lookup.php', {
+          method: 'POST',
+          body: new URLSearchParams({tag:query, csrf:document.querySelector('#csrf-token').value})
+        });
+        if (!response.ok) throw new Error();
+        matchedId = (await response.json()).id;
+      } catch {
+        if (revision === searchRevision) feedback.textContent = 'No se pudo completar la búsqueda.';
+        return;
+      }
+      if (revision !== searchRevision) return;
+    }
+    let count = 0;
+    for (const card of friendView.querySelectorAll('.friend-results .friend-result')) {
+      const name = card.dataset.name.toLocaleLowerCase('es');
+      const matches = tagged ? card.querySelector('[data-request-to]').dataset.requestTo === matchedId : name.includes(query);
+      card.hidden = !query || !matches;
+      if (!card.hidden) count++;
+    }
+    feedback.textContent = query ? (count ? '' : 'No se encontraron usuarios.') : 'Escribe un nombre para buscar.';
+  }
+  friendsToggle.addEventListener('click', () => {
+    setView('friends');
+    filterFriends();
+    friendView.dispatchEvent(new Event('home-open'));
+  });
+  friendQuery.addEventListener('input', filterFriends);
+  friendView.addEventListener('click', async event => {
+    const button = event.target.closest('[data-request-to]');
+    if (!button || button.disabled) return;
+    button.disabled = true;
+    try {
+      const response = await fetch('friend-request.php', {
+        method: 'POST',
+        body: new URLSearchParams({target: button.dataset.requestTo, csrf: document.querySelector('#csrf-token').value})
+      });
+      if (!response.ok) throw new Error();
+      const result = await response.json();
+      button.textContent = result.friends ? 'Amigos' : result.incoming ? 'Solicitud recibida' : 'Solicitud enviada';
+      if (result.incoming) button.closest('article').dataset.incoming = '1';
+    } catch {
+      button.disabled = false;
+      feedback.textContent = 'No se pudo enviar la solicitud. Vuelve a intentarlo.';
+    }
+  });
+
   function setView(view) {
-    const isDm = view === 'dm';
+    const finding = view === 'friends';
+    const isDm = finding || view === 'dm';
+    friendView.hidden = !finding;
+    friendsToggle.setAttribute('aria-pressed', String(finding));
+    if (finding) closeDmSearch(true);
     if (!isDm) closeDmSearch(true);
     serverNavigation.hidden = isDm;
     dmNavigation.hidden = !isDm;
     serverChat.hidden = isDm;
-    dmChat.hidden = !isDm;
+    dmChat.hidden = finding || !isDm;
     serverMembers.hidden = isDm;
     shell.classList.toggle('dm-view', isDm);
-    dmViewToggle.classList.toggle('selected', isDm);
-    dmViewToggle.setAttribute('aria-pressed', String(isDm));
+    dmViewToggle.classList.toggle('selected', view === 'dm');
+    dmViewToggle.setAttribute('aria-pressed', String(view === 'dm'));
     const isMobile = window.matchMedia('(max-width: 900px)').matches;
-    shell.classList.toggle('mobile-channels-open', isMobile);
+    shell.classList.toggle('mobile-channels-open', isMobile && !finding);
     channelsToggle.setAttribute('aria-expanded', String(isMobile));
     channelsToggle.setAttribute('aria-label', isMobile ? 'Volver al chat' : 'Abrir menú de canales');
   }
-  dmViewToggle.addEventListener('click', () => setView('dm'));
+  dmViewToggle.addEventListener('click', () => {
+    if (!dmContacts.size) {
+      friendsToggle.click();
+      showToast('Acepta una solicitud de amistad para iniciar un chat privado.');
+      return;
+    }
+    if (!activeContactId) selectContact(dmList.firstElementChild);
+    setView('dm');
+  });
+  document.querySelector('#dm-new').addEventListener('click', () => {
+    if (dmContacts.size) document.querySelector('#dm-search').focus();
+    else friendsToggle.click();
+  });
   document.querySelectorAll('.server-icon').forEach(button => button.addEventListener('click', () => setView('server')));
 
   channelsToggle.addEventListener('click', () => {
@@ -380,13 +497,6 @@
     channelsToggle.setAttribute('aria-expanded', String(open));
     channelsToggle.setAttribute('aria-label', open ? 'Volver al chat' : 'Abrir menú de canales');
   });
-
-  const dmMessages = {
-    Sofía: [['Sofía', '¡Hola! ¿Cómo va el proyecto?', '10:20'], ['me', 'Avanzando con el diseño de Corebite 😊', '10:22'], ['Sofía', '¡Qué bien! Cuando esté listo, enséñame cómo quedan los chats.', '10:24']],
-    Rodrigo: [['Rodrigo', '¿Has visto el canal nuevo?', 'Ayer'], ['me', 'Sí, está quedando muy bien.', 'Ayer']],
-    Alex: [['Alex', 'Perfecto, gracias 👌', 'Lun']],
-    Noa: [['Noa', 'Te he compartido una imagen para el proyecto.', 'Dom']],
-  };
 
   function closeDmSearch(clear = false) {
     dmSearchPopover.hidden = true;
@@ -426,7 +536,70 @@
   });
   window.addEventListener('resize', positionDmSearchPopover);
 
-  function appendPrivateMessage(author, text, time) {
+  const dmExamples = JSON.parse(document.querySelector('#dm-examples').textContent);
+  const dmTime = new Intl.DateTimeFormat('es-ES', {hour: '2-digit', minute: '2-digit'});
+  const sentByContact = new Map();
+  const minute = 60_000;
+  const readKeyPrefix = 'corebite.dm-read.' + dmList.dataset.accountId + '.';
+  const readThrough = new Map();
+
+  function readTime(id) {
+    if (!readThrough.has(id)) {
+      let stored = 0;
+      try { stored = Number(localStorage.getItem(readKeyPrefix + id)) || 0; } catch {}
+      readThrough.set(id, stored);
+    }
+    return readThrough.get(id);
+  }
+
+  function updateDmSummary(button) {
+    const id = button.dataset.contactId;
+    const history = dmExamples[id] || [];
+    const last = history.at(-1);
+    const sent = sentByContact.get(id)?.at(-1);
+    const sentIsLatest = sent && (!last || sent[3] >= last.sentAt);
+    button.dataset.lastMessageAt = String(sentIsLatest ? sent[3] : last?.sentAt ?? -1);
+    const preview = button.querySelector('.dm-preview');
+    preview.textContent = sentIsLatest ? 'Tú: ' + sent[1] : last ? (last.own ? 'Tú: ' : '') + last.text : 'Sin mensajes';
+    preview.title = preview.textContent;
+    const since = readTime(id);
+    const count = history.filter(message => !message.own && message.sentAt > since).length;
+    const badge = button.querySelector('.dm-unread');
+    badge.hidden = count === 0;
+    badge.textContent = String(count);
+    badge.setAttribute('aria-label', count === 1 ? '1 mensaje sin leer' : count + ' mensajes sin leer');
+  }
+
+  function sortDmContacts() {
+    const ordered = [...dmList.children].sort((a, b) => Number(b.dataset.lastMessageAt) - Number(a.dataset.lastMessageAt));
+    ordered.forEach((button, index) => {
+      const current = dmList.children[index];
+      if (current !== button) dmList.insertBefore(button, current);
+    });
+  }
+
+  function markVisibleDmRead() {
+    if (!activeContactId || document.hidden || !dmChat.getClientRects().length) return;
+    const button = dmList.querySelector('.active');
+    if (!button || button.dataset.contactId !== activeContactId) return;
+    const latest = (dmExamples[activeContactId] || []).findLast(message => !message.own);
+    if (!latest || latest.sentAt <= readTime(activeContactId)) return;
+    readThrough.set(activeContactId, latest.sentAt);
+    try { localStorage.setItem(readKeyPrefix + activeContactId, String(latest.sentAt)); } catch {}
+    updateDmSummary(button);
+  }
+
+  new IntersectionObserver(markVisibleDmRead).observe(dmChat);
+  document.addEventListener('visibilitychange', markVisibleDmRead);
+  window.addEventListener('storage', event => {
+    if (!event.key?.startsWith(readKeyPrefix)) return;
+    const id = event.key.slice(readKeyPrefix.length);
+    readThrough.delete(id);
+    const button = dmList.querySelector('[data-contact-id="' + CSS.escape(id) + '"]');
+    if (button) updateDmSummary(button);
+  });
+
+  function appendPrivateMessage(author, text, time, sentAt) {
     const row = document.createElement('article'); row.className = 'message';
     const avatar = document.createElement('div'); avatar.className = 'user-avatar message-avatar';
     const authorName = author === 'me' ? document.querySelector('.user-summary strong').textContent.trim() : author;
@@ -437,18 +610,34 @@
     const timestamp = document.createElement('time'); timestamp.textContent = time;
     const message = document.createElement('p'); message.textContent = text;
     meta.append(name, timestamp); content.append(meta, message); row.append(avatar, content);
-    document.querySelector('#dm-message-list').append(row);
+    const list = document.querySelector('#dm-message-list');
+    let card = list.lastElementChild;
+    const canJoin = Number.isFinite(sentAt) && card?.dataset.author === author
+      && sentAt >= Number(card.dataset.lastAt)
+      && sentAt - Number(card.dataset.lastAt) < minute
+      && sentAt - Number(card.dataset.firstAt) < 10 * minute;
+    if (!canJoin) {
+      card = document.createElement('div');
+      card.className = 'dm-message-group';
+      card.dataset.author = author;
+      if (Number.isFinite(sentAt)) card.dataset.firstAt = String(sentAt);
+      list.append(card);
+    }
+    if (Number.isFinite(sentAt)) card.dataset.lastAt = String(sentAt);
+    card.append(row);
   }
 
   function selectContact(button) {
+    const contactProfile = dmContacts.get(button.dataset.contactId);
+    if (!contactProfile) return;
+    setView('dm');
     closeDmSearch(true);
-    document.querySelectorAll('.dm-contact').forEach(item => item.classList.remove('active'));
+    dmList.querySelector('.active')?.classList.remove('active');
     button.classList.add('active');
-    const name = button.dataset.dm;
-    const contactProfile = button.dataset.contactProfile ? JSON.parse(button.dataset.contactProfile) : null;
-    const statusKey = contactProfile?.status || button.dataset.statusKey || ({ 'Ausente': 'away', 'No molestar': 'busy' }[button.dataset.status] || 'online');
-    const status = contactProfile?.statusLabel || button.dataset.status || presenceLabels[statusKey] || presenceLabels.online;
-    activeContactId = button.dataset.contactId || name.toLocaleLowerCase('es');
+    const name = contactProfile.username;
+    const statusKey = contactProfile.status;
+    const status = contactProfile.statusLabel;
+    activeContactId = button.dataset.contactId;
     dmChatSettingsContact.textContent = name;
     applyDmChatSettings();
     document.querySelector('#dm-overview-name').textContent = name;
@@ -456,30 +645,99 @@
     const overviewDot = document.querySelector('.dm-overview-nameblock .presence-dot');
     overviewDot.classList.remove('away', 'busy', 'offline');
     if (statusKey !== 'online') overviewDot.classList.add(statusKey);
-    document.querySelector('#dm-overview-description').textContent = contactProfile?.about || button.dataset.description || 'Este usuario todavía no ha escrito una presentación.';
+    document.querySelector('#dm-overview-description').textContent = contactProfile.about || 'Este usuario todavía no ha escrito una presentación.';
     const overviewAvatar = document.querySelector('#dm-overview-avatar');
-    overviewAvatar.src = contactProfile?.avatar || button.dataset.avatar || '../Media/IMG/default-avatar.png';
+    overviewAvatar.src = contactProfile.avatar;
     overviewAvatar.alt = `Foto de perfil de ${name}`;
     const activityList = document.querySelector('#dm-activity-list'); activityList.replaceChildren();
-    const activities = contactProfile ? contactProfile.activities : (button.dataset.activity || '').split('|').filter(Boolean);
+    const activities = contactProfile.activities;
     (Array.isArray(activities) ? activities : []).slice(0, 3).forEach(activity => { const item = document.createElement('li'); item.textContent = activity; activityList.append(item); });
-    const conversation = document.querySelector('#dm-message-list'); conversation.replaceChildren();
-    const conversationMessages = contactProfile ? [] : (dmMessages[name] || []);
-    conversationMessages.forEach(([author, text, time]) => appendPrivateMessage(author, text, time));
+    renderDmMessages();
     dmMessageSearch.value = ''; dmMessageSearch.dispatchEvent(new Event('input'));
     document.querySelector('#dm-message-input').placeholder = `Enviar mensaje a ${name}`;
     shell.classList.remove('mobile-channels-open');
     document.querySelector('#dm-message-scroll').scrollTop = document.querySelector('#dm-message-scroll').scrollHeight;
+    requestAnimationFrame(markVisibleDmRead);
   }
-  document.querySelectorAll('.dm-contact').forEach(button => button.addEventListener('click', () => selectContact(button)));
-  document.querySelector('#dm-search').addEventListener('input', event => {
-    const query = event.target.value.trim().toLocaleLowerCase('es'); let visible = 0;
-    document.querySelectorAll('.dm-contact').forEach(button => {
-      const match = button.dataset.dm.toLocaleLowerCase('es').includes(query);
-      button.hidden = !match; if (match) visible += 1;
-    });
-    document.querySelector('#dm-empty').hidden = visible > 0;
+  function renderDmMessages() {
+    const name = dmContacts.get(activeContactId).username;
+    const messages = (dmExamples[activeContactId] || []).map(message => [
+      message.own ? 'me' : name, message.text, dmTime.format(message.sentAt), message.sentAt
+    ]);
+    messages.push(...(sentByContact.get(activeContactId) || []));
+    messages.sort((a, b) => a[3] - b[3]);
+    document.querySelector('#dm-message-list').replaceChildren();
+    for (const args of messages) appendPrivateMessage(...args);
+  }
+
+  const dmSearch = document.querySelector('#dm-search');
+  function filterDmContacts() {
+    const query = dmSearch.value.trim().toLocaleLowerCase('es');
+    let visible = 0;
+    for (const button of dmList.children) {
+      button.hidden = !dmContacts.get(button.dataset.contactId).username.toLocaleLowerCase('es').includes(query);
+      if (!button.hidden) visible++;
+    }
+    const empty = document.querySelector('#dm-empty');
+    empty.textContent = dmContacts.size ? 'Ningún amigo coincide con la búsqueda.' : 'Tus amigos aparecerán aquí cuando se acepte una solicitud.';
+    empty.hidden = visible > 0;
+  }
+  let lastContactsSnapshot;
+  function updateDmContacts(profiles, histories = {}) {
+    const snapshot = JSON.stringify(profiles);
+    if (snapshot === lastContactsSnapshot && !Object.keys(histories).length) return;
+    Object.assign(dmExamples, histories);
+    lastContactsSnapshot = snapshot;
+    const allowed = new Set(profiles.map(profile => 'account-' + profile.id));
+    for (const id of dmContacts.keys()) {
+      if (allowed.has(id)) continue;
+      dmContacts.delete(id);
+      delete dmExamples[id];
+      sentByContact.delete(id);
+      dmList.querySelector(`[data-contact-id="${CSS.escape(id)}"]`)?.remove();
+      if (id === activeContactId) {
+        activeContactId = null;
+        document.querySelector('#dm-message-list').replaceChildren();
+        document.querySelector('#dm-message-input').value = '';
+        if (chatDialog.open) chatDialog.close();
+        if (!dmChat.hidden) setView('friends');
+      }
+    }
+    for (const profile of profiles) {
+      const id = 'account-' + profile.id;
+      dmContacts.set(id, profile);
+      let button = dmList.querySelector(`[data-contact-id="${CSS.escape(id)}"]`);
+      if (!button) {
+        button = document.querySelector('#dm-contact-template').content.firstElementChild.cloneNode(true);
+        button.dataset.contactId = id;
+        dmList.append(button);
+      }
+      button.querySelector('strong').textContent = profile.username;
+      button.querySelector('small').textContent = profile.statusLabel;
+      updateDmSummary(button);
+      const initial = button.querySelector('[data-avatar-initial]');
+      initial.textContent = profile.initial;
+      initial.hidden = profile.hasCustomAvatar;
+      const avatar = button.querySelector('img');
+      if (avatar.getAttribute('src') !== profile.avatar) avatar.src = profile.avatar;
+      avatar.hidden = !profile.hasCustomAvatar;
+      button.querySelector('.presence-dot').className = 'presence-dot ' + profile.statusClass;
+    }
+    sortDmContacts();
+    filterDmContacts();
+    if (activeContactId && histories[activeContactId]) {
+      renderDmMessages();
+      dmMessageSearch.dispatchEvent(new Event('input'));
+      markVisibleDmRead();
+    }
+  }
+  dmList.addEventListener('click', event => {
+    const button = event.target.closest('.dm-contact');
+    if (button) selectContact(button);
   });
+  dmSearch.addEventListener('input', filterDmContacts);
+  friendView.addEventListener('dm-friends-updated', event => updateDmContacts(event.detail.contacts, event.detail.histories));
+  updateDmContacts(JSON.parse(document.querySelector('#dm-friends').textContent));
   dmMessageSearch.addEventListener('input', () => {
     const query = dmMessageSearch.value.trim().toLocaleLowerCase('es');
     document.querySelectorAll('#dm-message-list .message').forEach(row => {
@@ -494,9 +752,16 @@
   document.querySelector('#dm-message-form').addEventListener('submit', event => {
     event.preventDefault();
     const input = document.querySelector('#dm-message-input'); const text = input.value.trim();
-    if (!text) return;
-    const time = new Intl.DateTimeFormat('es-ES', { hour: '2-digit', minute: '2-digit' }).format(new Date());
-    appendPrivateMessage('me', text, time); input.value = '';
+    if (!text || dmChat.hidden || !dmContacts.has(activeContactId)) return;
+    const sentAt = Date.now();
+    const args = ['me', text, dmTime.format(sentAt), sentAt];
+    if (!sentByContact.has(activeContactId)) sentByContact.set(activeContactId, []);
+    sentByContact.get(activeContactId).push(args);
+    updateDmSummary(dmList.querySelector('.active'));
+    sortDmContacts();
+    appendPrivateMessage(...args);
+    dmMessageSearch.dispatchEvent(new Event('input'));
+    input.value = '';
     document.querySelector('#dm-message-scroll').scrollTop = document.querySelector('#dm-message-scroll').scrollHeight;
     showToast('Mensaje de muestra: todavía no se ha enviado ni guardado.');
   });
@@ -538,4 +803,6 @@
     document.querySelector('#message-scroll').scrollTop = document.querySelector('#message-scroll').scrollHeight;
     showToast('Mensaje de muestra: todavía no se ha enviado a otros usuarios.');
   });
+  setView('friends');
+  filterFriends();
 })();
